@@ -1,12 +1,14 @@
 package players
 
-//PlayerList represents a list of Players
-type PlayerList struct {
-	Players []Player `json:"playerList"`
+type Team struct {
+	ID       int32  `json:"id"`
+	Location string `json:location"`
+	Name     string `json:"name"`
 }
 
 //Player represents all of a players stats
 type Player struct {
+	ID                int32   `json:"id"`
 	Name              string  `json:"name"`
 	Games             int32   `json:"games"`
 	Points            float32 `json:"points"`
@@ -21,6 +23,10 @@ type Player struct {
 	Blocks            float32 `json:"blocks"`
 	Fouls             float32 `json:"fouls"`
 	PlusMinus         float32 `json:"plusMinus"`
+}
+
+type Stats struct {
+	ID int32 `json:"id"`
 }
 
 //Shot represent a stat that tracks attempts and makes
