@@ -1,13 +1,13 @@
 .DEFAULT_GOAL := help
 
-install: ## npm and go install — Concurrently installs go and npm dependencies
-	@go get ./... & npm install
+install: ## yarn and go install — Concurrently installs go and yarn dependencies
+	@go get ./... & yarn install
 
 tidy: ## go mod tidy — Prune any no-longer-needed dependencies from go.mod and add any dependencies needed for other combinations of OS, architecture, and build tags
 	@go mod tidy
 
 upgrade: ## go get -u ./... — Update all direct and indirect dependencies to latest minor or patch upgrades (pre-releases are ignored)
-	@go get -u ./... & npm upgrade
+	@go get -u ./... & yarn upgrade
 
 clean: ## clean - removes existing binaries, vendored code and code coverage results
 	@rm -rf ./bin Duncan/vendor coverage.out Maravich/node_modules ./tmp
