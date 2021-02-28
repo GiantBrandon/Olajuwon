@@ -1,4 +1,4 @@
-import React, { CSSProperties, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from '@emotion/styled'
 import { ThemeContext } from './theme/themeContext';
 import { colors, shift, Theme } from './Color';
@@ -69,7 +69,7 @@ interface HexagonRedirectProps {
   width?: number
   path: string
   label: string
-  style: CSSProperties
+  className?: string
 }
 
 export const HexagonRedirect: React.FC<HexagonRedirectProps> = ({width=100, ...props}) => {
@@ -77,8 +77,8 @@ export const HexagonRedirect: React.FC<HexagonRedirectProps> = ({width=100, ...p
 
   const theme: string = useContext(ThemeContext).theme
   return (
-    <Link to={props.path}>
-      <HexagonButtonWrapper onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={props.style} theme={colors[theme]} width={width} hover={hover}>
+    <Link to={props.path} className={props.className} >
+      <HexagonButtonWrapper onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} theme={colors[theme]} width={width} hover={hover}>
         <HexagonBack theme={colors[theme]} width={width} hover={hover}/>
         <HexagonMid theme={colors[theme]} width={width} hover={hover} />
         <HexagonFront theme={colors[theme]} width={width} hover={hover} />
@@ -92,7 +92,7 @@ interface HexagonButtonProps {
   width?: number
   onClick: () => void
   label: string
-  style: CSSProperties
+  className?: string
 }
 
 export const HexagonButton: React.FC<HexagonButtonProps> = ({width=100, ...props}) => {
@@ -100,7 +100,7 @@ export const HexagonButton: React.FC<HexagonButtonProps> = ({width=100, ...props
 
   const theme: string = useContext(ThemeContext).theme
   return (
-      <HexagonButtonWrapper onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={props.onClick} style={props.style} theme={colors[theme]} width={width} hover={hover}>
+      <HexagonButtonWrapper className={props.className} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={props.onClick} theme={colors[theme]} width={width} hover={hover}>
         <HexagonBack theme={colors[theme]} width={width} hover={hover}/>
         <HexagonMid theme={colors[theme]} width={width} hover={hover} />
         <HexagonFront theme={colors[theme]} width={width} hover={hover} />

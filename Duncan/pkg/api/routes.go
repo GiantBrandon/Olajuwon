@@ -7,4 +7,5 @@ import (
 
 func RegisterRoutes(e echo.Echo) {
 	e.GET("/users", players.GetPlayers)
+	e.GET("")
 }
