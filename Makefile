@@ -1,13 +1,13 @@
 .DEFAULT_GOAL := help
 
 install: ## yarn and go install — Concurrently installs go and yarn dependencies
-	@go get ./... & yarn install
+	@go get ./... & yarn --cwd ./maravich install
 
 tidy: ## go mod tidy — Prune any no-longer-needed dependencies from go.mod and add any dependencies needed for other combinations of OS, architecture, and build tags
 	@go mod tidy
 
 upgrade: ## go get -u ./... — Update all direct and indirect dependencies to latest minor or patch upgrades (pre-releases are ignored)
-	@go get -u ./... & yarn upgrade
+	@go get -u ./... & yarn --cwd ./maravich upgrade
 
 clean: ## clean - removes existing binaries, vendored code and code coverage results
 	@rm -rf ./bin Duncan/vendor coverage.out Maravich/node_modules ./tmp
