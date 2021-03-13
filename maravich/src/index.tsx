@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { App } from './App';
+import {Bootstrap} from './Bootstrap';
 
 ReactDOM.render(
-  <App />,
-  document.getElementById('root')
+    <Bootstrap />,
+    document.getElementById('root'),
 );

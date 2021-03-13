@@ -1,7 +1,10 @@
-import styled from '@emotion/styled'
-import React, { useState } from 'react'
-import { HexagonButton, HexagonRedirect } from './HexagonButtons'
-import { CenteredDiv, spacing } from './styles'
+import styled from '@emotion/styled';
+import React, {useContext, useState} from 'react';
+import {Hexagon} from './HexagonButtons';
+import {Link} from 'react-router-dom';
+import {CenteredDiv, spacing} from './styles';
+import {VisualModeContext} from './theme/visualModeContext';
+import {WbSunny} from '@material-ui/icons';
 
 type ExpansionStyleProps = {
     hexWidth: number
@@ -9,51 +12,47 @@ type ExpansionStyleProps = {
 }
 
 const ExpandWrapper = styled(CenteredDiv)((props: ExpansionStyleProps) => ({
-    width: props.hexWidth * 3 + spacing.smaller * 2,
-    height: props.hexHeight * 2.5 + spacing.smaller * 2
-}))
+  width: props.hexWidth * 3 + spacing.smaller * 2,
+  height: props.hexHeight * 2.5 + spacing.smaller * 2,
+}));
 
-const ExpandButton = styled(HexagonButton)((props: ExpansionStyleProps) => ({
-    position: 'absolute',
-    top: props.hexHeight * .75 + spacing.smaller,
-    left: props.hexWidth + spacing.smaller
-}))
+const ExpandButton = styled.div((props: ExpansionStyleProps) => ({
+  position: 'absolute',
+  top: props.hexHeight * .75 + spacing.smaller,
+  left: props.hexWidth + spacing.smaller,
+}));
 
-const GithubButton = styled(HexagonRedirect)((props: ExpansionStyleProps) => ({
-    position: 'absolute',
-    top: 0,
-    left: props.hexWidth / 2 + spacing.smallest
-}))
+const GithubButton = styled(Link)((props: ExpansionStyleProps) => ({
+  position: 'absolute',
+  top: 0,
+  left: props.hexWidth / 2 + spacing.smallest,
+}));
 
-const LinkedInButton = styled(HexagonRedirect)((props: ExpansionStyleProps) => ({
-    position: 'absolute',
-    top: 0,
-    right: props.hexWidth / 2 + spacing.smallest
-}))
+const LinkedInButton = styled(Link)((props: ExpansionStyleProps) => ({position: 'absolute', top: 0, right: props.hexWidth / 2 + spacing.smallest}));
 
-const LoginButton = styled(HexagonRedirect)((props: ExpansionStyleProps) => ({
-    position: 'absolute',
-    top: props.hexHeight * .75 + 10,
-    right: 0
-}))
+const LoginButton = styled(Link)((props: ExpansionStyleProps) => ({
+  position: 'absolute',
+  top: props.hexHeight * .75 + 10,
+  right: 0,
+}));
 
-const ComingButton1 = styled(HexagonRedirect)((props: ExpansionStyleProps) => ({
-    position: 'absolute',
-    bottom: 0,
-    right: 100/ 2 + spacing.smallest
-}))
+const PingButton = styled(Link)((props: ExpansionStyleProps) => ({
+  position: 'absolute',
+  bottom: 0,
+  right: 100/ 2 + spacing.smallest,
+}));
 
-const ComingButton2 = styled(HexagonRedirect)((props: ExpansionStyleProps) => ({
-    position: 'absolute',
-    bottom: 0,
-    left: 100/ 2 + spacing.smallest
-}))
+const ComingButton2 = styled(Link)((props: ExpansionStyleProps) => ({
+  position: 'absolute',
+  bottom: 0,
+  left: 100/ 2 + spacing.smallest,
+}));
 
-const ComingButton3 = styled(HexagonRedirect)((props: ExpansionStyleProps) => ({
-    position: 'absolute',
-    top: props.hexHeight * .75 + spacing.smaller,
-    left: 0
-}))
+const DarkModeButton = styled.div((props: ExpansionStyleProps) => ({
+  position: 'absolute',
+  top: props.hexHeight * .75 + spacing.smaller,
+  left: 0,
+}));
 
 interface ExpansionProps {
     hexHeight?: number
@@ -61,21 +60,38 @@ interface ExpansionProps {
 }
 
 export const Expansion: React.FC<ExpansionProps> = ({hexWidth = 100, hexHeight = hexWidth * 1.16}) => {
-    const [expanded, setExpanded] = useState(false)
-    return (
-    <ExpandWrapper hexWidth={hexWidth} hexHeight={hexHeight}>
-    <ExpandButton label={'Get Started'} onClick={() => setExpanded(!expanded)} hexWidth={hexWidth} hexHeight={hexHeight} />
-    {expanded && 
-    <>
-    <GithubButton label={'GitHub'} path={'/Github'} hexWidth={hexWidth} hexHeight={hexHeight} />
-    <LinkedInButton label={'LinkedIn'} path={'/LinkedIn'} hexWidth={hexWidth} hexHeight={hexHeight} />
-    <LoginButton label={'Login'} path={'/Login'} hexWidth={hexWidth} hexHeight={hexHeight} />
-    <ComingButton1 label={'Coming Soon'} path={'/ComingSoon'} hexWidth={hexWidth} hexHeight={hexHeight} />
-    <ComingButton2 label={'Coming Soon'} path={'/ComingSoon'} hexWidth={hexWidth} hexHeight={hexHeight} />
-    <ComingButton3 label={'Coming Soon'} path={'/ComingSoon'} hexWidth={hexWidth} hexHeight={hexHeight} />
-    </>
-    }
-    </ExpandWrapper>
-    )
+  const [expanded, setExpanded] = useState(false);
+  const modeContext = useContext(VisualModeContext);
 
-}
+  return (
+    <ExpandWrapper hexWidth={hexWidth} hexHeight={hexHeight}>
+      <ExpandButton onClick={() => setExpanded(!expanded)} hexWidth={hexWidth} hexHeight={hexHeight}>
+        <Hexagon width={hexWidth}>Get Started</Hexagon>
+      </ExpandButton>
+      {expanded &&
+        <>
+          <GithubButton to={'/Github'} hexWidth={hexWidth} hexHeight={hexHeight}>
+            <Hexagon width={hexWidth}>Github</Hexagon>
+          </GithubButton>
+          <LinkedInButton to={'/LinkedIn'} hexWidth={hexWidth} hexHeight={hexHeight}>
+            <Hexagon width={hexWidth}>LinkedIn</Hexagon>
+          </LinkedInButton>
+          <LoginButton to={'/Login'} hexWidth={hexWidth} hexHeight={hexHeight}>
+            <Hexagon width={hexWidth}>Login</Hexagon>
+          </LoginButton>
+          <PingButton to={'/Ping'} hexWidth={hexWidth} hexHeight={hexHeight}>
+            <Hexagon width={hexWidth}>Ping Server</Hexagon>
+          </PingButton>
+          <ComingButton2 to={'/ComingSoon'} hexWidth={hexWidth} hexHeight={hexHeight}>
+            <Hexagon width={hexWidth}>Coming Soon</Hexagon>
+          </ComingButton2>
+          <DarkModeButton onClick={() => {
+            modeContext.setMode(modeContext.mode === 'light' ? 'dark' : 'light');
+          }} hexWidth={hexWidth} hexHeight={hexHeight}>
+            <Hexagon width={hexWidth}><WbSunny /></Hexagon>
+          </DarkModeButton>
+        </>
+      }
+    </ExpandWrapper>
+  );
+};

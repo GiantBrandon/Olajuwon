@@ -1,12 +1,11 @@
 import styled from '@emotion/styled'
+import { Radio } from '@material-ui/core'
 import React, { useContext, useEffect, useState } from 'react'
-import { colors, Theme } from '../Color'
 import { spacing } from '../styles'
-import { ThemeContext } from '../theme/themeContext'
+import { VisualModeContext } from '../theme/visualModeContext'
 
 type NodeProps = {
     checked: boolean
-    theme: Theme
 }
 
 const Node = styled.div((props: NodeProps) => ({
@@ -15,8 +14,8 @@ const Node = styled.div((props: NodeProps) => ({
     marginBottom: spacing.smaller,
     marginRight: spacing.smaller,
     borderRadius: spacing.medium,
-    backgroundColor: props.checked ? props.theme.contrast : props.theme.parallel,
-    border: `1px solid ${props.theme.contrast}`
+    backgroundColor: props.checked ? '#FFFFFF' : '#000000',
+    border: `1px solid #FFFFF`
 }))
 
 type PasswordEntryNodeProps = {
@@ -27,7 +26,7 @@ type PasswordEntryNodeProps = {
 
 export const PasswordEntryNode: React.FC<PasswordEntryNodeProps> = ({drawing, isActive, activate}) => {
     const [isHovered, setIsHovered] = useState(false)
-    const theme = useContext(ThemeContext).theme
+    const mode = useContext(VisualModeContext).mode
 
     const handleActivate = () => {
         drawing && !isActive && activate()
@@ -38,6 +37,6 @@ export const PasswordEntryNode: React.FC<PasswordEntryNodeProps> = ({drawing, is
     })
 
     return (
-        <Node checked={isActive} theme={colors[theme]} onMouseOver={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} />
+        <Radio checked={isActive} onMouseOver={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} />
     )
 }
