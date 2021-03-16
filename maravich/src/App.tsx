@@ -3,7 +3,7 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import {Expansion} from './Expansion';
 import {Link} from 'react-router-dom';
 import {Login} from './Login/Login';
-import {getLinkedin, getUsers} from './Api/Router';
+import {getFantasy, getLinkedin, getUsers} from './Api/Router';
 import {ThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import {CssBaseline} from '@material-ui/core';
 import {VisualModeContext} from './theme/visualModeContext';
@@ -41,7 +41,7 @@ export const App: React.FC = () => {
             <Login />
           </Route>
           <Route path='/Ping' component={() => {
-            getLinkedin();
+            getFantasy();
             return (<div>
             Check console for response
             </div>);
