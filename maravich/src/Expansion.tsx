@@ -22,27 +22,27 @@ const ExpandButton = styled.div((props: ExpansionStyleProps) => ({
   left: props.hexWidth + spacing.smaller,
 }));
 
-const GithubButton = styled(Link)((props: ExpansionStyleProps) => ({
+const GithubButton = styled.a((props: ExpansionStyleProps) => ({
   position: 'absolute',
   top: 0,
   left: props.hexWidth / 2 + spacing.smallest,
 }));
 
-const LinkedInButton = styled(Link)((props: ExpansionStyleProps) => ({position: 'absolute', top: 0, right: props.hexWidth / 2 + spacing.smallest}));
+const LinkedInButton = styled.a((props: ExpansionStyleProps) => ({position: 'absolute', top: 0, right: props.hexWidth / 2 + spacing.smallest}));
 
-const LoginButton = styled(Link)((props: ExpansionStyleProps) => ({
+const LoginButton = styled.a((props: ExpansionStyleProps) => ({
   position: 'absolute',
   top: props.hexHeight * .75 + 10,
   right: 0,
 }));
 
-const PingButton = styled(Link)((props: ExpansionStyleProps) => ({
+const PingButton = styled.a((props: ExpansionStyleProps) => ({
   position: 'absolute',
   bottom: 0,
   right: 100/ 2 + spacing.smallest,
 }));
 
-const ComingButton2 = styled(Link)((props: ExpansionStyleProps) => ({
+const ComingButton2 = styled.a((props: ExpansionStyleProps) => ({
   position: 'absolute',
   bottom: 0,
   left: 100/ 2 + spacing.smallest,
@@ -70,19 +70,19 @@ export const Expansion: React.FC<ExpansionProps> = ({hexWidth = 100, hexHeight =
       </ExpandButton>
       {expanded &&
         <>
-          <GithubButton to={'/Github'} hexWidth={hexWidth} hexHeight={hexHeight}>
+          <GithubButton href={'#/Github'} hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}><GitHub fontSize='large'/></Hexagon>
           </GithubButton>
-          <LinkedInButton to={'/LinkedIn'} hexWidth={hexWidth} hexHeight={hexHeight}>
+          <LinkedInButton href={'#/LinkedIn'} hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}><LinkedIn fontSize='large'/></Hexagon>
           </LinkedInButton>
-          <LoginButton to={'/Login'} hexWidth={hexWidth} hexHeight={hexHeight}>
+          <LoginButton href={'#/Login'} hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}><LockOpen fontSize='large'/></Hexagon>
           </LoginButton>
-          <PingButton to={'/Ping'} hexWidth={hexWidth} hexHeight={hexHeight}>
+          <PingButton href={'#/Ping'} hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}>Ping Server</Hexagon>
           </PingButton>
-          <ComingButton2 to={'/ComingSoon'} hexWidth={hexWidth} hexHeight={hexHeight}>
+          <ComingButton2 href={'#/ComingSoon'} hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}>Coming Soon</Hexagon>
           </ComingButton2>
           <DarkModeButton onClick={() => {

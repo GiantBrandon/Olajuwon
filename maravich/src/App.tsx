@@ -1,9 +1,8 @@
 import React, {useContext} from 'react';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {HashRouter, Route} from 'react-router-dom';
 import {Expansion} from './Expansion';
-import {Link} from 'react-router-dom';
 import {Login} from './Login/Login';
-import {getFantasy, getLinkedin, getUsers} from './Api/Router';
+import {getFantasy} from './Api/Router';
 import {ThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import {AppBar, CssBaseline, IconButton} from '@material-ui/core';
 import {VisualModeContext} from './theme/visualModeContext';
@@ -22,38 +21,33 @@ export const App: React.FC = () => {
   );
 
   return (
-    <BrowserRouter>
+    <HashRouter basename='\'>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar>
-          <Link to='/Home'><IconButton><Home fontSize='large'/></IconButton></Link>
+          <a href='#/Home'><IconButton><Home fontSize='large'/></IconButton></a>
         </AppBar>
-        <Switch>
           <Route path='/Home'>
             <Expansion />
           </Route>
-          <Route path='/Github' component={() => {
+          <Route exact path='/Github' component={() => {
             window.location.replace('https://github.com/GiantBrandon');
             return null;
           }}/>
-          <Route path='/LinkedIn' component={() => {
+          <Route exact path='/LinkedIn' component={() => {
             window.location.replace('https://www.linkedin.com/in/brandon-kurtz-377251111/');
             return null;
           }}/>
-          <Route path='/Login'>
+          <Route exact path='/Login'>
             <Login />
           </Route>
-          <Route path='/Ping' component={() => {
-            getFantasy();
+          <Route exact path='/Ping' component={() => {
+            getFantasy(75);
             return (<div>
             Check console for response
             </div>);
           }}/>
-          <Route path='/test'>
-                TEST
-          </Route>
-        </Switch>
       </ThemeProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
