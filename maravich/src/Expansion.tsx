@@ -4,7 +4,7 @@ import {Hexagon} from './HexagonButtons';
 import {Link} from 'react-router-dom';
 import {CenteredDiv, spacing} from './styles';
 import {VisualModeContext} from './theme/visualModeContext';
-import {WbSunny} from '@material-ui/icons';
+import {GitHub, LinkedIn, LockOpen, WbSunny} from '@material-ui/icons';
 
 type ExpansionStyleProps = {
     hexWidth: number
@@ -71,13 +71,13 @@ export const Expansion: React.FC<ExpansionProps> = ({hexWidth = 100, hexHeight =
       {expanded &&
         <>
           <GithubButton to={'/Github'} hexWidth={hexWidth} hexHeight={hexHeight}>
-            <Hexagon width={hexWidth}>Github</Hexagon>
+            <Hexagon width={hexWidth}><GitHub fontSize='large'/></Hexagon>
           </GithubButton>
           <LinkedInButton to={'/LinkedIn'} hexWidth={hexWidth} hexHeight={hexHeight}>
-            <Hexagon width={hexWidth}>LinkedIn</Hexagon>
+            <Hexagon width={hexWidth}><LinkedIn fontSize='large'/></Hexagon>
           </LinkedInButton>
           <LoginButton to={'/Login'} hexWidth={hexWidth} hexHeight={hexHeight}>
-            <Hexagon width={hexWidth}>Login</Hexagon>
+            <Hexagon width={hexWidth}><LockOpen fontSize='large'/></Hexagon>
           </LoginButton>
           <PingButton to={'/Ping'} hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}>Ping Server</Hexagon>
@@ -88,7 +88,7 @@ export const Expansion: React.FC<ExpansionProps> = ({hexWidth = 100, hexHeight =
           <DarkModeButton onClick={() => {
             modeContext.setMode(modeContext.mode === 'light' ? 'dark' : 'light');
           }} hexWidth={hexWidth} hexHeight={hexHeight}>
-            <Hexagon width={hexWidth}><WbSunny /></Hexagon>
+            <Hexagon width={hexWidth}><WbSunny fontSize='large'/></Hexagon>
           </DarkModeButton>
         </>
       }

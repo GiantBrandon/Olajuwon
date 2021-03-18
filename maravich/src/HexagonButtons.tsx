@@ -44,11 +44,12 @@ const HexagonFront = styled(Box)((props: HexagonStyleProps) => ({
   transform: 'rotate(60deg)',
 }));
 
-const HexagonTextContainer = styled(Box)((props: HexagonStyleProps) => ({
+const HexagonContainer = styled.div((props: HexagonStyleProps) => ({
   height: props.width * 1.16 / 2,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
+  alignItems: 'center',
   fontSize: props.width / 5,
   marginTop: -(props.width * 1.16) / 2,
   textAlign: 'center',
@@ -86,12 +87,11 @@ export const Hexagon: React.FC<HexagonProps> = ({width=100, ...props}: HexagonPr
         hover={hover}
         bgcolor={hover ? palette.info.dark : palette.primary.dark}
       />
-      <HexagonTextContainer
+      <HexagonContainer
         width={width}
-        hover={hover}
-        bgcolor='transparent'>
+        hover={hover}>
         {props.children}
-      </HexagonTextContainer>
+      </HexagonContainer>
     </HexagonWrapper>
   );
 };

@@ -5,8 +5,9 @@ import {Link} from 'react-router-dom';
 import {Login} from './Login/Login';
 import {getFantasy, getLinkedin, getUsers} from './Api/Router';
 import {ThemeProvider, createMuiTheme} from '@material-ui/core/styles';
-import {CssBaseline} from '@material-ui/core';
+import {AppBar, CssBaseline, IconButton} from '@material-ui/core';
 import {VisualModeContext} from './theme/visualModeContext';
+import { Home } from '@material-ui/icons';
 
 export const App: React.FC = () => {
   const modeContext = useContext(VisualModeContext);
@@ -24,7 +25,9 @@ export const App: React.FC = () => {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Link to='/Home'>Return Home</Link>
+        <AppBar>
+          <Link to='/Home'><IconButton><Home fontSize='large'/></IconButton></Link>
+        </AppBar>
         <Switch>
           <Route path='/Home'>
             <Expansion />
