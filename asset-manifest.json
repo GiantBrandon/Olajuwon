@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/Olajuwon/static/js/main.4dfbe0b9.chunk.js",
-    "main.js.map": "/Olajuwon/static/js/main.4dfbe0b9.chunk.js.map",
+    "main.js": "/Olajuwon/static/js/main.8f6802ae.chunk.js",
+    "main.js.map": "/Olajuwon/static/js/main.8f6802ae.chunk.js.map",
     "runtime-main.js": "/Olajuwon/static/js/runtime-main.f1a68854.js",
     "runtime-main.js.map": "/Olajuwon/static/js/runtime-main.f1a68854.js.map",
-    "static/js/2.2c8cd11e.chunk.js": "/Olajuwon/static/js/2.2c8cd11e.chunk.js",
-    "static/js/2.2c8cd11e.chunk.js.map": "/Olajuwon/static/js/2.2c8cd11e.chunk.js.map",
+    "static/js/2.d6671f4c.chunk.js": "/Olajuwon/static/js/2.d6671f4c.chunk.js",
+    "static/js/2.d6671f4c.chunk.js.map": "/Olajuwon/static/js/2.d6671f4c.chunk.js.map",
     "index.html": "/Olajuwon/index.html",
-    "precache-manifest.dcde5d884781c96f014a83586724775f.js": "/Olajuwon/precache-manifest.dcde5d884781c96f014a83586724775f.js",
+    "precache-manifest.f484cfedc36f21e65f811511a41bcca1.js": "/Olajuwon/precache-manifest.f484cfedc36f21e65f811511a41bcca1.js",
     "service-worker.js": "/Olajuwon/service-worker.js",
-    "static/js/2.2c8cd11e.chunk.js.LICENSE.txt": "/Olajuwon/static/js/2.2c8cd11e.chunk.js.LICENSE.txt"
+    "static/js/2.d6671f4c.chunk.js.LICENSE.txt": "/Olajuwon/static/js/2.d6671f4c.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.f1a68854.js",
-    "static/js/2.2c8cd11e.chunk.js",
-    "static/js/main.4dfbe0b9.chunk.js"
+    "static/js/2.d6671f4c.chunk.js",
+    "static/js/main.8f6802ae.chunk.js"
   ]
 }
