@@ -23,6 +23,24 @@ type Statistics struct {
 	Statistics []map[string]interface{} `json:"statistics"`
 }
 
+type PlayersResponse struct {
+	Api Players `json:"api"`
+}
+
+type Players struct {
+	Status  int                      `json:"status"`
+	Message string                   `json:"message"`
+	Results int                      `json:"results"`
+	Filters []map[string]interface{} `json:"filters"`
+	Players []Player                 `json:"players"`
+}
+
+type Player struct {
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	PlayerId  string `json:"playerId"`
+}
+
 func Login(c *gin.Context) {
 	content := gin.H{"ping": "received", "pong": "sent"}
 	c.JSON(200, content)
@@ -43,14 +61,13 @@ func Linkedin(c *gin.Context) {
 }
 
 func Fantasy(c *gin.Context) {
-
+	player := c.Param("player")
 	data, err := ioutil.ReadFile(".env.local")
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println(string(data))
-	url := "https://api-nba-v1.p.rapidapi.com/statistics/players/playerId/75"
-
+	url := fmt.Sprintf("https://api-nba-v1.p.rapidapi.com/statistics/players/playerId/%s", player)
 	req, _ := http.NewRequest("GET", url, nil)
 
 	req.Header.Add("x-rapidapi-key", string(data))
@@ -64,7 +81,31 @@ func Fantasy(c *gin.Context) {
 
 	stats := StatisticsResponse{}
 	json.Unmarshal(body, &stats)
-	content := gin.H{"stats": stats}
+	content := gin.H{"stats": stats.Api.Statistics}
+	c.JSON(200, content)
+}
+
+func GetPlayers(c *gin.Context) {
+	data, err := ioutil.ReadFile(".env.local")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(data))
+	url := "https://api-nba-v1.p.rapidapi.com/players/league/standard"
+	req, _ := http.NewRequest("GET", url, nil)
+
+	req.Header.Add("x-rapidapi-key", string(data))
+	req.Header.Add("x-rapidapi-host", "api-nba-v1.p.rapidapi.com")
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+	fmt.Println(string(body))
+
+	players := PlayersResponse{}
+	json.Unmarshal(body, &players)
+	content := gin.H{"players": players.Api.Players}
 	c.JSON(200, content)
 }
 
@@ -84,7 +125,8 @@ func main() {
 		v1.GET("/login", Login)
 		v1.OPTIONS("/login", OptionsLogin)
 		v1.GET("/linkedin", Linkedin)
-		v1.GET("/fantasy", Fantasy)
+		v1.GET("/fantasy/:player", Fantasy)
+		v1.GET("/players", GetPlayers)
 	}
 
 	router.Run()

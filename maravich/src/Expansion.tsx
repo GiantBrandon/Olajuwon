@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
 import React, {useContext, useState} from 'react';
 import {Hexagon} from './HexagonButtons';
-import {Link} from 'react-router-dom';
 import {CenteredDiv, spacing} from './styles';
 import {VisualModeContext} from './theme/visualModeContext';
-import {GitHub, LinkedIn, LockOpen, WbSunny} from '@material-ui/icons';
+import {GitHub, LinkedIn, LockOpen, SportsBasketball, WbSunny} from '@material-ui/icons';
 
 type ExpansionStyleProps = {
     hexWidth: number
@@ -82,8 +81,8 @@ export const Expansion: React.FC<ExpansionProps> = ({hexWidth = 100, hexHeight =
           <PingButton href={'#/Ping'} hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}>Ping Server</Hexagon>
           </PingButton>
-          <ComingButton2 href={'#/ComingSoon'} hexWidth={hexWidth} hexHeight={hexHeight}>
-            <Hexagon width={hexWidth}>Coming Soon</Hexagon>
+          <ComingButton2 href={'#/Fantasy'} hexWidth={hexWidth} hexHeight={hexHeight}>
+            <Hexagon width={hexWidth}><SportsBasketball fontSize='large'/></Hexagon>
           </ComingButton2>
           <DarkModeButton onClick={() => {
             modeContext.setMode(modeContext.mode === 'light' ? 'dark' : 'light');

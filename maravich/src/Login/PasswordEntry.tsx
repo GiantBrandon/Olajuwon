@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import React, { ReactNode, useContext, useState } from 'react'
-import { spacing } from '../styles'
 import { VisualModeContext } from '../theme/visualModeContext'
 import { PasswordEntryNode } from './PassWordEntryNode'
 
@@ -11,9 +10,7 @@ const Trace = styled.svg({
 const NodeGrid = styled.div(() => ({
     display: 'flex',
     flexDirection: 'column',
-    paddingTop: spacing.smaller,
-    paddingLeft: spacing.smaller,
-    border: `1px solid #FFFFFF`
+    border: `1px solid #FFFFFF`,
 }))
 
 const NodeRow = styled.div({
@@ -41,7 +38,7 @@ export const PasswordEntry: React.FC<PasswordEntryProps> = (props) => {
             lines.push(<line key={i} x1={selected[i].x * 42 + 21} y1={selected[i].y * 42 + 21} x2={selected[i + 1].x * 42 + 21} y2={selected[i + 1].y * 42 + 21} stroke='#FFFFFF' strokeWidth="2" />)
         }
         return (
-            <Trace height="148" width="148">
+            <Trace height="212" width="212">
             {lines}
           </Trace>
         )
@@ -50,9 +47,9 @@ export const PasswordEntry: React.FC<PasswordEntryProps> = (props) => {
     return (
         <NodeGrid onMouseDown={() => {setDrawing(true); setSelected([])}} onMouseUp={() => setDrawing(false)} onMouseLeave={() => setDrawing(false)}>
         {renderLines()}
-        {Array(4).fill(0).map((_, row) => 
+        {Array(5).fill(0).map((_, row) => 
         <NodeRow>
-            {Array(4).fill(0).map((_, column) => <PasswordEntryNode drawing={drawing} isActive={selected.filter(coordinate => coordinate.x === column && coordinate.y === row).length > 0} activate={() => setSelected([...selected, {x: column, y: row}])} /> )}
+            {Array(5).fill(0).map((_, column) => <PasswordEntryNode drawing={drawing} isActive={selected.filter(coordinate => coordinate.x === column && coordinate.y === row).length > 0} activate={() => setSelected([...selected, {x: column, y: row}])} /> )}
         </NodeRow>
         )}
         </NodeGrid>
