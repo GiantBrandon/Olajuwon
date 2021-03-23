@@ -28,7 +28,7 @@ vet: ## go vet ./... - report likely mistakes in packages
 	@go vet ./...
 
 lint: ## golangci-lint run ./... - run an aggregated linter on all go files, requires https://github.com/golangci/golangci-lint
-	@golangci-lint run ./...
+	@golangci-lint run ./... & yarn --cwd ./maravich lint
 
 refresh: ## refresh - runs the main hack server found at cmd/hack/main.go and auto refreshes on code changes, requires https://github.com/markbates/refresh
 	@refresh run Duncan/cmd/main.go

@@ -90,7 +90,6 @@ func GetPlayers(c *gin.Context) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(string(data))
 	url := "https://api-nba-v1.p.rapidapi.com/players/league/standard"
 	req, _ := http.NewRequest("GET", url, nil)
 
@@ -101,7 +100,6 @@ func GetPlayers(c *gin.Context) {
 
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
-	fmt.Println(string(body))
 
 	players := PlayersResponse{}
 	json.Unmarshal(body, &players)

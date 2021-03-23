@@ -1,6 +1,5 @@
 import { Radio } from '@material-ui/core'
-import React, { useContext, useEffect, useState } from 'react'
-import { VisualModeContext } from '../theme/visualModeContext'
+import React, { useEffect, useState } from 'react'
 
 type NodeProps = {
     checked: boolean
@@ -14,7 +13,6 @@ type PasswordEntryNodeProps = {
 
 export const PasswordEntryNode: React.FC<PasswordEntryNodeProps> = ({drawing, isActive, activate}) => {
     const [isHovered, setIsHovered] = useState(false)
-    const mode = useContext(VisualModeContext).mode
 
     const handleActivate = () => {
         drawing && !isActive && activate()

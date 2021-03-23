@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Hexagon} from './HexagonButtons';
-import {CenteredDiv, spacing} from './styles';
-import {VisualModeContext} from './theme/visualModeContext';
+import {LeftCenteredDiv, spacing} from './styles';
 import {GitHub, LinkedIn, LockOpen, SportsBasketball, WbSunny} from '@material-ui/icons';
 
 type ExpansionStyleProps = {
@@ -10,7 +9,7 @@ type ExpansionStyleProps = {
     hexHeight: number
 }
 
-const ExpandWrapper = styled(CenteredDiv)((props: ExpansionStyleProps) => ({
+const ExpandWrapper = styled(LeftCenteredDiv)((props: ExpansionStyleProps) => ({
   width: props.hexWidth * 3 + spacing.smaller * 2,
   height: props.hexHeight * 2.5 + spacing.smaller * 2,
 }));
@@ -60,7 +59,6 @@ interface ExpansionProps {
 
 export const Expansion: React.FC<ExpansionProps> = ({hexWidth = 100, hexHeight = hexWidth * 1.16}) => {
   const [expanded, setExpanded] = useState(false);
-  const modeContext = useContext(VisualModeContext);
 
   return (
     <ExpandWrapper hexWidth={hexWidth} hexHeight={hexHeight}>
@@ -84,9 +82,7 @@ export const Expansion: React.FC<ExpansionProps> = ({hexWidth = 100, hexHeight =
           <ComingButton2 href={'#/Fantasy'} hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}><SportsBasketball fontSize='large'/></Hexagon>
           </ComingButton2>
-          <DarkModeButton onClick={() => {
-            modeContext.setMode(modeContext.mode === 'light' ? 'dark' : 'light');
-          }} hexWidth={hexWidth} hexHeight={hexHeight}>
+          <DarkModeButton hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}><WbSunny fontSize='large'/></Hexagon>
           </DarkModeButton>
         </>

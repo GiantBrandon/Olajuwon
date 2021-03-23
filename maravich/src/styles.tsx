@@ -7,6 +7,13 @@ export const CenteredDiv = styled.div({
   transform: 'translate(-50%, -50%)',
 });
 
+export const LeftCenteredDiv = styled.div({
+  position: 'absolute',
+  top: '50%',
+  left: '25%',
+  transform: 'translate(-50%, -50%)',
+});
+
 export const spacing = {
   smallest: 6,
   smaller: 12,
