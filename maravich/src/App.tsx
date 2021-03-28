@@ -30,7 +30,7 @@ export const App: React.FC = () => {
         });
 
   return (
-    <HashRouter basename='\'>
+    <HashRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar>

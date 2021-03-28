@@ -9,7 +9,7 @@ export const Fantasy: React.FC = (props) => {
     const [players, setPlayers] = useState<Player[]>([])
     
     useEffect(() => {
-        getPlayers().then(response => console.log(response.players))
+        getPlayers().then(response => setPlayers(response.players))
     }, [])
 
     return (
