@@ -12,16 +12,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type ApiKey struct {
+	Key string `json:"key"`
+}
+
 type getStatsResponse struct {
 	Api getStatsAPI `json:"api"`
 }
 
 type getStatsAPI struct {
-	status    int                      `json:"status"`
-	message   string                   `json:"message"`
-	results   int                      `json:"results"`
-	filters   []map[string]interface{} `json:"filters"`
-	Statlines []Statistics             `json:"statistics"`
+	Statlines []Statistics `json:"statistics"`
 }
 
 type Statistics struct {
@@ -131,7 +131,6 @@ func Linkedin(c *gin.Context) {
 }
 
 func AverageStats(stats []Statistics) AverageStatline {
-	fmt.Println(stats)
 	avg := AverageStatline{}
 	for _, statline := range stats {
 		ast, _ := strconv.ParseFloat(statline.AST, 64)
@@ -175,7 +174,6 @@ func AverageStats(stats []Statistics) AverageStatline {
 		to, _ := strconv.ParseFloat(statline.TO, 64)
 		avg.TO += to
 	}
-	fmt.Println(avg)
 	avg.AST = avg.AST / float64(len(stats))
 	avg.BLK = avg.BLK / float64(len(stats))
 	avg.DREB = avg.DREB / float64(len(stats))
@@ -196,20 +194,19 @@ func AverageStats(stats []Statistics) AverageStatline {
 	avg.TPM = avg.TPM / float64(len(stats))
 	avg.TPP = avg.TPP / float64(len(stats))
 	avg.TO = avg.TO / float64(len(stats))
-	fmt.Println(avg)
 	return avg
 }
 
 func GetRecentGames(c *gin.Context) {
 	player := c.Param("player")
-	data, err := ioutil.ReadFile(".env.local")
-	if err != nil {
-		fmt.Println(err)
+	key, ok := c.MustGet("key").(string)
+	if !ok {
+		fmt.Println("Could not find key")
 	}
 	url := fmt.Sprintf("https://api-nba-v1.p.rapidapi.com/statistics/players/playerId/%s", player)
 	req, _ := http.NewRequest("GET", url, nil)
 
-	req.Header.Add("x-rapidapi-key", string(data))
+	req.Header.Add("x-rapidapi-key", key)
 	req.Header.Add("x-rapidapi-host", "api-nba-v1.p.rapidapi.com")
 
 	res, _ := http.DefaultClient.Do(req)
@@ -226,17 +223,21 @@ func GetRecentGames(c *gin.Context) {
 }
 
 func GetPlayers(c *gin.Context) {
-	data, err := ioutil.ReadFile(".env.local")
-	if err != nil {
-		fmt.Println(err)
+	key, ok := c.MustGet("key").(string)
+	if !ok {
+		fmt.Println("Could not find key")
 	}
 	url := "https://api-nba-v1.p.rapidapi.com/players/league/standard"
 	req, _ := http.NewRequest("GET", url, nil)
 
-	req.Header.Add("x-rapidapi-key", string(data))
+	req.Header.Add("x-rapidapi-key", key)
 	req.Header.Add("x-rapidapi-host", "api-nba-v1.p.rapidapi.com")
 
-	res, _ := http.DefaultClient.Do(req)
+	res, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
@@ -253,10 +254,29 @@ func OptionsLogin(c *gin.Context) {
 	c.Next()
 }
 
+func ApiMiddleware(key string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Set("key", key)
+		c.Next()
+	}
+}
+
+func GetKey() string {
+	keyFile, err := ioutil.ReadFile(".env.local")
+	if err != nil {
+		fmt.Errorf(".env.local file not found. %w", err)
+	}
+	key := ApiKey{}
+	json.Unmarshal([]byte(keyFile), &key)
+	return key.Key
+}
+
 func main() {
+	key := GetKey()
 	router := gin.Default()
 
 	router.Use(cors.Default())
+	router.Use(ApiMiddleware(key))
 
 	v1 := router.Group("v1")
 	{

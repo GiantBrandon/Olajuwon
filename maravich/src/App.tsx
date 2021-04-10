@@ -3,7 +3,6 @@ import {HashRouter, Route} from 'react-router-dom';
 import {Expansion} from './Expansion';
 import {Login} from './Login/Login';
 import {Fantasy} from './Fantasy/Fantasy';
-import {getFantasy} from './Api/Router';
 import {ThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import {AppBar, Button, CssBaseline, IconButton} from '@material-ui/core';
 import {Brush, Home} from '@material-ui/icons';
@@ -59,7 +58,6 @@ export const App: React.FC = () => {
           <Fantasy />
         </Route>
         <Route exact path='/Ping' component={() => {
-          getFantasy(75);
           return (<div>
             Check console for response
           </div>);

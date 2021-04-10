@@ -19,6 +19,7 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "max-len": "off"
+        "max-len": "off",
+        "react/prop-types": 0
     }
 }
