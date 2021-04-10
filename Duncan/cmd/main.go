@@ -233,7 +233,11 @@ func GetPlayers(c *gin.Context) {
 	req.Header.Add("x-rapidapi-key", string(data))
 	req.Header.Add("x-rapidapi-host", "api-nba-v1.p.rapidapi.com")
 
-	res, _ := http.DefaultClient.Do(req)
+	res, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
