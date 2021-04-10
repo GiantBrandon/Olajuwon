@@ -131,7 +131,6 @@ func Linkedin(c *gin.Context) {
 }
 
 func AverageStats(stats []Statistics) AverageStatline {
-	fmt.Println(stats)
 	avg := AverageStatline{}
 	for _, statline := range stats {
 		ast, _ := strconv.ParseFloat(statline.AST, 64)
@@ -175,7 +174,6 @@ func AverageStats(stats []Statistics) AverageStatline {
 		to, _ := strconv.ParseFloat(statline.TO, 64)
 		avg.TO += to
 	}
-	fmt.Println(avg)
 	avg.AST = avg.AST / float64(len(stats))
 	avg.BLK = avg.BLK / float64(len(stats))
 	avg.DREB = avg.DREB / float64(len(stats))
@@ -196,7 +194,6 @@ func AverageStats(stats []Statistics) AverageStatline {
 	avg.TPM = avg.TPM / float64(len(stats))
 	avg.TPP = avg.TPP / float64(len(stats))
 	avg.TO = avg.TO / float64(len(stats))
-	fmt.Println(avg)
 	return avg
 }
 
