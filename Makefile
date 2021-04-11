@@ -13,7 +13,10 @@ clean: ## clean - removes existing binaries, vendored code and code coverage res
 	@rm -rf ./bin Duncan/vendor coverage.out Maravich/node_modules ./tmp
 
 local: ## go run - runs the main hack server found at cmd/hack/main.go
-	@go run Duncan/cmd/main.go
+	@go run Duncan/cmd/main.go local
+
+local: ## go run - runs the main hack server found at cmd/hack/main.go
+	@go run Duncan/cmd/main.go prod
 
 test: ## go test ./... -race -cover - runs the full test suite with code coverage and data race detection
 	@go test ./... -race -cover

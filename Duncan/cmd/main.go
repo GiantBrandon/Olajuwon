@@ -6,9 +6,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 )
 
@@ -272,6 +274,7 @@ func GetKey() string {
 }
 
 func main() {
+	arg := os.Args[1]
 	key := GetKey()
 	router := gin.Default()
 
@@ -287,5 +290,9 @@ func main() {
 		v1.GET("/players", GetPlayers)
 	}
 
-	router.Run()
+	if arg == "local" {
+		log.Fatal(autotls.Run(router, "api.kyojin.dev", "locahost"))
+	} else {
+		router.Run()
+	}
 }
