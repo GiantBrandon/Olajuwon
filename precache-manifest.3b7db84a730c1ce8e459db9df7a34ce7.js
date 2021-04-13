@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "51e26bcf2b92107e1f31143c83393217",
+    "revision": "225c6ed0026384952bf7d00b8f7f14d6",
     "url": "/Olajuwon/index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Olajuwon/static/js/2.cf3c4491.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "21d4d342f00cc011fea3",
-    "url": "/Olajuwon/static/js/main.89b9a396.chunk.js"
+    "revision": "0b7d9b3713a837c54ec0",
+    "url": "/Olajuwon/static/js/main.102be60f.chunk.js"
   },
   {
     "revision": "ceb91726e591852bcc6b",
