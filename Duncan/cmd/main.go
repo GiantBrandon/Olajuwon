@@ -181,10 +181,10 @@ func AverageStats(stats []Statistics) AverageStatline {
 	avg.DREB = avg.DREB / float64(len(stats))
 	avg.FGA = avg.FGA / float64(len(stats))
 	avg.FGM = avg.FGM / float64(len(stats))
-	avg.FGP = avg.FGP / float64(len(stats))
+	avg.FGP = avg.FGM / avg.FGA
 	avg.FTA = avg.FTA / float64(len(stats))
 	avg.FTM = avg.FTM / float64(len(stats))
-	avg.FTP = avg.FTP / float64(len(stats))
+	avg.FTP = avg.FTM / avg.FGA
 	avg.MIN = avg.MIN / float64(len(stats))
 	avg.OREB = avg.OREB / float64(len(stats))
 	avg.PF = avg.PF / float64(len(stats))
@@ -194,7 +194,7 @@ func AverageStats(stats []Statistics) AverageStatline {
 	avg.REB = avg.REB / float64(len(stats))
 	avg.TPA = avg.TPA / float64(len(stats))
 	avg.TPM = avg.TPM / float64(len(stats))
-	avg.TPP = avg.TPP / float64(len(stats))
+	avg.TPP = avg.TPM / avg.TPA
 	avg.TO = avg.TO / float64(len(stats))
 	return avg
 }

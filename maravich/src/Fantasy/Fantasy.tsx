@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { getPlayers, getRecentGames } from '../Api/Router'
 import { CenteredDiv, spacing } from '../styles'
 import { Player, Stats } from '../Utils/types'
+import { PlayerStats } from './PlayerStats'
 
 const PlayerWrapper = styled(Paper)({
 	padding: spacing.medium,
@@ -15,13 +16,41 @@ const PlayerField = styled(TextField)({
 	minWidth: '240px',
 })
 
+const emptyStats: Stats = {
+	assists: -1,
+blocks: -1,
+defReb: -1,
+fga: -1,
+fgm: -1,
+fgp: -1,
+fta: -1,
+ftm: -1,
+ftp: -1,
+min: -1,
+offReb: -1,
+pFouls: -1,
+playerId: -1,
+plusMinus: -1,
+points: -1,
+steals: -1,
+teamId: -1,
+totReb: -1,
+tpa: -1,
+tpm: -1,
+tpp: -1,
+turnovers: -1,
+}
+
 export const Fantasy: React.FC = (props) => {
 	const [players, setPlayers] = useState<Player[]>([])
 	const [selectedPlayers, setSelectedPlayers] = useState<(Stats | undefined)[]>(
 		[undefined, undefined, undefined]
 	)
+	const [highStats, setHighStats] = useState<Stats>(emptyStats)
+	const [lowStats, setLowStats] = useState<Stats>(emptyStats)
 	console.log(players)
 	console.log(selectedPlayers)
+	console.log(highStats, lowStats)
 
 	useEffect(() => {
 		getPlayers().then((response) => setPlayers(response.players))
@@ -34,6 +63,20 @@ export const Fantasy: React.FC = (props) => {
 			setSelectedPlayers(newPlayers)
 		})
 	}
+
+	useEffect(() => {
+		const newHighStats = {...highStats}
+		const newLowStats = {...lowStats}
+		const validPlayers = selectedPlayers.filter(player => player != undefined) as Stats[]
+			validPlayers.forEach(player => {
+				Object.keys(player).forEach(key => {
+				if(newHighStats[key] == -1 || newHighStats[key] < player[key]) newHighStats[key] = player[key]
+				if(newLowStats[key] == -1 || newLowStats[key] > player[key]) newLowStats[key] = player[key]
+			})
+		})
+		setHighStats(newHighStats)
+		setLowStats(newLowStats)
+	}, [selectedPlayers])
 
 	return (
 		<CenteredDiv>
@@ -49,17 +92,7 @@ export const Fantasy: React.FC = (props) => {
 							<PlayerField {...params} value="Player" variant="outlined" />
 						)}
 					/>
-                    {selectedPlayers[0] &&
-                    <>
-                    <p> Points: {selectedPlayers[0].points}</p>
-                    <p> Rebounds: {selectedPlayers[0].totReb}</p>
-                    <p> Assists: {selectedPlayers[0].assists}</p>
-                    <p> Blocks: {selectedPlayers[0].blocks}</p>
-                    <p> Steals: {selectedPlayers[0].steals}</p>
-                    <p> Field Goal %: {selectedPlayers[0].fgp}</p>
-                    <p> 3 Point %: {selectedPlayers[0].tpp}</p>
-                    <p> Free Throw %: {selectedPlayers[0].ftp}</p>
-                    </>}
+                    {selectedPlayers[0] && <PlayerStats player={selectedPlayers[0]} low={lowStats} high={highStats} />}
 				</PlayerWrapper>
 				<PlayerWrapper>
 					<Autocomplete
@@ -72,17 +105,8 @@ export const Fantasy: React.FC = (props) => {
 							<PlayerField {...params} value="Player" variant="outlined" />
 						)}
 					/>
-                    {selectedPlayers[1] &&
-                    <>
-                    <p> Points: {selectedPlayers[1].points}</p>
-                    <p> Rebounds: {selectedPlayers[1].totReb}</p>
-                    <p> Assists: {selectedPlayers[1].assists}</p>
-                    <p> Blocks: {selectedPlayers[1].blocks}</p>
-                    <p> Steals: {selectedPlayers[1].steals}</p>
-                    <p> Field Goal %: {selectedPlayers[1].fgp}</p>
-                    <p> 3 Point %: {selectedPlayers[1].tpp}</p>
-                    <p> Free Throw %: {selectedPlayers[1].ftp}</p>
-                    </>}
+                    
+                    {selectedPlayers[1] && <PlayerStats player={selectedPlayers[1]} low={lowStats} high={highStats} />}
 				</PlayerWrapper>
 				<PlayerWrapper>
 					<Autocomplete
@@ -95,17 +119,8 @@ export const Fantasy: React.FC = (props) => {
 							<PlayerField {...params} value="Player" variant="outlined" />
 						)}
 					/>
-                    {selectedPlayers[2] &&
-                    <>
-                    <p> Points: {selectedPlayers[2].points}</p>
-                    <p> Rebounds: {selectedPlayers[2].totReb}</p>
-                    <p> Assists: {selectedPlayers[2].assists}</p>
-                    <p> Blocks: {selectedPlayers[2].blocks}</p>
-                    <p> Steals: {selectedPlayers[2].steals}</p>
-                    <p> Field Goal %: {selectedPlayers[2].fgp}</p>
-                    <p> 3 Point %: {selectedPlayers[2].tpp}</p>
-                    <p> Free Throw %: {selectedPlayers[2].ftp}</p>
-                    </>}
+                    
+                    {selectedPlayers[2] && <PlayerStats player={selectedPlayers[2]} low={lowStats} high={highStats} />}
 				</PlayerWrapper>
 			</Grid>
 		</CenteredDiv>
