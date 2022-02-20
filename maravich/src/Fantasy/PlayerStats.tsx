@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { green, red } from '@material-ui/core/colors'
+import { green, red } from '@mui/material/colors'
 import React from 'react'
 import { Stats } from '../Utils/types'
 

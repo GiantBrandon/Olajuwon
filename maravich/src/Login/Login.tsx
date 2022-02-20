@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import { Button, Checkbox, FormControl, FormControlLabel, Grid, IconButton, Input, InputAdornment, InputLabel, Paper, Switch, TextField } from '@material-ui/core'
-import { Dialpad, TextFields, Visibility, VisibilityOff } from '@material-ui/icons'
+import { Button, Checkbox, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel, Paper, TextField } from '@mui/material'
+import { TextFields, Dialpad, VisibilityOff, Visibility } from '@mui/icons-material'
 import React, { useState } from 'react'
 import { CenteredDiv, spacing } from '../styles'
 import { PasswordEntry } from './PasswordEntry'
@@ -45,7 +45,7 @@ export const Login: React.FC = (props) => {
             }
           />
           </FormControl>}
-          <Grid container spacing={1} justify='center'><SubmitButton variant="contained" color="primary" onClick={() => alert('ya, so this doesn\'t do anything yet')}>
+          <Grid><SubmitButton variant="contained" color="primary" onClick={() => alert('ya, so this doesn\'t do anything yet')}>
             Submit
           </SubmitButton>
           <Checkbox checked={usePasscode} icon={<TextFields />} checkedIcon={<Dialpad />} onChange={() => setUsePasscode(!usePasscode)} />

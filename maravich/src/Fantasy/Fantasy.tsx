@@ -1,6 +1,5 @@
-import { Grid, Paper, TextField } from '@material-ui/core'
-import { Autocomplete } from '@material-ui/lab'
-import { styled } from '@material-ui/styles'
+import styled from '@emotion/styled'
+import { Autocomplete, Grid, Paper, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { getPlayers, getRecentGames } from '../Api/Router'
 import { CenteredDiv, spacing } from '../styles'

@@ -1,7 +1,6 @@
 import React, {ReactNode, useState} from 'react';
 import styled from '@emotion/styled';
-import {useTheme} from '@material-ui/styles';
-import {Box} from '@material-ui/core';
+import {Box, useTheme} from '@mui/material';
 
 type HexagonStyleProps = {
   width: number

@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React, {useState} from 'react';
 import {Hexagon} from './HexagonButtons';
 import {LeftCenteredDiv, spacing} from './styles';
-import {GitHub, LinkedIn, LockOpen, SportsBasketball, WbSunny} from '@material-ui/icons';
+import {GitHub, LinkedIn, LockOpen, SportsBasketball, WbSunny, DirectionsBoat} from '@mui/icons-material';
 
 type ExpansionStyleProps = {
     hexWidth: number
@@ -34,7 +34,7 @@ const LoginButton = styled.a((props: ExpansionStyleProps) => ({
   right: 0,
 }));
 
-const PingButton = styled.a((props: ExpansionStyleProps) => ({
+const BattleShipButton = styled.a((props: ExpansionStyleProps) => ({
   position: 'absolute',
   bottom: 0,
   right: 100/ 2 + spacing.smallest,
@@ -76,9 +76,9 @@ export const Expansion: React.FC<ExpansionProps> = ({hexWidth = 100, hexHeight =
           <LoginButton href={'#/Login'} hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}><LockOpen fontSize='large'/></Hexagon>
           </LoginButton>
-          <PingButton href={'#/Ping'} hexWidth={hexWidth} hexHeight={hexHeight}>
-            <Hexagon width={hexWidth}>Ping Server</Hexagon>
-          </PingButton>
+          <BattleShipButton href={'#/BattleShip'} hexWidth={hexWidth} hexHeight={hexHeight}>
+            <Hexagon width={hexWidth}><DirectionsBoat fontSize='large'/></Hexagon>
+          </BattleShipButton>
           <ComingButton2 href={'#/Fantasy'} hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}><SportsBasketball fontSize='large'/></Hexagon>
           </ComingButton2>
