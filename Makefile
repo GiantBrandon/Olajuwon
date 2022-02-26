@@ -1,22 +1,27 @@
 .DEFAULT_GOAL := help
 
 install: ## yarn and go install — Concurrently installs go and yarn dependencies
-	@go get ./... & yarn --cwd ./maravich install
+	cd Duncan; go get ./...
+	yarn --cwd ./maravich install
 
 tidy: ## go mod tidy — Prune any no-longer-needed dependencies from go.mod and add any dependencies needed for other combinations of OS, architecture, and build tags
-	@go mod tidy
+	cd Duncan; go mod tidy
 
 upgrade: ## go get -u ./... — Update all direct and indirect dependencies to latest minor or patch upgrades (pre-releases are ignored)
-	@go get -u ./... & yarn --cwd ./maravich upgrade
+	cd Duncan; go get -u ./...
+	yarn --cwd ./maravich upgrade
 
 clean: ## clean - removes existing binaries, vendored code and code coverage results
-	@rm -rf ./bin Duncan/vendor coverage.out Maravich/node_modules ./tmp
+	rm -rf ./bin Duncan/vendor coverage.out Maravich/node_modules ./tmp
 
-local: ## go run - runs the main hack server found at cmd/hack/main.go
-	@go run Duncan/cmd/main.go local
+local: ## go run - runs the main hack server found at cmd/main.go
+	cd Duncan; go run cmd/main.go local
 
-local: ## go run - runs the main hack server found at cmd/hack/main.go
-	@go run Duncan/cmd/main.go prod
+prod: ## go run - runs the main hack server found at cmd/main.go
+	cd Duncan; go run cmd/main.go prod
+
+ui: ## yarn start
+	cd maravich; yarn start
 
 test: ## go test ./... -race -cover - runs the full test suite with code coverage and data race detection
 	@go test ./... -race -cover
@@ -31,7 +36,8 @@ vet: ## go vet ./... - report likely mistakes in packages
 	@go vet ./...
 
 lint: ## golangci-lint run ./... - run an aggregated linter on all go files, requires https://github.com/golangci/golangci-lint
-	@golangci-lint run ./... & yarn --cwd ./maravich lint
+	cd Duncan; golangci-lint run ./...
+	yarn --cwd ./maravich lint
 
 refresh: ## refresh - runs the main hack server found at cmd/hack/main.go and auto refreshes on code changes, requires https://github.com/markbates/refresh
 	@refresh run Duncan/cmd/main.go

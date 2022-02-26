@@ -5,112 +5,20 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"strconv"
 
+	"github.com/GiantBrandon/Olajuwon/Duncan/types"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
 type ApiKey struct {
 	Key string `json:"key"`
-}
-
-type getStatsResponse struct {
-	Api getStatsAPI `json:"api"`
-}
-
-type getStatsAPI struct {
-	Statlines []Statistics `json:"statistics"`
-}
-
-type Statistics struct {
-	AST  string `json:"assists"`
-	BLK  string `json:"blocks"`
-	DREB string `json:"defReb"`
-	FGA  string `json:"fga"`
-	FGM  string `json:"fgm"`
-	FGP  string `json:"fgp"`
-	FTA  string `json:"fta"`
-	FTM  string `json:"ftm"`
-	FTP  string `json:"ftp"`
-	MIN  string `json:"min"`
-	OREB string `json:"offReb"`
-	PF   string `json:"pFouls"`
-	PM   string `json:"plusMinus"`
-	PTS  string `json:"points"`
-	STL  string `json:"steals"`
-	REB  string `json:"totReb"`
-	TPA  string `json:"tpa"`
-	TPM  string `json:"tpm"`
-	TPP  string `json:"tpp"`
-	TO   string `json:"turnovers"`
-}
-
-type Statline struct {
-	AST  int     `json:"assists"`
-	BLK  int     `json:"blocks"`
-	DREB int     `json:"defReb"`
-	FGA  int     `json:"fga"`
-	FGM  int     `json:"fgm"`
-	FGP  float32 `json:"fgp"`
-	FTA  int     `json:"fta"`
-	FTM  int     `json:"ftm"`
-	FTP  float32 `json:"ftp"`
-	MIN  float32 `json:"min"`
-	OREB int     `json:"offReb"`
-	PF   int     `json:"pFouls"`
-	PM   int     `json:"plusMinus"`
-	PTS  int     `json:"points"`
-	STL  int     `json:"steals"`
-	REB  int     `json:"totReb"`
-	TPA  int     `json:"tpa"`
-	TPM  int     `json:"tpm"`
-	TPP  float32 `json:"tpp"`
-	TO   int     `json:"turnovers"`
-}
-
-type AverageStatline struct {
-	AST  float64 `json:"assists"`
-	BLK  float64 `json:"blocks"`
-	DREB float64 `json:"defReb"`
-	FGA  float64 `json:"fga"`
-	FGM  float64 `json:"fgm"`
-	FGP  float64 `json:"fgp"`
-	FTA  float64 `json:"fta"`
-	FTM  float64 `json:"ftm"`
-	FTP  float64 `json:"ftp"`
-	MIN  float64 `json:"min"`
-	OREB float64 `json:"offReb"`
-	PF   float64 `json:"pFouls"`
-	PM   float64 `json:"plusMinus"`
-	PTS  float64 `json:"points"`
-	STL  float64 `json:"steals"`
-	REB  float64 `json:"totReb"`
-	TPA  float64 `json:"tpa"`
-	TPM  float64 `json:"tpm"`
-	TPP  float64 `json:"tpp"`
-	TO   float64 `json:"turnovers"`
-}
-
-type PlayersResponse struct {
-	Api Players `json:"api"`
-}
-
-type Players struct {
-	Status  int                      `json:"status"`
-	Message string                   `json:"message"`
-	Results int                      `json:"results"`
-	Filters []map[string]interface{} `json:"filters"`
-	Players []Player                 `json:"players"`
-}
-
-type Player struct {
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	PlayerId  string `json:"playerId"`
 }
 
 func Login(c *gin.Context) {
@@ -132,8 +40,8 @@ func Linkedin(c *gin.Context) {
 	c.JSON(200, content)
 }
 
-func AverageStats(stats []Statistics) AverageStatline {
-	avg := AverageStatline{}
+func AverageStats(stats []types.Statistics) types.AverageStatline {
+	avg := types.AverageStatline{}
 	for _, statline := range stats {
 		ast, _ := strconv.ParseFloat(statline.AST, 64)
 		avg.AST += ast
@@ -216,7 +124,7 @@ func GetRecentGames(c *gin.Context) {
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
 
-	stats := getStatsResponse{}
+	stats := types.GetStatsResponse{}
 	json.Unmarshal(body, &stats)
 	fmt.Println(stats)
 	recentStats := stats.Api.Statlines[len(stats.Api.Statlines)-5:]
@@ -244,9 +152,27 @@ func GetPlayers(c *gin.Context) {
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
 
-	players := PlayersResponse{}
+	players := types.PlayersResponse{}
 	json.Unmarshal(body, &players)
 	content := gin.H{"players": players.Api.Players}
+	c.JSON(200, content)
+}
+
+type Status int64
+
+const (
+	Empty Status = iota
+	Hit
+	Miss
+)
+
+func GetBoards(c *gin.Context) {
+	r := rand.New(rand.NewSource(99))
+	var board [100]bool
+	for i := 0; i < 100; i++ {
+		board[i] = r.Float32() < .5
+	}
+	content := gin.H{"board": board}
 	c.JSON(200, content)
 }
 
@@ -273,6 +199,48 @@ func GetKey() string {
 	return key.Key
 }
 
+var boards [][]bool
+
+var wsupgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin:     func(r *http.Request) bool { return true },
+}
+
+func wshandler(w http.ResponseWriter, r *http.Request) {
+	conn, err := wsupgrader.Upgrade(w, r, nil)
+	if err != nil {
+		fmt.Println("Failed to set websocket upgrade: %+v", err)
+		return
+	}
+
+	for {
+		t, msg, err := conn.ReadMessage()
+		if err != nil {
+			break
+		}
+		switch string(msg) {
+		case "GET_BOARD":
+			r := rand.New(rand.NewSource(100))
+			var board []bool
+			for i := 0; i < 100; i++ {
+				if r.Float32() < .5 {
+					board = append(board, true)
+				} else {
+					board = append(board, false)
+				}
+			}
+			boards = append(boards, board)
+			fmt.Println(boards)
+			conn.WriteJSON(boards)
+			break
+		case "FIRE":
+		default:
+			conn.WriteMessage(t, msg)
+		}
+	}
+}
+
 func main() {
 	arg := os.Args[1]
 	key := GetKey()
@@ -280,6 +248,9 @@ func main() {
 
 	router.Use(cors.Default())
 	router.Use(ApiMiddleware(key))
+	router.GET("/ws", func(c *gin.Context) {
+		wshandler(c.Writer, c.Request)
+	})
 
 	v1 := router.Group("v1")
 	{
@@ -288,10 +259,11 @@ func main() {
 		v1.GET("/linkedin", Linkedin)
 		v1.GET("/recentgames/:player", GetRecentGames)
 		v1.GET("/players", GetPlayers)
+		v1.GET("/boards", GetBoards)
 	}
 
-	if arg == "local" {
-		log.Fatal(autotls.Run(router, "api.kyojin.dev", "locahost"))
+	if arg == "prod" {
+		log.Fatal(autotls.Run(router, "api.kyojin.dev", "localhost"))
 	} else {
 		router.Run()
 	}

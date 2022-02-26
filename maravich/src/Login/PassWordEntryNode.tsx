@@ -1,28 +1,36 @@
-import { Radio } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Radio } from "@mui/material"
+import React, { useEffect, useState } from "react"
 
 type NodeProps = {
-    checked: boolean
+  checked: boolean
 }
 
 type PasswordEntryNodeProps = {
-    drawing: boolean
-    isActive: boolean
-    activate: () => void
+  drawing: boolean
+  isActive: boolean
+  activate: () => void
 }
 
-export const PasswordEntryNode: React.FC<PasswordEntryNodeProps> = ({drawing, isActive, activate}) => {
-    const [isHovered, setIsHovered] = useState(false)
+export const PasswordEntryNode: React.FC<PasswordEntryNodeProps> = ({
+  drawing,
+  isActive,
+  activate,
+}) => {
+  const [isHovered, setIsHovered] = useState(false)
 
-    const handleActivate = () => {
-        drawing && !isActive && activate()
-    }
-    
-    useEffect(() => {
-        isHovered && handleActivate()
-    })
+  const handleActivate = () => {
+    drawing && !isActive && activate()
+  }
 
-    return (
-        <Radio checked={isActive} onMouseOver={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} />
-    )
+  useEffect(() => {
+    isHovered && handleActivate()
+  })
+
+  return (
+    <Radio
+      checked={isActive}
+      onMouseOver={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    />
+  )
 }
