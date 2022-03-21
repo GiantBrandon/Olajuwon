@@ -1,12 +1,12 @@
-import axios from "axios"
-import { Player, Stats } from "../Utils/types"
+import axios from 'axios'
+import { Player, Stats } from '../Utils/types'
 
 
 export const getUrl = (): string => {
   // eslint-disable-next-line  no-restricted-globals
-  return location.hostname === "localhost"
-    ? "http://localhost:8080"
-    : "https://api.kyojin.dev:443"
+  return location.hostname === 'localhost'
+    ? 'http://localhost:8080'
+    : 'https://api.kyojin.dev:443'
 }
 
 export const getUsers = () =>

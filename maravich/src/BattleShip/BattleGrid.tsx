@@ -1,34 +1,48 @@
-import styled from "@emotion/styled"
-import { Grid, Paper } from "@mui/material"
-import React from "react"
+import styled from '@emotion/styled'
+import { Grid, Paper } from '@mui/material'
+import React, { useState } from 'react'
+import { BattleCell } from './BattleCell'
+import { BattleshipPlayer } from './types'
 
-const GridWrapper = styled(Paper)({
-	width: '264px',
-	alignSelf: 'center'
-})
+export type Size = 'small' | 'medium' | 'large'
 
-const GridItem = styled(Grid)({
-  height: "24px",
-  width: "24px",
+const GridWrapper = styled(Paper)((props: {size: number}) => ({
+	width: `${props.size}px`,
+	height: `${props.size}px`
+}))
+
+const GridView = styled(Grid)({
+  height: '100%'
 })
 
 type BattleGridProps = {
-  board: boolean[]
+  player: BattleshipPlayer
+  size?: Size
 }
 
-export const BattleGrid: React.FC<BattleGridProps> = ({ board }) => {
-	
+const getSize = (size: Size) => {
+  switch(size) {
+    case 'large':
+      return 480
+    case 'medium':
+      return 360
+    case 'small':
+      return 240
+  }
+}
+
+export const BattleGrid: React.FC<BattleGridProps> = ({ player, size = 'medium' }) => {
+  const [hover, setHover] = useState<number>(-10)
   return (
-    <GridWrapper>
-      <Grid container columns={10}>
-        {board.map((item) => {
+    <GridWrapper size={getSize(size)} onMouseLeave={() => setHover(-10)}>
+      <GridView container columns={10}>
+        {player.board?.map((item, index) => {
           return (
-            <GridItem item xs={1}>
-              <input type="checkbox" checked={item} />
-            </GridItem>
+            <BattleCell key={index} size={size} status={item} hover={index >= hover && index < hover + 4} setHover={() => setHover(index)}/>
           )
         })}
-      </Grid>
+      </GridView>
+      <div>{player.name}{player.defeat ? ' defeated' : undefined}</div>
     </GridWrapper>
   )
 }

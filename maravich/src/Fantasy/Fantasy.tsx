@@ -1,10 +1,10 @@
-import styled from "@emotion/styled"
-import { Autocomplete, Grid, Paper, TextField } from "@mui/material"
-import React, { useEffect, useState } from "react"
-import { getPlayers, getRecentGames } from "../Api/Router"
-import { CenteredDiv, spacing } from "../styles"
-import { Player, Stats } from "../Utils/types"
-import { PlayerStats } from "./PlayerStats"
+import styled from '@emotion/styled'
+import { Autocomplete, Grid, Paper, TextField } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { getPlayers, getRecentGames } from '../Api/Router'
+import { CenteredDiv, spacing } from '../styles'
+import { Player, Stats } from '../Utils/types'
+import { PlayerStats } from './PlayerStats'
 
 const PlayerWrapper = styled(Paper)({
   padding: spacing.medium,
@@ -12,7 +12,7 @@ const PlayerWrapper = styled(Paper)({
 })
 
 const PlayerField = styled(TextField)({
-  minWidth: "240px",
+  minWidth: '240px',
 })
 
 const emptyStats: Stats = {
@@ -88,11 +88,11 @@ export const Fantasy: React.FC = (props) => {
           <Autocomplete
             options={players}
             getOptionLabel={(option) =>
-              option.firstName + " " + option.lastName
+              option.firstName + ' ' + option.lastName
             }
             onChange={(_, value) => changePlayer(0, value ? value : {firstName: '', lastName: '', playerId: 0})}
             renderInput={(params) => (
-              <PlayerField {...params} value="Player" variant="outlined" />
+              <PlayerField {...params} value='Player' variant='outlined' />
             )}
           />
           {selectedPlayers[0] && (
@@ -107,11 +107,11 @@ export const Fantasy: React.FC = (props) => {
           <Autocomplete
             options={players}
             getOptionLabel={(option) =>
-              option.firstName + " " + option.lastName
+              option.firstName + ' ' + option.lastName
             }
             onChange={(_, value) => changePlayer(1, value ? value : {firstName: '', lastName: '', playerId: 0})}
             renderInput={(params) => (
-              <PlayerField {...params} value="Player" variant="outlined" />
+              <PlayerField {...params} value='Player' variant='outlined' />
             )}
           />
 
@@ -127,11 +127,11 @@ export const Fantasy: React.FC = (props) => {
           <Autocomplete
             options={players}
             getOptionLabel={(option) =>
-              option.firstName + " " + option.lastName
+              option.firstName + ' ' + option.lastName
             }
             onChange={(_, value) => changePlayer(2, value ? value : {firstName: '', lastName: '', playerId: 0})}
             renderInput={(params) => (
-              <PlayerField {...params} value="Player" variant="outlined" />
+              <PlayerField {...params} value='Player' variant='outlined' />
             )}
           />
 

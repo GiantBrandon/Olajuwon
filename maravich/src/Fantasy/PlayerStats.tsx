@@ -1,7 +1,7 @@
-import styled from "@emotion/styled"
-import { green, red } from "@mui/material/colors"
-import React from "react"
-import { Stats } from "../Utils/types"
+import styled from '@emotion/styled'
+import { green, red } from '@mui/material/colors'
+import React from 'react'
+import { Stats } from '../Utils/types'
 
 type PlayerStatsProps = {
   player: Stats
@@ -47,14 +47,14 @@ export const PlayerStats: React.FC<PlayerStatsProps> = (props) => {
   }
   return (
     <>
-      {displayStat("Points", player.points, low.points, high.points)}
-      {displayStat("Rebounds", player.totReb, low.totReb, high.totReb)}
-      {displayStat("Assists", player.assists, low.assists, high.assists)}
-      {displayStat("Blocks", player.blocks, low.blocks, high.blocks)}
-      {displayStat("Steals", player.steals, low.steals, high.steals)}
-      {displayStat("Field Goal %", player.fgp, low.fgp, high.fgp)}
-      {displayStat("3 Point %", player.tpp, low.tpp, high.tpp)}
-      {displayStat("Free Throw %", player.ftp, low.ftp, high.ftp)}
+      {displayStat('Points', player.points, low.points, high.points)}
+      {displayStat('Rebounds', player.totReb, low.totReb, high.totReb)}
+      {displayStat('Assists', player.assists, low.assists, high.assists)}
+      {displayStat('Blocks', player.blocks, low.blocks, high.blocks)}
+      {displayStat('Steals', player.steals, low.steals, high.steals)}
+      {displayStat('Field Goal %', player.fgp, low.fgp, high.fgp)}
+      {displayStat('3 Point %', player.tpp, low.tpp, high.tpp)}
+      {displayStat('Free Throw %', player.ftp, low.ftp, high.ftp)}
     </>
   )
 }

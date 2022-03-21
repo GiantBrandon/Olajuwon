@@ -199,7 +199,20 @@ func GetKey() string {
 	return key.Key
 }
 
-var boards [][]bool
+var game = types.BattleshipGame{
+	Players: []types.BattleshipPlayer{},
+	Rules: types.BattleshipRules{
+		ShipType: "Ships",
+		FireType: "Equality",
+	},
+}
+var active = 0
+
+func updateGame() {
+	for _, player := range game.Players {
+		player.Connection.WriteJSON(types.GameToView(game, player))
+	}
+}
 
 var wsupgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -216,25 +229,47 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 
 	for {
 		t, msg, err := conn.ReadMessage()
+		request := types.BattleshipRequest{}
+		json.Unmarshal(msg, &request)
 		if err != nil {
 			break
 		}
-		switch string(msg) {
-		case "GET_BOARD":
-			r := rand.New(rand.NewSource(100))
-			var board []bool
-			for i := 0; i < 100; i++ {
-				if r.Float32() < .5 {
-					board = append(board, true)
-				} else {
-					board = append(board, false)
+		switch request.Command {
+		case "JOIN_ROOM":
+			game.Players = append(game.Players, types.BattleshipPlayer{Name: request.Name, Active: len(game.Players) == 0, Connection: conn})
+			updateGame()
+			break
+		case "RESET":
+			for i := 0; i < len(game.Players); i++ {
+				game.Players[i] = types.BattleshipPlayer{Name: request.Name, Active: i == 0, Connection: conn}
+			}
+			updateGame()
+			break
+		case "ADD_BOARD":
+			for i := 0; i < len(game.Players); i++ {
+				if game.Players[i].Name == request.Name {
+					game.Players[i].Ships = request.Ships
 				}
 			}
-			boards = append(boards, board)
-			fmt.Println(boards)
-			conn.WriteJSON(boards)
+			updateGame()
 			break
 		case "FIRE":
+			if active == len(game.Players)-1 {
+				active = 0
+			} else {
+				active = active + 1
+			}
+			for i := 0; i < len(game.Players); i++ {
+				game.Players[i].Targets = append(game.Players[i].Targets, request.Targets...)
+				game.Players[i].Defeat = types.CheckDefeat(game.Players[i])
+				if i == active {
+					game.Players[i].Active = true
+				} else {
+					game.Players[i].Active = false
+				}
+			}
+			updateGame()
+			break
 		default:
 			conn.WriteMessage(t, msg)
 		}

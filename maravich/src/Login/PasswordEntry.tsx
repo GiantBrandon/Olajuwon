@@ -1,19 +1,19 @@
-import styled from "@emotion/styled"
-import React, { ReactNode, useContext, useState } from "react"
-import { PasswordEntryNode } from "./PassWordEntryNode"
+import styled from '@emotion/styled'
+import React, { ReactNode, useContext, useState } from 'react'
+import { PasswordEntryNode } from './PassWordEntryNode'
 
 const Trace = styled.svg({
-  position: "absolute",
+  position: 'absolute',
 })
 
 const NodeGrid = styled.div(() => ({
-  display: "flex",
-  flexDirection: "column",
+  display: 'flex',
+  flexDirection: 'column',
   border: `1px solid #FFFFFF`,
 }))
 
 const NodeRow = styled.div({
-  display: "inline-flex",
+  display: 'inline-flex',
   zIndex: 1,
 })
 
@@ -36,13 +36,13 @@ export const PasswordEntry: React.FC = (props) => {
           y1={selected[i].y * 42 + 21}
           x2={selected[i + 1].x * 42 + 21}
           y2={selected[i + 1].y * 42 + 21}
-          stroke="#FFFFFF"
-          strokeWidth="2"
+          stroke='#FFFFFF'
+          strokeWidth='2'
         />
       )
     }
     return (
-      <Trace height="212" width="212">
+      <Trace height='212' width='212'>
         {lines}
       </Trace>
     )
