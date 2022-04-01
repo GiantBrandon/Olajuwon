@@ -17,13 +17,13 @@ const GridItem = styled.div((props: {hover: boolean}) => ({
 const getIcon = (status: BattleshipCellStatus, size: Size) => {
   switch (status) {
     case 'Untouched':
-      return <Water fontSize={size} />
+      return <Water fontSize={size} color='primary' />
     case 'Hit':
-      return <Anchor fontSize={size} />
+      return <Anchor fontSize={size} color='disabled' />
     case 'Miss':
       return <Close fontSize={size} />
     case 'Ship':
-      return <DirectionsBoat fontSize={size} />
+      return <DirectionsBoat fontSize={size} color='success' />
       case 'Target':
         return <ModeStandby fontSize={size} />
     default:

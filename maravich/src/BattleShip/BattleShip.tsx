@@ -1,9 +1,12 @@
 import { Button, Input } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { BattleshipGame, BattleshipPlayer } from './types'
+import { BattleshipGame } from './types'
 import { BattleView } from './BattleView'
 
-export const socket = new WebSocket('ws://localhost:8080/ws')
+export const socket = location.hostname === 'localhost'
+    ? new WebSocket('ws://localhost:8080/ws') : 
+    new WebSocket('ws://api.kyojin.dev:443/ws')
+
 
 export const BattleShip: React.FC = (props) => {
   const [name, setName] = useState('')
@@ -12,8 +15,8 @@ export const BattleShip: React.FC = (props) => {
 
 	useEffect(() => {
     socket.onmessage = (incoming) => {
-      console.log(incoming.data)
       const game = JSON.parse(incoming.data)
+      console.log(game)
       setGame(game)
     }
 	}, [])

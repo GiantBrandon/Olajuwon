@@ -205,6 +205,7 @@ var game = types.BattleshipGame{
 		ShipType: "Ships",
 		FireType: "Equality",
 	},
+	Messages: []string{},
 }
 var active = 0
 
@@ -231,12 +232,21 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 		t, msg, err := conn.ReadMessage()
 		request := types.BattleshipRequest{}
 		json.Unmarshal(msg, &request)
-		if err != nil {
+		if err != nil || t == -1 {
+			for i := 0; i < len(game.Players); i++ {
+				if game.Players[i].Connection == conn {
+					game.Messages = append(game.Messages, fmt.Sprintf("%s left", game.Players[i].Name))
+					game.Players = append(game.Players[:i], game.Players[i+1:]...)
+					updateGame()
+					break
+				}
+			}
 			break
 		}
 		switch request.Command {
 		case "JOIN_ROOM":
 			game.Players = append(game.Players, types.BattleshipPlayer{Name: request.Name, Active: len(game.Players) == 0, Connection: conn})
+			game.Messages = append(game.Messages, fmt.Sprintf("%s joined", request.Name))
 			updateGame()
 			break
 		case "RESET":
@@ -268,6 +278,11 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 					game.Players[i].Active = false
 				}
 			}
+			updateGame()
+			break
+		case "UPDATE_RULES":
+			game.Rules = request.Rules
+			game.Messages = append(game.Messages, fmt.Sprintf("%s updated the rules", request.Name))
 			updateGame()
 			break
 		default:

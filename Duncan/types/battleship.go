@@ -35,6 +35,7 @@ type BattleshipGame struct {
 	Players   []BattleshipPlayer `json:"players"`
 	IsStarted bool               `json:"started"`
 	Rules     BattleshipRules    `json:"rules"`
+	Messages  []string           `json:"messages"`
 }
 
 type BattleshipRules struct {
@@ -103,6 +104,7 @@ type BattleshipRequest struct {
 	Board   []BattleshipCell `json:"board"`
 	Targets []int            `json:"targets"`
 	Ships   map[string][]int `json:"ships"`
+	Rules   BattleshipRules  `json:"rules"`
 }
 
 func Filter(players []BattleshipPlayer, test func(BattleshipPlayer) bool) (ret []BattleshipPlayer) {
@@ -119,6 +121,7 @@ type BattleshipView struct {
 	Self      BattleshipPlayerView   `json:"self"`
 	IsStarted bool                   `json:"started"`
 	Rules     BattleshipRules        `json:"rules"`
+	Messages  []string               `json:"messages"`
 }
 
 func GameToView(game BattleshipGame, self BattleshipPlayer) BattleshipView {
@@ -128,5 +131,5 @@ func GameToView(game BattleshipGame, self BattleshipPlayer) BattleshipView {
 			others = append(others, BattleshipPlayerView{Name: player.Name, Board: AssembleBoard(player, false), Active: player.Active, Defeat: player.Defeat})
 		}
 	}
-	return BattleshipView{Self: BattleshipPlayerView{Name: self.Name, Board: AssembleBoard(self, true), Active: self.Active, Defeat: self.Defeat}, Others: others, IsStarted: game.IsStarted, Rules: game.Rules}
+	return BattleshipView{Self: BattleshipPlayerView{Name: self.Name, Board: AssembleBoard(self, true), Active: self.Active, Defeat: self.Defeat}, Others: others, IsStarted: game.IsStarted, Rules: game.Rules, Messages: game.Messages}
 }

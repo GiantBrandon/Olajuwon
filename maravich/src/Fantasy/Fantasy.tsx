@@ -47,9 +47,6 @@ export const Fantasy: React.FC = (props) => {
   )
   const [highStats, setHighStats] = useState<Stats>(emptyStats)
   const [lowStats, setLowStats] = useState<Stats>(emptyStats)
-  console.log(players)
-  console.log(selectedPlayers)
-  console.log(highStats, lowStats)
 
   useEffect(() => {
     getPlayers().then((response) => setPlayers(response.players))

@@ -9,7 +9,7 @@ const Trace = styled.svg({
 const NodeGrid = styled.div(() => ({
   display: 'flex',
   flexDirection: 'column',
-  border: `1px solid #FFFFFF`,
+  border: '1px solid #FFFFFF',
 }))
 
 const NodeRow = styled.div({

@@ -35,12 +35,14 @@ export const Rotations = ['right', 'down', 'left', 'up'] as const
 export type Rotation = typeof Rotations[number]
 
 export const ShipTypes = ['Carrier', 'BattleShip', 'Destroyer', 'Submarine', 'Patrol Boat'] as const
-export type ShipType = typeof ShipTypes[number]
+export const TetrisTypes = ['O-Block', 'Hero-Block', 'S-Block', 'Z-Block', 'L-Block', 'J-Block', 'T-Block'] as const
+export type ShipType = typeof ShipTypes[number] | typeof TetrisTypes[number]
 
 export type BattleshipGame = {
   self: BattleshipPlayer
   others: BattleshipPlayer[],
-  rules: BattleshipRules
+  rules: BattleshipRules,
+  messages: string[]
 }
 
 export type BattleshipRules = {

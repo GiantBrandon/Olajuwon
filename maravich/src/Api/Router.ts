@@ -33,6 +33,5 @@ export const getBoard = (): Promise<{ board: boolean[] }> =>
   axios
     .get(`${getUrl()}/v1/boards`)
     .then((Response) => {
-      console.log(Response)
       return Response.data
     })

@@ -1,6 +1,7 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material"
-import React, { useState } from "react"
-import { BattleshipFireType, BattleshipFireTypes, BattleshipFleetType, BattleshipFleetTypes, BattleshipRules, fireTypeDescriptions } from "./types"
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material'
+import React, { useState } from 'react'
+import { socket } from './BattleShip'
+import { BattleshipFireType, BattleshipFireTypes, BattleshipFleetType, BattleshipFleetTypes, BattleshipRules, fireTypeDescriptions } from './types'
 
 type RulesEditorProps = {
     open: boolean
@@ -20,7 +21,8 @@ export const RulesEditor: React.FC<RulesEditorProps> = ({open, handleClose, rule
   }
 
   const submit = () => {
-    console.log(newRules)
+    console.log(rules)
+    socket.send(JSON.stringify({rules: newRules, command: 'UPDATE_RULES'}))
     handleClose()
   }
 
@@ -50,8 +52,8 @@ export const RulesEditor: React.FC<RulesEditorProps> = ({open, handleClose, rule
           </Select>
         </DialogContent>
         <DialogActions>
-          <Button onClick={submit}>Cancel</Button>
-          <Button onClick={handleClose}>Save</Button>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={submit}>Save</Button>
         </DialogActions>
       </Dialog>
 }
