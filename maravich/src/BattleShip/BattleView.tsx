@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { BattleGrid } from './BattleGrid'
 import { BattleshipGame } from './types'
 import { PlayerGrid } from './PlayerGrid'
-import { Delete, MessageSharp, Settings } from '@mui/icons-material'
+import { Delete, Settings } from '@mui/icons-material'
 import { RulesEditor } from './RulesEditor'
 import { socket } from './BattleShip'
 

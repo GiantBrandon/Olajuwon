@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { ReactNode, useContext, useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { PasswordEntryNode } from './PassWordEntryNode'
 
 const Trace = styled.svg({
@@ -22,7 +22,7 @@ type Coordinate = {
   y: number
 }
 
-export const PasswordEntry: React.FC = (props) => {
+export const PasswordEntry: React.FC = () => {
   const [selected, setSelected] = useState<Coordinate[]>([])
   const [drawing, setDrawing] = useState(false)
 

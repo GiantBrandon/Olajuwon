@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { HashRouter, Route } from 'react-router-dom'
+import React from 'react'
+import { BrowserRouter, Route, Link } from 'react-router-dom'
 import { Expansion } from './Expansion'
 import { Login } from './Login/Login'
 import { Fantasy } from './Fantasy/Fantasy'
@@ -39,18 +39,12 @@ export const App: React.FC = () => {
 			mode: 'dark',
 		},
 	})
-	const [ratio, setRatio] = useState(window.innerHeight / window.innerWidth)
-
-	const onResize = () => {
-		setRatio(window.innerHeight / window.innerWidth)
-	}
-	window.addEventListener('resize', onResize)
 
 	return (
-		<HashRouter>
+		<BrowserRouter>
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<Route path='/Home'>
+				<Route path='/'>
 					{window.innerHeight / window.innerWidth < .65 ? <Background src={background} width={'100%'} height={'auto'} /> : <Background src={background} width={'auto'} height={'100%'} />}
 					<Expansion />
 					<ShellyLink
@@ -91,10 +85,12 @@ export const App: React.FC = () => {
 				<Route exact path='/BattleShip'>
 					<BattleShip />
 				</Route>
-				<HomeButton color='primary' href='#/Home'>
-					<Home fontSize='large' />
-				</HomeButton>
+				<Link to='/'>
+					<HomeButton color='primary'>
+						<Home fontSize='large' />
+					</HomeButton>
+				</Link>
 			</ThemeProvider>
-		</HashRouter>
+		</BrowserRouter>
 	)
 }

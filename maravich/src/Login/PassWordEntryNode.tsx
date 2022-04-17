@@ -1,10 +1,6 @@
 import { Radio } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
-type NodeProps = {
-  checked: boolean
-}
-
 type PasswordEntryNodeProps = {
   drawing: boolean
   isActive: boolean

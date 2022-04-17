@@ -311,10 +311,5 @@ func main() {
 		v1.GET("/players", GetPlayers)
 		v1.GET("/boards", GetBoards)
 	}
-
-	if arg == "prod" {
-		log.Fatal(autotls.Run(router, "api.kyojin.dev", "localhost"))
-	} else {
 		router.Run()
-	}
 }

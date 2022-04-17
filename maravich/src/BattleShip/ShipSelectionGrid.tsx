@@ -1,12 +1,10 @@
 import styled from '@emotion/styled'
-import { Keyboard, RotateRight, Save, Settings } from '@mui/icons-material'
-import { Button, ButtonGroup, Card, Chip, FormControlLabel, Grid, IconButton, Paper, Radio, RadioGroup } from '@mui/material'
-import React, { KeyboardEvent, KeyboardEventHandler, useEffect, useState } from 'react'
+import { RotateRight, Save } from '@mui/icons-material'
+import { Button, ButtonGroup, FormControlLabel, Grid, Paper, Radio, RadioGroup } from '@mui/material'
+import React, { KeyboardEvent, useState } from 'react'
 import { BattleCell } from './BattleCell'
-import { Size } from './BattleGrid'
 import { socket } from './BattleShip'
-import { RulesEditor } from './RulesEditor'
-import { BattleshipFleetType, BattleshipGame, BattleshipPlayer, Rotation, Rotations, ShipType, ShipTypes, TetrisTypes } from './types'
+import { BattleshipGame, Rotation, Rotations, ShipType, ShipTypes, TetrisTypes } from './types'
 
 const GridWrapper = styled(Paper)({
 	width: '480px',

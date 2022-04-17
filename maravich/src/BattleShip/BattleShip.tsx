@@ -8,7 +8,7 @@ export const socket = location.hostname === 'localhost'
     new WebSocket('ws://api.kyojin.dev:443/ws')
 
 
-export const BattleShip: React.FC = (props) => {
+export const BattleShip: React.FC = () => {
   const [name, setName] = useState('')
   const [game, setGame] = useState<BattleshipGame>()
   console.log(game)

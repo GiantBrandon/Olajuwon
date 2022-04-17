@@ -66,7 +66,7 @@ export const Hexagon: React.FC<HexagonProps> = ({
 	...props
 }: HexagonProps) => {
 	const [hover, setHover] = useState(false)
-	const palette = (useTheme() as any).palette
+	const palette = useTheme().palette
 
 	return (
 		<HexagonWrapper

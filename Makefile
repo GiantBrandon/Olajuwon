@@ -2,23 +2,19 @@
 
 install: ## yarn and go install — Concurrently installs go and yarn dependencies
 	cd Duncan; go get ./...
-	yarn --cwd ./maravich install
+	cd maravich; yarn install
 
 tidy: ## go mod tidy — Prune any no-longer-needed dependencies from go.mod and add any dependencies needed for other combinations of OS, architecture, and build tags
 	cd Duncan; go mod tidy
 
 upgrade: ## go get -u ./... — Update all direct and indirect dependencies to latest minor or patch upgrades (pre-releases are ignored)
 	cd Duncan; go get -u ./...
-	yarn --cwd ./maravich upgrade
 
 clean: ## clean - removes existing binaries, vendored code and code coverage results
-	rm -rf ./bin Duncan/vendor coverage.out Maravich/node_modules ./tmp
+	rm -rf ./bin Duncan/vendor coverage.out maravich/node_modules ./tmp
 
-local: ## go run - runs the main hack server found at cmd/main.go
+local: ## go run - runs the main server found at cmd/main.go
 	cd Duncan; go run cmd/main.go local
-
-prod: ## go run - runs the main hack server found at cmd/main.go
-	cd Duncan; go run cmd/main.go prod
 
 ui: ## yarn start
 	cd maravich; yarn start

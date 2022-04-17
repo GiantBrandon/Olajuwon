@@ -7,3 +7,5 @@
 .vscode
 keyPair.pem
 maravich/node_modules
+maravich/.storybook
+maravich/.yarn

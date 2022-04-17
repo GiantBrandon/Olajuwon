@@ -40,7 +40,7 @@ const emptyStats: Stats = {
   turnovers: -1,
 }
 
-export const Fantasy: React.FC = (props) => {
+export const Fantasy: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([])
   const [selectedPlayers, setSelectedPlayers] = useState<(Stats | undefined)[]>(
     [undefined, undefined, undefined]
