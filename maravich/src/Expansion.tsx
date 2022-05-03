@@ -92,7 +92,7 @@ export const Expansion: React.FC<ExpansionProps> = ({
       {expanded && (
         <>
           <GithubButton
-            href={'/Github'}
+            href={'#/Github'}
             hexWidth={hexWidth}
             hexHeight={hexHeight}
           >
@@ -101,7 +101,7 @@ export const Expansion: React.FC<ExpansionProps> = ({
             </Hexagon>
           </GithubButton>
           <LinkedInButton
-            href={'/LinkedIn'}
+            href={'#/LinkedIn'}
             hexWidth={hexWidth}
             hexHeight={hexHeight}
           >
@@ -110,7 +110,7 @@ export const Expansion: React.FC<ExpansionProps> = ({
             </Hexagon>
           </LinkedInButton>
           <LoginButton
-            href={'/Login'}
+            href={'#/Login'}
             hexWidth={hexWidth}
             hexHeight={hexHeight}
           >
@@ -119,14 +119,14 @@ export const Expansion: React.FC<ExpansionProps> = ({
             </Hexagon>
           </LoginButton>
           <BattleShipButton
-            href={'/BattleShip'}
+            href={'#/BattleShip'}
           >
             <Hexagon width={hexWidth}>
               <DirectionsBoat fontSize='large' />
             </Hexagon>
           </BattleShipButton>
           <ComingButton2
-            href={'/Fantasy'}
+            href={'#/Fantasy'}
           >
             <Hexagon width={hexWidth}>
               <SportsBasketball fontSize='large' />

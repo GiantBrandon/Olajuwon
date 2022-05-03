@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Link } from 'react-router-dom'
+import { HashRouter, Route, Link } from 'react-router-dom'
 import { Expansion } from './Expansion'
 import { Login } from './Login/Login'
 import { Fantasy } from './Fantasy/Fantasy'
@@ -41,7 +41,7 @@ export const App: React.FC = () => {
   })
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Route exact path='/'>
@@ -85,12 +85,12 @@ export const App: React.FC = () => {
         <Route exact path='/BattleShip'>
           <BattleShip />
         </Route>
-        <Link to='/'>
+        <Link to='#/'>
           <HomeButton color='primary'>
             <Home fontSize='large' />
           </HomeButton>
         </Link>
       </ThemeProvider>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
