@@ -1,7 +1,6 @@
 package main
 
 import (
-	"container/list"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -200,8 +199,7 @@ func GetKey() string {
 	return key.Key
 }
 
-var turnOrder = list.New()
-var active = turnOrder.Front()
+var turnOrder = make([]string, 0)
 var game = types.BattleshipGame{
 	Players: make(map[string]types.BattleshipPlayer),
 	Rules: types.BattleshipRules{
@@ -213,8 +211,7 @@ var game = types.BattleshipGame{
 
 func updateGame() {
 	for name, player := range game.Players {
-		activeName, _ := active.Value.(string)
-		player.Connection.WriteJSON(types.GameToView(game, name, activeName))
+		player.Connection.WriteJSON(types.GameToView(game, name, turnOrder[0]))
 	}
 }
 
@@ -240,6 +237,13 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 				if player.Connection == conn {
 					game.Messages = append(game.Messages, fmt.Sprintf("%s left", name))
 					delete(game.Players, name)
+					index := -1
+					for i, value := range turnOrder {
+						if value == name {
+							index = i
+						}
+					}
+					turnOrder = append(turnOrder[:index], turnOrder[index+1:]...)
 					updateGame()
 					break
 				}
@@ -249,10 +253,7 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 		switch request.Command {
 		case "JOIN_ROOM":
 			game.Players[request.Name] = types.BattleshipPlayer{Connection: conn}
-			turnOrder.PushBack(request.Name)
-			if active == nil {
-				active = turnOrder.Front()
-			}
+			turnOrder = append(turnOrder, request.Name)
 			game.Messages = append(game.Messages, fmt.Sprintf("%s joined", request.Name))
 			updateGame()
 			break
@@ -271,13 +272,13 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 			updateGame()
 			break
 		case "FIRE":
-			if active.Next() == nil {
-				active = turnOrder.Front()
-			} else {
-				active = active.Next()
+			turnOrder = append(turnOrder[1:], turnOrder[0])
+			for game.Players[turnOrder[0]].Defeat == true {
+				turnOrder = append(turnOrder[1:], turnOrder[0])
 			}
 			switch game.Rules.FireType {
 			case "Original":
+				game.Messages = append(game.Messages, fmt.Sprintf("%s fired at %v", request.Name, request.Targets))
 				for name, targets := range request.Targets {
 					player := game.Players[name]
 					player.Targets = append(game.Players[name].Targets, targets...)
