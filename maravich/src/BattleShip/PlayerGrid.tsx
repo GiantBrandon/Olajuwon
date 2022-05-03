@@ -1,18 +1,15 @@
 import React from 'react'
 import { BattleGrid } from './BattleGrid'
-import { BattleshipGame } from './types'
-import { ShipSelectionGrid } from './ShipSelectionGrid'
+import { BattleshipPlayer } from './types'
 import { TargetSelectionGrid } from './TargetSelectionGrid'
 
 type PlayerGridProps = {
-  game: BattleshipGame
+  self: BattleshipPlayer
 }
 
-export const PlayerGrid: React.FC<PlayerGridProps> = ({game}) => {
-  if (game.self.board.length == 0)
-    return <ShipSelectionGrid game={game} />
-  else if (game.self.active)
-    return <TargetSelectionGrid player={game.self} size={'large'} />
+export const PlayerGrid: React.FC<PlayerGridProps> = ({self}) => {
+  if (self.active)
+    return <TargetSelectionGrid player={self} />
   else
-    return <BattleGrid player={game.self} size={'large'} />
+    return <BattleGrid player={self} />
 }

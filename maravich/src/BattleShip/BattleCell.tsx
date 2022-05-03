@@ -16,18 +16,18 @@ const GridItem = styled.div((props: {hover: boolean}) => ({
 
 const getIcon = (status: BattleshipCellStatus, size: Size) => {
   switch (status) {
-    case 'Untouched':
-      return <Water fontSize={size} color='primary' />
-    case 'Hit':
-      return <Anchor fontSize={size} color='disabled' />
-    case 'Miss':
-      return <Close fontSize={size} />
-    case 'Ship':
-      return <DirectionsBoat fontSize={size} color='success' />
-      case 'Target':
-        return <ModeStandby fontSize={size} />
-    default:
-      return <QuestionMark fontSize={size} />
+  case 'Untouched':
+    return <Water fontSize={size} color='primary' />
+  case 'Hit':
+    return <Anchor fontSize={size} color='disabled' />
+  case 'Miss':
+    return <Close fontSize={size} />
+  case 'Ship':
+    return <DirectionsBoat fontSize={size} color='success' />
+  case 'Target':
+    return <ModeStandby fontSize={size} />
+  default:
+    return <QuestionMark fontSize={size} />
   }
 }
 
@@ -41,8 +41,8 @@ type BattleCellProps = {
 
 export const BattleCell: React.FC<BattleCellProps> = ({ status, hover, size, setHover, onClick }) => {	
   return (
-            <GridItem hover={hover} onMouseEnter={setHover} onClick={onClick}>
-              {getIcon(status, size)}
-              </GridItem>
-          )
+    <GridItem hover={hover} onMouseEnter={setHover} onClick={onClick}>
+      {getIcon(status, size)}
+    </GridItem>
+  )
 }

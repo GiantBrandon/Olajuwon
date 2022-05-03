@@ -13,7 +13,7 @@ upgrade: ## go get -u ./... — Update all direct and indirect dependencies to l
 clean: ## clean - removes existing binaries, vendored code and code coverage results
 	rm -rf ./bin Duncan/vendor coverage.out maravich/node_modules ./tmp
 
-local: ## go run - runs the main server found at cmd/main.go
+server: ## go run - runs the main server found at cmd/main.go
 	cd Duncan; go run cmd/main.go local
 
 ui: ## yarn start
@@ -33,7 +33,7 @@ vet: ## go vet ./... - report likely mistakes in packages
 
 lint: ## golangci-lint run ./... - run an aggregated linter on all go files, requires https://github.com/golangci/golangci-lint
 	cd Duncan; golangci-lint run ./...
-	yarn --cwd ./maravich lint
+	cd maravich; yarn lint --fix
 
 refresh: ## refresh - runs the main hack server found at cmd/hack/main.go and auto refreshes on code changes, requires https://github.com/markbates/refresh
 	@refresh run Duncan/cmd/main.go

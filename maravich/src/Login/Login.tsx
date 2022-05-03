@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import {
   Button,
   Checkbox,
@@ -18,14 +17,15 @@ import {
   Visibility,
 } from '@mui/icons-material'
 import React, { useState } from 'react'
-import { CenteredDiv, spacing } from '../styles'
+import { CenteredDiv } from '../styles'
 import { PasswordEntry } from './PasswordEntry'
+import { styled } from '@mui/system'
 
-const LoginWrapper = styled(Paper)({
-  padding: spacing.medium,
+const LoginWrapper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(2),
   display: 'flex',
   flexDirection: 'column',
-})
+}))
 
 const UsernameField = styled(TextField)({
   marginBottom: '8px',

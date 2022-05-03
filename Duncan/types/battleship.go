@@ -32,10 +32,10 @@ const (
 )
 
 type BattleshipGame struct {
-	Players   []BattleshipPlayer `json:"players"`
-	IsStarted bool               `json:"started"`
-	Rules     BattleshipRules    `json:"rules"`
-	Messages  []string           `json:"messages"`
+	Players   map[string]BattleshipPlayer `json:"players"`
+	IsStarted bool                        `json:"started"`
+	Rules     BattleshipRules             `json:"rules"`
+	Messages  []string                    `json:"messages"`
 }
 
 type BattleshipRules struct {
@@ -44,10 +44,8 @@ type BattleshipRules struct {
 }
 
 type BattleshipPlayer struct {
-	Name       string           `json:"name"`
 	Ships      map[string][]int `json:"ships"`
 	Targets    []int            `json:"targets"`
-	Active     bool             `json:"active"`
 	Defeat     bool             `json:"defeat"`
 	Connection *websocket.Conn
 }
@@ -102,7 +100,7 @@ type BattleshipRequest struct {
 	Name    string           `json:"name"`
 	Command string           `json:"command"`
 	Board   []BattleshipCell `json:"board"`
-	Targets []int            `json:"targets"`
+	Targets map[string][]int `json:"targets"`
 	Ships   map[string][]int `json:"ships"`
 	Rules   BattleshipRules  `json:"rules"`
 }
@@ -124,12 +122,19 @@ type BattleshipView struct {
 	Messages  []string               `json:"messages"`
 }
 
-func GameToView(game BattleshipGame, self BattleshipPlayer) BattleshipView {
-	others := []BattleshipPlayerView{}
-	for _, player := range game.Players {
-		if self.Name != player.Name {
-			others = append(others, BattleshipPlayerView{Name: player.Name, Board: AssembleBoard(player, false), Active: player.Active, Defeat: player.Defeat})
+func GameToView(game BattleshipGame, self string, active string) BattleshipView {
+	otherPlayers := []BattleshipPlayerView{}
+	for name, player := range game.Players {
+		if self != name {
+			otherPlayers = append(otherPlayers, BattleshipPlayerView{Name: name, Board: AssembleBoard(player, false), Active: name == active, Defeat: player.Defeat})
 		}
 	}
-	return BattleshipView{Self: BattleshipPlayerView{Name: self.Name, Board: AssembleBoard(self, true), Active: self.Active, Defeat: self.Defeat}, Others: others, IsStarted: game.IsStarted, Rules: game.Rules, Messages: game.Messages}
+	selfPlayer := game.Players[self]
+	return BattleshipView{
+		Self:      BattleshipPlayerView{Name: self, Board: AssembleBoard(selfPlayer, true), Active: self == active, Defeat: selfPlayer.Defeat},
+		Others:    otherPlayers,
+		IsStarted: game.IsStarted,
+		Rules:     game.Rules,
+		Messages:  game.Messages,
+	}
 }

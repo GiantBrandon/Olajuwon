@@ -1,15 +1,15 @@
-import styled from '@emotion/styled'
 import { Autocomplete, Grid, Paper, TextField } from '@mui/material'
+import { styled } from '@mui/system'
 import React, { useEffect, useState } from 'react'
 import { getPlayers, getRecentGames } from '../Api/Router'
-import { CenteredDiv, spacing } from '../styles'
+import { CenteredDiv } from '../styles'
 import { Player, Stats } from '../Utils/types'
 import { PlayerStats } from './PlayerStats'
 
-const PlayerWrapper = styled(Paper)({
-  padding: spacing.medium,
-  margin: spacing.medium,
-})
+const PlayerWrapper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(2),
+  margin: theme.spacing(2),
+}))
 
 const PlayerField = styled(TextField)({
   minWidth: '240px',

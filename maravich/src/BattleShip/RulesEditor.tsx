@@ -21,39 +21,38 @@ export const RulesEditor: React.FC<RulesEditorProps> = ({open, handleClose, rule
   }
 
   const submit = () => {
-    console.log(rules)
     socket.send(JSON.stringify({rules: newRules, command: 'UPDATE_RULES'}))
     handleClose()
   }
 
-    return <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
-        <DialogContent>
-            <h3>Fleet Type</h3>
-          <DialogContentText>
+  return <Dialog open={open} onClose={handleClose}>
+    <DialogTitle>Subscribe</DialogTitle>
+    <DialogContent>
+      <h3>Fleet Type</h3>
+      <DialogContentText>
             Determines the size and shape of your fleet.
-          </DialogContentText>
-          <Select
-            value={newRules.shipType}
-            onChange={changeShipType}
-          >
-            {BattleshipFleetTypes.map((fleetType) => <MenuItem key={fleetType} value={fleetType}>{fleetType}</MenuItem>)}
-          </Select>
+      </DialogContentText>
+      <Select
+        value={newRules.shipType}
+        onChange={changeShipType}
+      >
+        {BattleshipFleetTypes.map((fleetType) => <MenuItem key={fleetType} value={fleetType}>{fleetType}</MenuItem>)}
+      </Select>
 
-            <h3>Fire Type</h3>
-          <DialogContentText>
-            {newRules.fireType}: {fireTypeDescriptions(newRules.fireType)}
-          </DialogContentText>
-          <Select
-            value={newRules.fireType}
-            onChange={changeFireType}
-          >
-            {BattleshipFireTypes.map((fireType) => <MenuItem key={fireType} value={fireType}>{fireType}</MenuItem>)}
-          </Select>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={submit}>Save</Button>
-        </DialogActions>
-      </Dialog>
+      <h3>Fire Type</h3>
+      <DialogContentText>
+        {newRules.fireType}: {fireTypeDescriptions(newRules.fireType)}
+      </DialogContentText>
+      <Select
+        value={newRules.fireType}
+        onChange={changeFireType}
+      >
+        {BattleshipFireTypes.map((fireType) => <MenuItem key={fireType} value={fireType}>{fireType}</MenuItem>)}
+      </Select>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleClose}>Cancel</Button>
+      <Button onClick={submit}>Save</Button>
+    </DialogActions>
+  </Dialog>
 }

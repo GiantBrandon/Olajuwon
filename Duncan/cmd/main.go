@@ -1,18 +1,17 @@
 package main
 
 import (
+	"container/list"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/GiantBrandon/Olajuwon/Duncan/types"
 	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
@@ -119,14 +118,16 @@ func GetRecentGames(c *gin.Context) {
 	req.Header.Add("x-rapidapi-key", key)
 	req.Header.Add("x-rapidapi-host", "api-nba-v1.p.rapidapi.com")
 
-	res, _ := http.DefaultClient.Do(req)
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
 
 	stats := types.GetStatsResponse{}
 	json.Unmarshal(body, &stats)
-	fmt.Println(stats)
 	recentStats := stats.Api.Statlines[len(stats.Api.Statlines)-5:]
 	content := gin.H{"stats": AverageStats(recentStats)}
 	c.JSON(200, content)
@@ -199,19 +200,21 @@ func GetKey() string {
 	return key.Key
 }
 
+var turnOrder = list.New()
+var active = turnOrder.Front()
 var game = types.BattleshipGame{
-	Players: []types.BattleshipPlayer{},
+	Players: make(map[string]types.BattleshipPlayer),
 	Rules: types.BattleshipRules{
 		ShipType: "Ships",
-		FireType: "Equality",
+		FireType: "Original",
 	},
 	Messages: []string{},
 }
-var active = 0
 
 func updateGame() {
-	for _, player := range game.Players {
-		player.Connection.WriteJSON(types.GameToView(game, player))
+	for name, player := range game.Players {
+		activeName, _ := active.Value.(string)
+		player.Connection.WriteJSON(types.GameToView(game, name, activeName))
 	}
 }
 
@@ -224,7 +227,7 @@ var wsupgrader = websocket.Upgrader{
 func wshandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := wsupgrader.Upgrade(w, r, nil)
 	if err != nil {
-		fmt.Println("Failed to set websocket upgrade: %+v", err)
+		fmt.Printf("Failed to set websocket upgrade: %+v", err)
 		return
 	}
 
@@ -233,10 +236,10 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 		request := types.BattleshipRequest{}
 		json.Unmarshal(msg, &request)
 		if err != nil || t == -1 {
-			for i := 0; i < len(game.Players); i++ {
-				if game.Players[i].Connection == conn {
-					game.Messages = append(game.Messages, fmt.Sprintf("%s left", game.Players[i].Name))
-					game.Players = append(game.Players[:i], game.Players[i+1:]...)
+			for name, player := range game.Players {
+				if player.Connection == conn {
+					game.Messages = append(game.Messages, fmt.Sprintf("%s left", name))
+					delete(game.Players, name)
 					updateGame()
 					break
 				}
@@ -245,37 +248,45 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 		}
 		switch request.Command {
 		case "JOIN_ROOM":
-			game.Players = append(game.Players, types.BattleshipPlayer{Name: request.Name, Active: len(game.Players) == 0, Connection: conn})
+			game.Players[request.Name] = types.BattleshipPlayer{Connection: conn}
+			turnOrder.PushBack(request.Name)
+			if active == nil {
+				active = turnOrder.Front()
+			}
 			game.Messages = append(game.Messages, fmt.Sprintf("%s joined", request.Name))
 			updateGame()
 			break
 		case "RESET":
-			for i := 0; i < len(game.Players); i++ {
-				game.Players[i] = types.BattleshipPlayer{Name: request.Name, Active: i == 0, Connection: conn}
+			for name, player := range game.Players {
+				game.Players[name] = types.BattleshipPlayer{Connection: player.Connection}
 			}
 			updateGame()
 			break
 		case "ADD_BOARD":
-			for i := 0; i < len(game.Players); i++ {
-				if game.Players[i].Name == request.Name {
-					game.Players[i].Ships = request.Ships
+			for name, player := range game.Players {
+				if name == request.Name {
+					game.Players[name] = types.BattleshipPlayer{Ships: request.Ships, Connection: player.Connection}
 				}
 			}
 			updateGame()
 			break
 		case "FIRE":
-			if active == len(game.Players)-1 {
-				active = 0
+			if active.Next() == nil {
+				active = turnOrder.Front()
 			} else {
-				active = active + 1
+				active = active.Next()
 			}
-			for i := 0; i < len(game.Players); i++ {
-				game.Players[i].Targets = append(game.Players[i].Targets, request.Targets...)
-				game.Players[i].Defeat = types.CheckDefeat(game.Players[i])
-				if i == active {
-					game.Players[i].Active = true
-				} else {
-					game.Players[i].Active = false
+			switch game.Rules.FireType {
+			case "Original":
+				for name, targets := range request.Targets {
+					player := game.Players[name]
+					player.Targets = append(game.Players[name].Targets, targets...)
+					game.Players[name] = player
+				}
+			case "Equality":
+				for name, player := range game.Players {
+					player.Targets = append(game.Players[name].Targets, request.Targets["all"]...)
+					game.Players[name] = player
 				}
 			}
 			updateGame()
@@ -292,7 +303,6 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	arg := os.Args[1]
 	key := GetKey()
 	router := gin.Default()
 
@@ -311,5 +321,5 @@ func main() {
 		v1.GET("/players", GetPlayers)
 		v1.GET("/boards", GetBoards)
 	}
-		router.Run()
+	router.Run()
 }
