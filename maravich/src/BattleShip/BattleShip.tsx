@@ -6,7 +6,7 @@ import { ShipSelection } from './ShipSelectionGrid'
 
 export const socket = location.hostname === 'localhost'
   ? new WebSocket('ws://localhost:8080/ws') : 
-  new WebSocket('ws://api.kyojin.dev:443/ws')
+  new WebSocket('wss://api.kyojin.dev:443/ws')
 
 
 export const BattleShip: React.FC = () => {
