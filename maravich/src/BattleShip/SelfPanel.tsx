@@ -38,7 +38,7 @@ export const SelfPanel: React.FC<SelfPanelProps> = ({self, messages}) => {
       </IconButton>}
       <ChatLog>
         <List dense>
-          {messages.slice(0, 4).map(message =>
+          {messages.slice(-4).map(message =>
             <ListItem>
               <ListItemText primary={message}/>
             </ListItem>,

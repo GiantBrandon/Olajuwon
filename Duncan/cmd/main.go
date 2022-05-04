@@ -11,6 +11,7 @@ import (
 
 	"github.com/GiantBrandon/Olajuwon/Duncan/types"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
@@ -309,6 +310,7 @@ func main() {
 
 	router.Use(cors.Default())
 	router.Use(ApiMiddleware(key))
+	router.Use(static.Serve("/", static.LocalFile("../maravich/build", true)))
 	router.GET("/ws", func(c *gin.Context) {
 		wshandler(c.Writer, c.Request)
 	})
