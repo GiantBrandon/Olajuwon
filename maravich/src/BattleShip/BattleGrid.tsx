@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Grid, Paper } from '@mui/material'
+import { Avatar, Chip, Grid, Paper } from '@mui/material'
 import React, { useContext, useState } from 'react'
 import { BattleCell } from './BattleCell'
 import { TargetSelectionContext } from './GameView'
@@ -65,7 +65,7 @@ export const BattleGrid: React.FC<BattleGridProps> = ({ player, size = 'large' }
           })}
         </GridView>
       </GridWrapper>
-      <div>{player.name}{player.defeat ? ' defeated' : undefined}</div>
+      <Chip avatar={<Avatar>{player.shipCount}</Avatar>} label={player.name} />
     </div>
   )
 }

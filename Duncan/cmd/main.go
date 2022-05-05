@@ -262,19 +262,16 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 			for name, player := range game.Players {
 				game.Players[name] = types.BattleshipPlayer{Connection: player.Connection}
 			}
+			game.Messages = []string{}
 			updateGame()
 			break
 		case "ADD_BOARD":
-			for name, player := range game.Players {
-				if name == request.Name {
-					game.Players[name] = types.BattleshipPlayer{Ships: request.Ships, Connection: player.Connection}
-				}
-			}
+			game.Players[request.Name] = types.BattleshipPlayer{Ships: request.Ships, Connection: game.Players[request.Name].Connection, ShipCount: len(request.Ships)}
 			updateGame()
 			break
 		case "FIRE":
 			turnOrder = append(turnOrder[1:], turnOrder[0])
-			for game.Players[turnOrder[0]].Defeat == true {
+			for game.Players[turnOrder[0]].ShipCount == 0 {
 				turnOrder = append(turnOrder[1:], turnOrder[0])
 			}
 			switch game.Rules.FireType {
@@ -283,11 +280,13 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 				for name, targets := range request.Targets {
 					player := game.Players[name]
 					player.Targets = append(game.Players[name].Targets, targets...)
+					player.ShipCount = types.ActiveShips(player)
 					game.Players[name] = player
 				}
 			case "Equality":
 				for name, player := range game.Players {
 					player.Targets = append(game.Players[name].Targets, request.Targets["all"]...)
+					player.ShipCount = types.ActiveShips(player)
 					game.Players[name] = player
 				}
 			}

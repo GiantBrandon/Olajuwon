@@ -18,19 +18,19 @@ const ChatLog = styled(Paper)({
 
 export const SelfPanel: React.FC<SelfPanelProps> = ({self, messages}) => {
   const { targets, setTargets, active } = useContext(TargetSelectionContext)
+  console.log(targets)
 
   const countTargets = () => {
     return Object.keys(targets).flatMap(target => targets[target]).length
   }
 
-  console.log(countTargets())
   return (
-    <Grid container direction='column' xs='auto' paddingRight='12px'>
+    <Grid container direction='column' xs='auto' alignItems='center' paddingRight='12px'>
       <BattleGrid player={self} size='large' />
       <IconButton onClick={() => socket.send(JSON.stringify({command: 'RESET'}))} >
         <Delete />
       </IconButton>
-      {active && <IconButton disabled={(countTargets() == 0) || (countTargets() > 5)} onClick={() => {
+      {active && <IconButton disabled={(countTargets() == 0) || (countTargets() > self.shipCount)} onClick={() => {
         socket.send(JSON.stringify({name: self.name, command: 'FIRE', targets: targets}))
         setTargets({})
       }} >

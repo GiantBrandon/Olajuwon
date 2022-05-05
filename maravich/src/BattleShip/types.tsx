@@ -54,5 +54,5 @@ export type BattleshipPlayer = {
   name: string
   board: BattleshipCellStatus[]
   active: boolean
-  defeat: boolean
+  shipCount: number
 }
