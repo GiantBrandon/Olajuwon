@@ -65,7 +65,7 @@ export const BattleGrid: React.FC<BattleGridProps> = ({ player, size = 'large' }
           })}
         </GridView>
       </GridWrapper>
-      <Chip avatar={<Avatar>{player.shipCount}</Avatar>} label={player.name} />
+      <Chip avatar={<Avatar>{player.shipCount}</Avatar>} label={player.name + (player.active ? '\'s turn' : '')} />
     </div>
   )
 }

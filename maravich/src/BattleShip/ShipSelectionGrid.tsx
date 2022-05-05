@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
-import { RotateRight, Save } from '@mui/icons-material'
+import { Gavel, RotateRight, Save } from '@mui/icons-material'
 import { Button, ButtonGroup, FormControlLabel, Grid, Paper, Radio, RadioGroup } from '@mui/material'
 import React, { KeyboardEvent, useState } from 'react'
 import { CenteredDiv } from '../styles'
 import { BattleCell } from './BattleCell'
 import { socket } from './BattleShip'
+import { RulesEditor } from './RulesEditor'
 import { BattleshipGame, Rotation, Rotations, ShipType, ShipTypes, TetrisTypes } from './types'
 
 const GridWrapper = styled(Paper)({
@@ -82,6 +83,7 @@ export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
   const [selectedShip, setSelectedShip] = useState<ShipType>('Carrier')
   const [ships, setShips] = useState<{[key: string]: number[]}>({})
   const [rotation, setRotation] = useState<Rotation>('right')
+  const [isRulesOpen, setIsRulesOpen] = useState(false)
   const placedShips = Object.values(ships).flatMap(item => item)
   const hovered = validate(getSelected(selectedShip, hover, rotation))
 
@@ -125,7 +127,11 @@ export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
         <Button startIcon={<Save />} onClick={sendGrid} >
          Save
         </Button>
+        <Button startIcon={<Gavel />} onClick={() => setIsRulesOpen(true)} >
+         Change Rules
+        </Button>
       </ButtonGroup>
+      <RulesEditor open={isRulesOpen} handleClose={() => setIsRulesOpen(false)} rules={game.rules}/>
     </CenteredDiv>
   )
 }

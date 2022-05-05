@@ -205,7 +205,7 @@ var game = types.BattleshipGame{
 	Players: make(map[string]types.BattleshipPlayer),
 	Rules: types.BattleshipRules{
 		ShipType: "Ships",
-		FireType: "Original",
+		FireType: "Justice",
 	},
 	Messages: []string{},
 }
@@ -275,7 +275,7 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 				turnOrder = append(turnOrder[1:], turnOrder[0])
 			}
 			switch game.Rules.FireType {
-			case "Original":
+			case "Justice":
 				game.Messages = append(game.Messages, fmt.Sprintf("%s fired at %v", request.Name, request.Targets))
 				for name, targets := range request.Targets {
 					player := game.Players[name]

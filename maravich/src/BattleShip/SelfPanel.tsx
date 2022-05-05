@@ -1,5 +1,5 @@
 import { Delete, LocalFireDepartment } from '@mui/icons-material'
-import { Grid, IconButton, List, ListItem, ListItemText, Paper } from '@mui/material'
+import { Button, Grid, List, ListItem, ListItemText, Paper } from '@mui/material'
 import { styled } from '@mui/system'
 import React, { useContext } from 'react'
 import { BattleGrid } from './BattleGrid'
@@ -27,15 +27,19 @@ export const SelfPanel: React.FC<SelfPanelProps> = ({self, messages}) => {
   return (
     <Grid container direction='column' xs='auto' alignItems='center' paddingRight='12px'>
       <BattleGrid player={self} size='large' />
-      <IconButton onClick={() => socket.send(JSON.stringify({command: 'RESET'}))} >
-        <Delete />
-      </IconButton>
-      {active && <IconButton disabled={(countTargets() == 0) || (countTargets() > self.shipCount)} onClick={() => {
-        socket.send(JSON.stringify({name: self.name, command: 'FIRE', targets: targets}))
-        setTargets({})
-      }} >
-        <LocalFireDepartment />
-      </IconButton>}
+      <Button startIcon={<Delete />} onClick={() => socket.send(JSON.stringify({command: 'RESET'}))} >
+        Reset Game
+      </Button>
+      {active && <Button
+        startIcon={<LocalFireDepartment />}
+        disabled={(countTargets() == 0 && self.shipCount != 0) || (countTargets() > self.shipCount)}
+        onClick={() => {
+          socket.send(JSON.stringify({name: self.name, command: 'FIRE', targets: targets}))
+          setTargets({})
+        }}
+      >
+        Fire
+      </Button>}
       <ChatLog>
         <List dense>
           {messages.slice(-4).map(message =>
