@@ -1,9 +1,12 @@
 import styled from '@emotion/styled'
 import { Grid } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BattleshipGame } from './types'
 import { EnemyPanel } from './EnemyPanel'
 import { SelfPanel } from './SelfPanel'
+import DistantShipHorn from '../distant-ship-horn.wav'
+
+const TurnSound = new Audio(DistantShipHorn)
 
 type Targets = {
   [key: string]: number[]
@@ -22,7 +25,8 @@ export const TargetSelectionContext = React.createContext<TargetSelectionContext
 
 
 const ColumnWrapper = styled(Grid)({
-  height: '100vh'
+  height: '100vh',
+  padding: '12px'
 })
 
 type GameViewProps = {
@@ -31,9 +35,14 @@ type GameViewProps = {
 
 export const GameView: React.FC<GameViewProps> = ({game}) => {
   const [targets, setTargets] = useState<{[key: string]: number[]}>({})
+
+  useEffect(() => {
+    if (game.self.order == 0)
+      TurnSound.play()
+  }, [game.self])
   return (
-    <TargetSelectionContext.Provider value={{active: game.self.active, targets, setTargets}}>
-      <ColumnWrapper container>
+    <TargetSelectionContext.Provider value={{active: game.self.order == 0, targets, setTargets}}>
+      <ColumnWrapper container direction='row' spacing={1}>
         <SelfPanel self={game.self} messages={game.messages} />
         <EnemyPanel enemies={game.others} />
       </ColumnWrapper>

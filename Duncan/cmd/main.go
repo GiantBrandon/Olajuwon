@@ -9,7 +9,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/GiantBrandon/Olajuwon/Duncan/types"
+	"github.com/GiantBrandon/Olajuwon/Duncan/internal/battleship"
+	"github.com/GiantBrandon/Olajuwon/Duncan/internal/types"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
@@ -200,20 +201,15 @@ func GetKey() string {
 	return key.Key
 }
 
-var turnOrder = make([]string, 0)
-var game = types.BattleshipGame{
-	Players: make(map[string]types.BattleshipPlayer),
-	Rules: types.BattleshipRules{
+var order = make([]string, 0)
+var game = battleship.BattleshipGame{
+	Players: make(map[string]battleship.BattleshipPlayer),
+	Rules: battleship.BattleshipRules{
 		ShipType: "Ships",
 		FireType: "Justice",
 	},
 	Messages: []string{},
-}
-
-func updateGame() {
-	for name, player := range game.Players {
-		player.Connection.WriteJSON(types.GameToView(game, name, turnOrder[0]))
-	}
+	Status:   "Setup",
 }
 
 var wsupgrader = websocket.Upgrader{
@@ -230,72 +226,35 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for {
+		fmt.Println(game.Messages)
 		t, msg, err := conn.ReadMessage()
-		request := types.BattleshipRequest{}
+		fmt.Println(string(msg))
+		request := battleship.BattleshipRequest{}
 		json.Unmarshal(msg, &request)
 		if err != nil || t == -1 {
-			for name, player := range game.Players {
-				if player.Connection == conn {
-					game.Messages = append(game.Messages, fmt.Sprintf("%s left", name))
-					delete(game.Players, name)
-					index := -1
-					for i, value := range turnOrder {
-						if value == name {
-							index = i
-						}
-					}
-					turnOrder = append(turnOrder[:index], turnOrder[index+1:]...)
-					updateGame()
-					break
-				}
-			}
+			game, order = battleship.RemovePlayer(game, order, conn)
 			break
 		}
 		switch request.Command {
 		case "JOIN_ROOM":
-			game.Players[request.Name] = types.BattleshipPlayer{Connection: conn}
-			turnOrder = append(turnOrder, request.Name)
-			game.Messages = append(game.Messages, fmt.Sprintf("%s joined", request.Name))
-			updateGame()
+			game, order = battleship.JoinRoom(game, order, request, conn)
+			break
+		case "START_GAME":
+			game, order = battleship.StartGame(game, order)
 			break
 		case "RESET":
-			for name, player := range game.Players {
-				game.Players[name] = types.BattleshipPlayer{Connection: player.Connection}
-			}
-			game.Messages = []string{}
-			updateGame()
+			game, order = battleship.Reset(game, order)
 			break
 		case "ADD_BOARD":
-			game.Players[request.Name] = types.BattleshipPlayer{Ships: request.Ships, Connection: game.Players[request.Name].Connection, ShipCount: len(request.Ships)}
-			updateGame()
+			game, order = battleship.AddBoard(game, order, request)
 			break
 		case "FIRE":
-			turnOrder = append(turnOrder[1:], turnOrder[0])
-			for game.Players[turnOrder[0]].ShipCount == 0 {
-				turnOrder = append(turnOrder[1:], turnOrder[0])
-			}
-			switch game.Rules.FireType {
-			case "Justice":
-				game.Messages = append(game.Messages, fmt.Sprintf("%s fired at %v", request.Name, request.Targets))
-				for name, targets := range request.Targets {
-					player := game.Players[name]
-					player.Targets = append(game.Players[name].Targets, targets...)
-					player.ShipCount = types.ActiveShips(player)
-					game.Players[name] = player
-				}
-			case "Equality":
-				for name, player := range game.Players {
-					player.Targets = append(game.Players[name].Targets, request.Targets["all"]...)
-					player.ShipCount = types.ActiveShips(player)
-					game.Players[name] = player
-				}
-			}
-			updateGame()
+			game, order = battleship.Fire(game, order, request)
 			break
 		case "UPDATE_RULES":
 			game.Rules = request.Rules
 			game.Messages = append(game.Messages, fmt.Sprintf("%s updated the rules", request.Name))
-			updateGame()
+			battleship.SendUpdates(game, order)
 			break
 		default:
 			conn.WriteMessage(t, msg)
@@ -309,7 +268,7 @@ func main() {
 
 	router.Use(cors.Default())
 	router.Use(ApiMiddleware(key))
-	router.Use(static.Serve("/", static.LocalFile("../maravich/build", true)))
+	router.Use(static.Serve("/", static.LocalFile("./ui", true)))
 	router.GET("/ws", func(c *gin.Context) {
 		wshandler(c.Writer, c.Request)
 	})

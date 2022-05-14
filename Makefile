@@ -1,5 +1,15 @@
 .DEFAULT_GOAL := help
 
+build: ## yarn and go build
+	make build-server
+	make build-ui
+
+build-server:
+	cd Duncan; cd cmd; GOOS=linux GOARCH=amd64 go build -o server .; mv server ../../server
+
+build-ui:
+	cd maravich; yarn build; mv build ../ui
+
 install: ## yarn and go install — Concurrently installs go and yarn dependencies
 	cd Duncan; go get ./...
 	cd maravich; yarn install

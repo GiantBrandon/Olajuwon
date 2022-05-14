@@ -8,7 +8,7 @@ type PlayerGridProps = {
 }
 
 export const PlayerGrid: React.FC<PlayerGridProps> = ({self}) => {
-  if (self.active)
+  if (self.order == 0)
     return <TargetSelectionGrid player={self} />
   else
     return <BattleGrid player={self} />

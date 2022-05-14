@@ -1,5 +1,3 @@
-
-
 export type BattleshipCellStatus = 'Untouched' | 'Hit' | 'Miss' | 'Ship' | 'Target'
 
 export const BattleshipFleetTypes = ['Ships', 'Tetris'] as const
@@ -38,11 +36,14 @@ export const ShipTypes = ['Carrier', 'BattleShip', 'Destroyer', 'Submarine', 'Pa
 export const TetrisTypes = ['O-Block', 'Hero-Block', 'S-Block', 'Z-Block', 'L-Block', 'J-Block', 'T-Block'] as const
 export type ShipType = typeof ShipTypes[number] | typeof TetrisTypes[number]
 
+export type BattleshipStatus = 'Setup' | 'Active' | 'End'
+
 export type BattleshipGame = {
   self: BattleshipPlayer
   others: BattleshipPlayer[],
   rules: BattleshipRules,
-  messages: string[]
+  messages: string[],
+  status: BattleshipStatus
 }
 
 export type BattleshipRules = {
@@ -53,6 +54,6 @@ export type BattleshipRules = {
 export type BattleshipPlayer = {
   name: string
   board: BattleshipCellStatus[]
-  active: boolean
+  order: number
   shipCount: number
 }

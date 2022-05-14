@@ -14,17 +14,21 @@ export const BattleShip: React.FC = () => {
 
   useEffect(() => {
     socket.onmessage = (incoming) => {
-      const game = JSON.parse(incoming.data)
+      const game: BattleshipGame = JSON.parse(incoming.data)
       console.log(game)
       setGame(game)
     }
   }, [])
 
-  if (!game?.self) {
+  console.log(game)
+  if (!game)
     return <MainMenu />
-  } else if (game.self.board.length == 0) {
-    return <ShipSelection game={game} />
-  } else {
+  switch (game?.status) {
+  case 'Active':
     return <GameView game={game}/>
+  case 'Setup':
+    return <ShipSelection game={game} />
+  case 'End':
+    return null
   }
 }

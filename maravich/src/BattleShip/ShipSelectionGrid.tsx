@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Gavel, RotateRight, Save } from '@mui/icons-material'
+import { Gavel, PlayArrow, RotateRight, Save } from '@mui/icons-material'
 import { Button, ButtonGroup, FormControlLabel, Grid, Paper, Radio, RadioGroup } from '@mui/material'
 import React, { KeyboardEvent, useState } from 'react'
 import { CenteredDiv } from '../styles'
@@ -86,6 +86,7 @@ export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
   const [isRulesOpen, setIsRulesOpen] = useState(false)
   const placedShips = Object.values(ships).flatMap(item => item)
   const hovered = validate(getSelected(selectedShip, hover, rotation))
+  const ready = game.others.every(player => player.shipCount > 0) && game.self.shipCount > 0
 
   const rotate = () => {
     const index = Rotations.findIndex((r) => rotation == r)
@@ -110,6 +111,10 @@ export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
     socket.send(JSON.stringify({name: game.self.name, command: 'ADD_BOARD', ships: ships}))
   }
 
+  const startGame = () => {
+    socket.send(JSON.stringify({command: 'START_GAME'}))
+  }
+
   return (
     <CenteredDiv>
       <GridWrapper onMouseLeave={() => setHover(-10)} onKeyDown={(e) => handleKey(e)} tabIndex={0}>
@@ -126,6 +131,9 @@ export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
         </Button>
         <Button startIcon={<Save />} onClick={sendGrid} >
          Save
+        </Button>
+        <Button startIcon={<PlayArrow />} disabled={!ready} onClick={startGame} >
+         Start
         </Button>
         <Button startIcon={<Gavel />} onClick={() => setIsRulesOpen(true)} >
          Change Rules

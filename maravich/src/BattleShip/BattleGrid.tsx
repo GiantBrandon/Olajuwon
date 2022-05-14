@@ -16,6 +16,10 @@ const GridView = styled(Grid)({
   height: '100%'
 })
 
+const NameChip = styled(Chip)((props: {width: number}) => ({
+  maxWidth: `${props.width}px`
+}))
+
 type BattleGridProps = {
   player: BattleshipPlayer
   size?: Size
@@ -65,7 +69,7 @@ export const BattleGrid: React.FC<BattleGridProps> = ({ player, size = 'large' }
           })}
         </GridView>
       </GridWrapper>
-      <Chip avatar={<Avatar>{player.shipCount}</Avatar>} label={player.name + (player.active ? '\'s turn' : '')} />
+      <NameChip width={getSize(size)} avatar={<Avatar>{player.shipCount}</Avatar>} label={player.name} color={player.order == 0 ? 'primary' : 'default'} />
     </div>
   )
 }
