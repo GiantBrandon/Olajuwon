@@ -23,7 +23,7 @@ const Background = styled.img({
 
 const HomeButton = styled(Fab)({
   position: 'absolute',
-  left: '16px',
+  right: '16px',
   top: '16px',
 })
 

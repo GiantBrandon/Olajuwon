@@ -1,34 +1,25 @@
-import styled from '@emotion/styled'
-import { Gavel, PlayArrow, RotateRight, Save } from '@mui/icons-material'
-import { Button, ButtonGroup, FormControlLabel, Grid, Paper, Radio, RadioGroup } from '@mui/material'
-import React, { KeyboardEvent, useState } from 'react'
-import { CenteredDiv } from '../styles'
-import { BattleCell } from './BattleCell'
+import { Gavel, PlayArrow, RotateRight, Save, Settings } from '@mui/icons-material'
+import { Button, ButtonGroup, FormControlLabel, Radio, RadioGroup, Stack } from '@mui/material'
+import React, { useEffect, useRef, useState } from 'react'
 import { socket } from './BattleShip'
+import { PreferencesEditor } from './PreferencesEditor'
 import { RulesEditor } from './RulesEditor'
+import { ShipGrid } from './ShipGrid'
 import { BattleshipGame, Rotation, Rotations, ShipType, ShipTypes, TetrisTypes } from './types'
 
-const GridWrapper = styled(Paper)({
-  width: '480px',
-  height: '480px'
-})
-
-const GridView = styled(Grid)({
-  height: '100%'
-})
-
-const sameRow = (coordinates: number[]): boolean => coordinates.every(coordinate => Math.floor(coordinate / 10) == Math.floor(coordinates[0] / 10))
-
-const sameColumn = (coordinates: number[]): boolean => coordinates.every(coordinate => coordinate % 10 == coordinates[0] % 10)
-
-const inBounds = (coordinates: number[]): boolean => coordinates.every(coordinate => coordinate < 100 && coordinate >= 0)
-
-const validate = (coordinates: number[]): number[] | undefined => {
-  return coordinates
-  /*if(inBounds(coordinates) && sameRow(coordinates) || sameColumn(coordinates))
-    return coordinates
-  else
-    return undefined*/
+const validate = (coordinates: number[]): number[] => {
+  const [start, ...others] = coordinates
+  let existing = [start]
+  const isContinuous = others.every(other => {
+    const foundContinuous = existing.some(coordinate => {
+      return coordinate != other && 
+      (Math.abs(coordinate - other) == 10 ||
+      (Math.abs(coordinate - other) == 1 && Math.floor(coordinate / 10) === Math.floor(other / 10)))
+    })
+    existing = [other, ...existing]
+    return foundContinuous
+  })
+  return isContinuous ? coordinates : []
 }
 
 const getTransformation = (rotation: Rotation, ) => {
@@ -71,6 +62,8 @@ const getSelected = (ship: ShipType, selected: number, rotation: Rotation): numb
     return [transform(0,0), transform(1, 0), transform(2, 0), transform(2, 1)]
   case 'T-Block':
     return [transform(0,0), transform(1, 0), transform(1, 1), transform(2, 0)]
+  default:
+    return []
   }
 }
 
@@ -79,26 +72,29 @@ type ShipSelectionProps = {
 }
 
 export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
-  const [hover, setHover] = useState<number>(-10)
-  const [selectedShip, setSelectedShip] = useState<ShipType>('Carrier')
+  const shipTypes = game.rules.shipType == 'Ships' ? ShipTypes : TetrisTypes
+  const [hover, setHover] = useState<number>(-100)
+  const [selectedShip, setSelectedShip] = useState<ShipType>(shipTypes[0])
   const [ships, setShips] = useState<{[key: string]: number[]}>({})
   const [rotation, setRotation] = useState<Rotation>('right')
   const [isRulesOpen, setIsRulesOpen] = useState(false)
+  const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
+  const rules = useRef(game.rules)
   const placedShips = Object.values(ships).flatMap(item => item)
   const hovered = validate(getSelected(selectedShip, hover, rotation))
   const ready = game.others.every(player => player.shipCount > 0) && game.self.shipCount > 0
 
+  useEffect(() => {
+    if(game.rules.shipType != rules.current.shipType) {
+      setShips({})
+      setSelectedShip(shipTypes[0])
+      rules.current = game.rules
+    }
+  }, [game])
+
   const rotate = () => {
     const index = Rotations.findIndex((r) => rotation == r)
     setRotation(index == Rotations.length - 1 ? Rotations[0] : Rotations[index + 1])
-  }
-
-  const handleKey = (event: KeyboardEvent<HTMLDivElement>) => {
-    switch(event.key) {
-    case 'r':
-      rotate()
-      break
-    }
   }
 
   const addShip = () => {
@@ -116,20 +112,25 @@ export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
   }
 
   return (
-    <CenteredDiv>
-      <GridWrapper onMouseLeave={() => setHover(-10)} onKeyDown={(e) => handleKey(e)} tabIndex={0}>
-        <GridView container columns={10}>
-          {[...Array(100)].map((_, index) => <BattleCell key={index} size={'large'} status={placedShips.includes(index) ? 'Ship' : 'Untouched'} hover={hovered ? hovered.includes(index) : false} setHover={() => setHover(index)} onClick={addShip} />)}
-        </GridView>
-      </GridWrapper>
-      <RadioGroup row onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedShip(e.target.value as ShipType)}>
-        {game.rules.shipType == 'Ships' ? ShipTypes.map(ship => <FormControlLabel key={ship} value={ship} control={<Radio />} label={ship} />) : TetrisTypes.map(tetris => <FormControlLabel key={tetris} value={tetris} control={<Radio />} label={tetris} />)}
+    <Stack height='100vh' justifyContent='center' alignItems='center'>
+      <ShipGrid
+        board={[...Array(100)].map((_, index) => placedShips.includes(index) ? 'Ship' : 'Untouched')}
+        hovered={hovered}
+        setHover={setHover}
+        onClick={addShip}
+      />
+      <RadioGroup
+        row
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedShip(e.target.value as ShipType)}
+        defaultValue={ShipTypes[0]}
+      >
+        {shipTypes.map(ship => <FormControlLabel key={ship} value={ship} control={<Radio />} label={ship} />)}
       </RadioGroup>
       <ButtonGroup variant='outlined'>
         <Button startIcon={<RotateRight />} onClick={rotate} >
          Rotate
         </Button>
-        <Button startIcon={<Save />} onClick={sendGrid} >
+        <Button startIcon={<Save />} disabled={Object.keys(ships).length == shipTypes.length} onClick={sendGrid} >
          Save
         </Button>
         <Button startIcon={<PlayArrow />} disabled={!ready} onClick={startGame} >
@@ -138,8 +139,12 @@ export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
         <Button startIcon={<Gavel />} onClick={() => setIsRulesOpen(true)} >
          Change Rules
         </Button>
+        <Button startIcon={<Settings />} onClick={() => setIsPreferencesOpen(true)} >
+          Preferences
+        </Button>
       </ButtonGroup>
       <RulesEditor open={isRulesOpen} handleClose={() => setIsRulesOpen(false)} rules={game.rules}/>
-    </CenteredDiv>
+      <PreferencesEditor open={isPreferencesOpen} handleClose={() => setIsPreferencesOpen(false)} />
+    </Stack>
   )
 }

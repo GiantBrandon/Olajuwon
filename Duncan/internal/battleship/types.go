@@ -4,78 +4,79 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type BattleshipFleetType string
+type FleetType string
 
 const (
-	Ships  BattleshipFleetType = "Ships"
-	Tetris                     = "Tetris"
+	Ships  FleetType = "Ships"
+	Tetris           = "Tetris"
 )
 
-type BattleshipFireType string
+type FireType string
 
 const (
-	Original     BattleshipFireType = "Original"
-	Equality                        = "Equality"
-	Justice                         = "Justice"
-	BattleRoyale                    = "BattleRoyale"
-	FreeForAll                      = "FreeForAll"
+	Original     FireType = "Original"
+	Equality              = "Equality"
+	Justice               = "Justice"
+	BattleRoyale          = "BattleRoyale"
+	FreeForAll            = "FreeForAll"
 )
 
-type BattleshipCell string
+type Cell string
 
 const (
-	Untouched BattleshipCell = "Untouched"
-	Miss                     = "Miss"
-	Ship                     = "Ship"
-	Hit                      = "Hit"
+	Untouched Cell = "Untouched"
+	Miss           = "Miss"
+	Ship           = "Ship"
+	Hit            = "Hit"
 )
 
-type BattleshipStatus string
+type Status string
 
 const (
-	Setup  BattleshipCell = "Setup"
-	Active                = "Active"
-	End                   = "End"
+	Setup  Cell = "Setup"
+	Active      = "Active"
+	End         = "End"
 )
 
-type BattleshipGame struct {
-	Players  map[string]BattleshipPlayer `json:"players"`
-	Status   BattleshipStatus            `json:"started"`
-	Rules    BattleshipRules             `json:"rules"`
-	Messages []string                    `json:"messages"`
+type Game struct {
+	Players  map[string]Player `json:"players"`
+	Order    []string          `json:"order"`
+	Status   Status            `json:"started"`
+	Rules    Rules             `json:"rules"`
+	Messages []string          `json:"messages"`
 }
 
-type BattleshipRules struct {
-	ShipType BattleshipFleetType `json:"shipType"`
-	FireType BattleshipFireType  `json:"fireType"`
+type Rules struct {
+	ShipType FleetType `json:"shipType"`
+	FireType FireType  `json:"fireType"`
 }
 
-type BattleshipPlayer struct {
+type Player struct {
 	Ships      map[string][]int `json:"ships"`
 	Targets    []int            `json:"targets"`
 	ShipCount  int              `json:"shipCount"`
 	Connection *websocket.Conn
 }
 
-type BattleshipPlayerView struct {
-	Name      string           `json:"name"`
-	Board     []BattleshipCell `json:"board"`
-	Order     int              `json:"order"`
-	ShipCount int              `json:"shipCount"`
+type PlayerView struct {
+	Name      string `json:"name"`
+	Board     []Cell `json:"board"`
+	Order     int    `json:"order"`
+	ShipCount int    `json:"shipCount"`
 }
-type BattleshipRequest struct {
+type Request struct {
 	Name    string           `json:"name"`
 	Command string           `json:"command"`
-	Board   []BattleshipCell `json:"board"`
+	Board   []Cell           `json:"board"`
 	Targets map[string][]int `json:"targets"`
 	Ships   map[string][]int `json:"ships"`
-	Rules   BattleshipRules  `json:"rules"`
+	Rules   Rules            `json:"rules"`
 }
 
-type BattleshipView struct {
-	Others   []BattleshipPlayerView `json:"others"`
-	Self     BattleshipPlayerView   `json:"self"`
-	Status   BattleshipStatus       `json:"status"`
-	Rules    BattleshipRules        `json:"rules"`
-	Messages []string               `json:"messages"`
+type View struct {
+	Others   []PlayerView `json:"others"`
+	Self     PlayerView   `json:"self"`
+	Status   Status       `json:"status"`
+	Rules    Rules        `json:"rules"`
+	Messages []string     `json:"messages"`
 }

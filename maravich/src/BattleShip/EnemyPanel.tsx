@@ -32,7 +32,7 @@ export const EnemyPanel: React.FC<EnemyPanelProps> = ({enemies}) => {
   return (
     <Grid height={'100%'} ref={wrapperRef} direction='column' container item xs columns={columns} justifyContent='space-around'>
       {enemies.map(enemy => (
-        <Grid item xs={1}>
+        <Grid key={enemy.name} item xs={1}>
           <BattleGrid key={enemy.name} player={enemy} size={gridSize} />
         </Grid>
       ))}

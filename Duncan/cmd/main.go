@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math/rand"
 	"net/http"
 	"strconv"
 
@@ -168,16 +167,6 @@ const (
 	Miss
 )
 
-func GetBoards(c *gin.Context) {
-	r := rand.New(rand.NewSource(99))
-	var board [100]bool
-	for i := 0; i < 100; i++ {
-		board[i] = r.Float32() < .5
-	}
-	content := gin.H{"board": board}
-	c.JSON(200, content)
-}
-
 func OptionsLogin(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT")
 	c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
@@ -194,17 +183,17 @@ func ApiMiddleware(key string) gin.HandlerFunc {
 func GetKey() string {
 	keyFile, err := ioutil.ReadFile(".env.local")
 	if err != nil {
-		fmt.Errorf(".env.local file not found. %w", err)
+		fmt.Printf(".env.local file not found. %s", err)
 	}
 	key := ApiKey{}
 	json.Unmarshal([]byte(keyFile), &key)
 	return key.Key
 }
 
-var order = make([]string, 0)
-var game = battleship.BattleshipGame{
-	Players: make(map[string]battleship.BattleshipPlayer),
-	Rules: battleship.BattleshipRules{
+var game = battleship.Game{
+	Players: make(map[string]battleship.Player),
+	Order:   make([]string, 0),
+	Rules: battleship.Rules{
 		ShipType: "Ships",
 		FireType: "Justice",
 	},
@@ -226,35 +215,33 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for {
-		fmt.Println(game.Messages)
 		t, msg, err := conn.ReadMessage()
-		fmt.Println(string(msg))
-		request := battleship.BattleshipRequest{}
+		request := battleship.Request{}
 		json.Unmarshal(msg, &request)
 		if err != nil || t == -1 {
-			game, order = battleship.RemovePlayer(game, order, conn)
+			game = battleship.RemovePlayer(game, conn)
 			break
 		}
 		switch request.Command {
 		case "JOIN_ROOM":
-			game, order = battleship.JoinRoom(game, order, request, conn)
+			game = battleship.JoinRoom(game, request, conn)
 			break
 		case "START_GAME":
-			game, order = battleship.StartGame(game, order)
+			game = battleship.StartGame(game)
 			break
 		case "RESET":
-			game, order = battleship.Reset(game, order)
+			game = battleship.Reset(game)
 			break
 		case "ADD_BOARD":
-			game, order = battleship.AddBoard(game, order, request)
+			game = battleship.AddBoard(game, request)
 			break
 		case "FIRE":
-			game, order = battleship.Fire(game, order, request)
+			game = battleship.Fire(game, request)
 			break
 		case "UPDATE_RULES":
 			game.Rules = request.Rules
 			game.Messages = append(game.Messages, fmt.Sprintf("%s updated the rules", request.Name))
-			battleship.SendUpdates(game, order)
+			battleship.SendUpdates(game)
 			break
 		default:
 			conn.WriteMessage(t, msg)
@@ -280,7 +267,6 @@ func main() {
 		v1.GET("/linkedin", Linkedin)
 		v1.GET("/recentgames/:player", GetRecentGames)
 		v1.GET("/players", GetPlayers)
-		v1.GET("/boards", GetBoards)
 	}
 	router.Run()
 }

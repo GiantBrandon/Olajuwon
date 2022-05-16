@@ -32,8 +32,8 @@ export const fireTypeDescriptions = (type: BattleshipFireType) => battleshipFire
 export const Rotations = ['right', 'down', 'left', 'up'] as const
 export type Rotation = typeof Rotations[number]
 
-export const ShipTypes = ['Carrier', 'BattleShip', 'Destroyer', 'Submarine', 'Patrol Boat'] as const
-export const TetrisTypes = ['O-Block', 'Hero-Block', 'S-Block', 'Z-Block', 'L-Block', 'J-Block', 'T-Block'] as const
+export const ShipTypes = ['Carrier', 'BattleShip', 'Destroyer', 'Submarine', 'Patrol Boat']
+export const TetrisTypes = ['O-Block', 'Hero-Block', 'S-Block', 'Z-Block', 'L-Block', 'J-Block', 'T-Block']
 export type ShipType = typeof ShipTypes[number] | typeof TetrisTypes[number]
 
 export type BattleshipStatus = 'Setup' | 'Active' | 'End'

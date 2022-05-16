@@ -9,59 +9,55 @@ import (
 
 // COMMAND LEVEL
 
-func RemovePlayer(game BattleshipGame, order []string, conn *websocket.Conn) (BattleshipGame, []string) {
+func RemovePlayer(game Game, conn *websocket.Conn) Game {
 	for name, player := range game.Players {
 		if player.Connection == conn {
 			game = addMessage(game, fmt.Sprintf("%s left", name))
 			delete(game.Players, name)
-			index := utils.Find(order, name)
-			order = append(order[:index], order[index+1:]...)
-			SendUpdates(game, order)
-			return game, order
+			index := utils.Find(game.Order, name)
+			game.Order = append(game.Order[:index], game.Order[index+1:]...)
+			SendUpdates(game)
+			return game
 		}
 	}
-	return game, order
+	return game
 }
 
-func JoinRoom(game BattleshipGame, order []string, request BattleshipRequest, conn *websocket.Conn) (BattleshipGame, []string) {
-	game.Players[request.Name] = BattleshipPlayer{Connection: conn}
-	order = append(order, request.Name)
+func JoinRoom(game Game, request Request, conn *websocket.Conn) Game {
+	game.Players[request.Name] = Player{Connection: conn}
+	game.Order = append(game.Order, request.Name)
 	game = addMessage(game, fmt.Sprintf("%s joined", request.Name))
-	SendUpdates(game, order)
-	return game, order
+	SendUpdates(game)
+	return game
 }
 
-func StartGame(game BattleshipGame, order []string) (BattleshipGame, []string) {
+func StartGame(game Game) Game {
 	game.Status = "Active"
-	SendUpdates(game, order)
-	return game, order
+	SendUpdates(game)
+	return game
 }
 
-func Reset(game BattleshipGame, order []string) (BattleshipGame, []string) {
+func Reset(game Game) Game {
 	for name, player := range game.Players {
-		game.Players[name] = BattleshipPlayer{Connection: player.Connection}
+		game.Players[name] = Player{Connection: player.Connection}
 	}
 	game.Messages = []string{}
 	game.Status = "Setup"
-	SendUpdates(game, order)
-	return game, order
+	SendUpdates(game)
+	return game
 }
 
-func AddBoard(game BattleshipGame, order []string, request BattleshipRequest) (BattleshipGame, []string) {
-	game.Players[request.Name] = BattleshipPlayer{
+func AddBoard(game Game, request Request) Game {
+	game.Players[request.Name] = Player{
 		Ships:      request.Ships,
 		Connection: game.Players[request.Name].Connection,
 		ShipCount:  len(request.Ships),
 	}
-	SendUpdates(game, order)
-	return game, order
+	SendUpdates(game)
+	return game
 }
 
-func Fire(game BattleshipGame, order []string, request BattleshipRequest) (BattleshipGame, []string) {
-	order = append(order[1:], order[0])
-	for game.Players[order[0]].ShipCount == 0 {
-		order = append(order[1:], order[0])
-	}
+func Fire(game Game, request Request) Game {
 	switch game.Rules.FireType {
 	case "Justice":
 		game = addMessage(game, fmt.Sprintf("%s fired at %v", request.Name, request.Targets))
@@ -78,25 +74,29 @@ func Fire(game BattleshipGame, order []string, request BattleshipRequest) (Battl
 			game.Players[name] = player
 		}
 	}
-	SendUpdates(game, order)
-	return game, order
+	game.Order = append(game.Order[1:], game.Order[0])
+	for game.Players[game.Order[0]].ShipCount == 0 {
+		game.Order = append(game.Order[1:], game.Order[0])
+	}
+	SendUpdates(game)
+	return game
 }
 
 // GAME LEVEL
 
-func SendUpdates(game BattleshipGame, order []string) {
-	for _, name := range order {
-		game.Players[name].Connection.WriteJSON(GameToView(game, order, name))
+func SendUpdates(game Game) {
+	for _, name := range game.Order {
+		game.Players[name].Connection.WriteJSON(GameToView(game, name))
 	}
 }
 
-func GameToView(game BattleshipGame, order []string, self string) BattleshipView {
-	var selfView BattleshipPlayerView
-	otherViews := []BattleshipPlayerView{}
-	for index, name := range order {
-		view := BattleshipPlayerView{
+func GameToView(game Game, self string) View {
+	var selfView PlayerView
+	otherViews := []PlayerView{}
+	for index, name := range game.Order {
+		view := PlayerView{
 			Name:      name,
-			Board:     AssembleBoard(game.Players[name], false),
+			Board:     AssembleBoard(game.Players[name], self == name),
 			Order:     index,
 			ShipCount: game.Players[name].ShipCount,
 		}
@@ -106,7 +106,7 @@ func GameToView(game BattleshipGame, order []string, self string) BattleshipView
 			selfView = view
 		}
 	}
-	return BattleshipView{
+	return View{
 		Self:     selfView,
 		Others:   otherViews,
 		Status:   game.Status,
@@ -128,14 +128,14 @@ func IsShipSunk(ship []int, targets []int) bool {
 
 // MESSAGE LEVEL
 
-func addMessage(game BattleshipGame, message string) BattleshipGame {
+func addMessage(game Game, message string) Game {
 	game.Messages = append([]string{message}, game.Messages...)
 	return game
 }
 
 // PLAYER LEVEL
 
-func ActiveShips(player BattleshipPlayer) int {
+func ActiveShips(player Player) int {
 	count := len(player.Ships)
 	for _, ship := range player.Ships {
 		if IsShipSunk(ship, player.Targets) {
@@ -145,8 +145,8 @@ func ActiveShips(player BattleshipPlayer) int {
 	return count
 }
 
-func AssembleBoard(player BattleshipPlayer, isOwner bool) []BattleshipCell {
-	board := []BattleshipCell{}
+func AssembleBoard(player Player, isOwner bool) []Cell {
+	board := []Cell{}
 	if isOwner && len(player.Ships) == 0 {
 		return board
 	}
@@ -173,7 +173,7 @@ func AssembleBoard(player BattleshipPlayer, isOwner bool) []BattleshipCell {
 	return board
 }
 
-func Filter(players []BattleshipPlayer, test func(BattleshipPlayer) bool) (ret []BattleshipPlayer) {
+func Filter(players []Player, test func(Player) bool) (ret []Player) {
 	for _, item := range players {
 		if test(item) {
 			ret = append(ret, item)

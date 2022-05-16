@@ -1,4 +1,4 @@
-import { Button, Paper, Stack, TextField } from '@mui/material'
+import { Button, Grid, Paper, Stack, TextField } from '@mui/material'
 import { styled } from '@mui/system'
 import React, { useState } from 'react'
 import { socket } from './BattleShip'
@@ -17,8 +17,14 @@ export const MainMenu: React.FC = () => {
   return (
     <Stack height='100vh' justifyContent='center' alignItems='center'>
       <MenuWrapper>
-        <TextField placeholder='Enter Name' value={name} onChange={(e) => setName(e.target.value)} />
-        <Button onClick={join}>Join</Button>
+        <Grid container>
+          <Grid item xs={12}>
+            <TextField placeholder='Enter Name' value={name} onChange={(e) => setName(e.target.value)} />
+          </Grid>
+          <Grid item xs={6}>
+            <Button onClick={join}>Join</Button>
+          </Grid>
+        </Grid>
       </MenuWrapper>
     </Stack>
   )

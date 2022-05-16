@@ -35,7 +35,8 @@ export const PreferencesEditor: React.FC<PreferencesEditorProps> = ({open, handl
         onChange={changeAlert}
       >
         <FormControlLabel value="none" control={<Radio />} label="none" />
-        <FormControlLabel value="horn" control={<Radio />} label="horn" />
+        <FormControlLabel value="horn" control={<Radio />} label="ship horn" />
+        <FormControlLabel value="gun" control={<Radio />} label="gun cock" />
       </RadioGroup>
     </DialogContent>
     <DialogActions>

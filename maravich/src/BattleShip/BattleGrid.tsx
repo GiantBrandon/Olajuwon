@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
-import { Avatar, Chip, Grid, Paper } from '@mui/material'
+import { Avatar, Chip, Paper } from '@mui/material'
 import React, { useContext, useState } from 'react'
-import { BattleCell } from './BattleCell'
 import { TargetSelectionContext } from './GameView'
+import { ShipGrid } from './ShipGrid'
 import { BattleshipPlayer } from './types'
 
 export type Size = 'small' | 'medium' | 'large'
@@ -11,10 +11,6 @@ const GridWrapper = styled(Paper)((props: {size: number}) => ({
   width: `${props.size}px`,
   height: `${props.size}px`
 }))
-
-const GridView = styled(Grid)({
-  height: '100%'
-})
 
 const NameChip = styled(Chip)((props: {width: number}) => ({
   maxWidth: `${props.width}px`
@@ -41,33 +37,20 @@ const getSize = (size: Size) => {
 
 export const BattleGrid: React.FC<BattleGridProps> = ({ player, size = 'large' }) => {
   const [hover, setHover] = useState<number>()
-  const { active, targets, setTargets } = useContext(TargetSelectionContext)
+  const { active, targets, toggleTarget } = useContext(TargetSelectionContext)
   const myTargets = targets[player.name]
+  const board = player.board.map((item, index) => myTargets?.find(target => target == index) != null ? 'Target' : item)
 
   const onClick = (index: number) => {
     if (active) {
-      if (!targets[player.name])
-        setTargets({...targets, [player.name]: [index]})
-      else if (!targets[player.name].find(target => target == index))
-        setTargets({...targets, [player.name]: [...myTargets, index]})
-      else {
-        myTargets.splice(myTargets.indexOf(index), 1)
-        setTargets({...targets, [player.name]: [...myTargets]})
-      }
+      toggleTarget(player.name, index)
     }
   }
 
   return (
     <div>
       <GridWrapper size={getSize(size)} onMouseLeave={() => setHover(undefined)}>
-        <GridView container columns={10}>
-          {player.board?.map((item, index) => {
-            const isTarget = myTargets?.find(target => target == index)
-            return (
-              <BattleCell key={index} size={size} status={isTarget ? 'Target' : item} hover={active && hover == index} setHover={() => setHover(index)} onClick={() => onClick(index)} />
-            )
-          })}
-        </GridView>
+        <ShipGrid board={board} hovered={hover != null ? [hover] : []} setHover={setHover} onClick={onClick} />
       </GridWrapper>
       <NameChip width={getSize(size)} avatar={<Avatar>{player.shipCount}</Avatar>} label={player.name} color={player.order == 0 ? 'primary' : 'default'} />
     </div>
