@@ -11,21 +11,21 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@vitejs/plugin-react": "1.1.1",
     "axios": "^0.21.1",
     "eslint": "^8.14.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-helmet": "^6.1.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "5.0.0",
     "socket.io-client": "^4.4.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "vite": "2.7.0"
   },
   "scripts": {
-    "start": "HTTPS=TRUE react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "HTTPS=TRUE vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint ./src**/*.tsx"
   },
   "eslintConfig": {

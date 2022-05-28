@@ -65,12 +65,13 @@ type PlayerView struct {
 	ShipCount int    `json:"shipCount"`
 }
 type Request struct {
-	Name    string           `json:"name"`
-	Command string           `json:"command"`
-	Board   []Cell           `json:"board"`
-	Targets map[string][]int `json:"targets"`
-	Ships   map[string][]int `json:"ships"`
-	Rules   Rules            `json:"rules"`
+	Name     string           `json:"name"`
+	Command  string           `json:"command"`
+	Board    []Cell           `json:"board"`
+	Targets  map[string][]int `json:"targets"`
+	Ships    map[string][]int `json:"ships"`
+	Rules    Rules            `json:"rules"`
+	ToDelete string           `json:toDelete"`
 }
 
 type View struct {

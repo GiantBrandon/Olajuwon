@@ -1,7 +1,8 @@
-import { Gavel, PlayArrow, RotateRight, Save, Settings } from '@mui/icons-material'
+import { Gavel, List, PlayArrow, RotateRight, Save, Settings } from '@mui/icons-material'
 import { Button, ButtonGroup, FormControlLabel, Radio, RadioGroup, Stack } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
-import { socket } from './BattleShip'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { SocketContext } from './BattleShip'
+import { PlayerManager } from './PlayerManager'
 import { PreferencesEditor } from './PreferencesEditor'
 import { RulesEditor } from './RulesEditor'
 import { ShipGrid } from './ShipGrid'
@@ -79,6 +80,8 @@ export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
   const [rotation, setRotation] = useState<Rotation>('right')
   const [isRulesOpen, setIsRulesOpen] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
+  const [isPlayerManagerOpen, setIsPlayerManagerOpen] = useState(false)
+  const {sendMessage} = useContext(SocketContext)
   const rules = useRef(game.rules)
   const placedShips = Object.values(ships).flatMap(item => item)
   const hovered = validate(getSelected(selectedShip, hover, rotation))
@@ -104,11 +107,11 @@ export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
   }
 
   const sendGrid = () => {
-    socket.send(JSON.stringify({name: game.self.name, command: 'ADD_BOARD', ships: ships}))
+    sendMessage(game.self.name, 'ADD_BOARD', {ships})
   }
 
   const startGame = () => {
-    socket.send(JSON.stringify({command: 'START_GAME'}))
+    sendMessage(game.self.name, 'START_GAME', {})
   }
 
   return (
@@ -142,9 +145,13 @@ export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
         <Button startIcon={<Settings />} onClick={() => setIsPreferencesOpen(true)} >
           Preferences
         </Button>
+        <Button startIcon={<List />} onClick={() => setIsPlayerManagerOpen(true)} >
+          Players
+        </Button>
       </ButtonGroup>
-      <RulesEditor open={isRulesOpen} handleClose={() => setIsRulesOpen(false)} rules={game.rules}/>
+      <RulesEditor player={game.self} open={isRulesOpen} handleClose={() => setIsRulesOpen(false)} rules={game.rules}/>
       <PreferencesEditor open={isPreferencesOpen} handleClose={() => setIsPreferencesOpen(false)} />
+      <PlayerManager game={game} open={isPlayerManagerOpen} handleClose={() => setIsPlayerManagerOpen(false)} />
     </Stack>
   )
 }

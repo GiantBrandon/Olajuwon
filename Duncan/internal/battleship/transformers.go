@@ -9,10 +9,12 @@ import (
 
 // COMMAND LEVEL
 
-func RemovePlayer(game Game, conn *websocket.Conn) Game {
+func RemovePlayerConnection(game Game, conn *websocket.Conn) Game {
 	for name, player := range game.Players {
 		if player.Connection == conn {
 			game = addMessage(game, fmt.Sprintf("%s left", name))
+			var emptyResponse struct{}
+			game.Players[name].Connection.WriteJSON(emptyResponse)
 			delete(game.Players, name)
 			index := utils.Find(game.Order, name)
 			game.Order = append(game.Order[:index], game.Order[index+1:]...)
@@ -20,6 +22,17 @@ func RemovePlayer(game Game, conn *websocket.Conn) Game {
 			return game
 		}
 	}
+	return game
+}
+
+func RemovePlayerName(game Game, name string) Game {
+	game = addMessage(game, fmt.Sprintf("%s left", name))
+	var emptyResponse struct{}
+	game.Players[name].Connection.WriteJSON(emptyResponse)
+	delete(game.Players, name)
+	index := utils.Find(game.Order, name)
+	game.Order = append(game.Order[:index], game.Order[index+1:]...)
+	SendUpdates(game)
 	return game
 }
 

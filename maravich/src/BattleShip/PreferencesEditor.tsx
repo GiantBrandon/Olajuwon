@@ -1,7 +1,5 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Radio, RadioGroup, SelectChangeEvent } from '@mui/material'
 import React, { useState } from 'react'
-import { socket } from './BattleShip'
-import { BattleshipFireTypes, BattleshipFleetTypes, fireTypeDescriptions } from './types'
 
 type PreferencesEditorProps = {
     open: boolean

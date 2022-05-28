@@ -1,16 +1,18 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import React, { useState } from 'react'
-import { socket } from './BattleShip'
-import { BattleshipFireType, BattleshipFireTypes, BattleshipFleetType, BattleshipFleetTypes, BattleshipRules, fireTypeDescriptions } from './types'
+import React, { useContext, useState } from 'react'
+import { SocketContext } from './BattleShip'
+import { BattleshipFireType, BattleshipFireTypes, BattleshipFleetType, BattleshipFleetTypes, BattleshipPlayer, BattleshipRules, fireTypeDescriptions } from './types'
 
 type RulesEditorProps = {
+    player: BattleshipPlayer
     open: boolean
     handleClose: () => void
     rules: BattleshipRules
 }
 
-export const RulesEditor: React.FC<RulesEditorProps> = ({open, handleClose, rules}) => {
+export const RulesEditor: React.FC<RulesEditorProps> = ({player, open, handleClose, rules}) => {
   const [newRules, setNewRules] = useState(rules)
+  const { sendMessage } = useContext(SocketContext)
 
   const changeShipType = (event: SelectChangeEvent) => {
     setNewRules({...rules, shipType: event.target.value as BattleshipFleetType})
@@ -21,7 +23,7 @@ export const RulesEditor: React.FC<RulesEditorProps> = ({open, handleClose, rule
   }
 
   const submit = () => {
-    socket.send(JSON.stringify({rules: newRules, command: 'UPDATE_RULES'}))
+    sendMessage(player.name, 'UPDATE_RULES', {rules: newRules })
     handleClose()
   }
 

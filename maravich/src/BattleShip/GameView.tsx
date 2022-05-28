@@ -20,6 +20,7 @@ type TargetSelectionContextType = {
   resetTargets: () => void,
   toggleTarget: (player: string, point: number) => void
 }
+
 export const TargetSelectionContext = React.createContext<TargetSelectionContextType>({
   active: false,
   targets: {},

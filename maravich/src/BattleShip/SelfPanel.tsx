@@ -3,7 +3,7 @@ import { Button, ButtonGroup, Chip, Grid, List, ListItem, ListItemText, Paper } 
 import { styled } from '@mui/system'
 import React, { useContext, useEffect, useState } from 'react'
 import { BattleGrid } from './BattleGrid'
-import { socket } from './BattleShip'
+import { SocketContext } from './BattleShip'
 import { TargetSelectionContext } from './GameView'
 import { PreferencesEditor } from './PreferencesEditor'
 import { BattleshipPlayer } from './types'
@@ -23,9 +23,10 @@ export const SelfPanel: React.FC<SelfPanelProps> = ({self, messages}) => {
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   const [timer, setTimer] = useState(0)
   const { targets, resetTargets, active } = useContext(TargetSelectionContext)
+  const { sendMessage } = useContext(SocketContext)
 
   const fire = (targets) => {
-    socket.send(JSON.stringify({name: self.name, command: 'FIRE', targets: targets}))
+    sendMessage(self.name, 'FIRE', {targets})
     setTimer(-1)
     resetTargets()
   }
@@ -60,7 +61,7 @@ export const SelfPanel: React.FC<SelfPanelProps> = ({self, messages}) => {
       </Grid>
       <Grid item xs='auto'>
         <ButtonGroup variant='outlined'>
-          <Button startIcon={<RestartAlt />} onClick={() => socket.send(JSON.stringify({command: 'RESET'}))} >
+          <Button startIcon={<RestartAlt />} onClick={() => sendMessage(self.name, 'RESET', {})} >
           Reset
           </Button>
           <Button startIcon={<Settings />} onClick={() => setIsPreferencesOpen(true)} >

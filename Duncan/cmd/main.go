@@ -219,7 +219,7 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 		request := battleship.Request{}
 		json.Unmarshal(msg, &request)
 		if err != nil || t == -1 {
-			game = battleship.RemovePlayer(game, conn)
+			game = battleship.RemovePlayerConnection(game, conn)
 			break
 		}
 		switch request.Command {
@@ -231,6 +231,9 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 			break
 		case "RESET":
 			game = battleship.Reset(game)
+			break
+		case "REMOVE_PLAYER":
+			game = battleship.RemovePlayerName(game, request.ToDelete)
 			break
 		case "ADD_BOARD":
 			game = battleship.AddBoard(game, request)

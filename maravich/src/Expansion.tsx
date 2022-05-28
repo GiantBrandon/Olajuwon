@@ -36,13 +36,13 @@ const ExpandButton = styled.div((props: ExpansionStyleProps) => ({
 const GithubButton = styled.a((props: ExpansionStyleProps) => ({
   position: 'absolute',
   top: 0,
-  left: props.hexWidth / 2 + 12,
+  left: props.hexWidth / 2 + 6,
 }))
 
 const LinkedInButton = styled.a((props: ExpansionStyleProps) => ({
   position: 'absolute',
   top: 0,
-  right: props.hexWidth / 2 + 12,
+  right: props.hexWidth / 2 + 6,
 }))
 
 const LoginButton = styled.a((props: ExpansionStyleProps) => ({
@@ -54,13 +54,13 @@ const LoginButton = styled.a((props: ExpansionStyleProps) => ({
 const BattleShipButton = styled.a({
   position: 'absolute',
   bottom: 0,
-  right: 100 / 2 + 12,
+  right: 100 / 2 + 6,
 })
 
-const ComingButton2 = styled.a({
+const FantasyButton = styled.a({
   position: 'absolute',
   bottom: 0,
-  left: 100 / 2 + 12,
+  left: 100 / 2 + 6,
 })
 
 const DarkModeButton = styled.div((props: ExpansionStyleProps) => ({
@@ -125,13 +125,13 @@ export const Expansion: React.FC<ExpansionProps> = ({
               <DirectionsBoat fontSize='large' />
             </Hexagon>
           </BattleShipButton>
-          <ComingButton2
+          <FantasyButton
             href={'#/Fantasy'}
           >
             <Hexagon width={hexWidth}>
               <SportsBasketball fontSize='large' />
             </Hexagon>
-          </ComingButton2>
+          </FantasyButton>
           <DarkModeButton hexWidth={hexWidth} hexHeight={hexHeight}>
             <Hexagon width={hexWidth}>
               <WbSunny fontSize='large' />
