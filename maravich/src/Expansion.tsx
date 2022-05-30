@@ -72,11 +72,13 @@ const DarkModeButton = styled.div((props: ExpansionStyleProps) => ({
 interface ExpansionProps {
   hexHeight?: number
   hexWidth?: number
+  toggleDarkMode: () => void
 }
 
 export const Expansion: React.FC<ExpansionProps> = ({
   hexWidth = 100,
   hexHeight = hexWidth * 1.16,
+  toggleDarkMode,
 }) => {
   const [expanded, setExpanded] = useState(false)
 
@@ -132,7 +134,7 @@ export const Expansion: React.FC<ExpansionProps> = ({
               <SportsBasketball fontSize='large' />
             </Hexagon>
           </FantasyButton>
-          <DarkModeButton hexWidth={hexWidth} hexHeight={hexHeight}>
+          <DarkModeButton hexWidth={hexWidth} hexHeight={hexHeight} onClick={toggleDarkMode}>
             <Hexagon width={hexWidth}>
               <WbSunny fontSize='large' />
             </Hexagon>

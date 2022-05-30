@@ -55,6 +55,7 @@ type Player struct {
 	Ships      map[string][]int `json:"ships"`
 	Targets    []int            `json:"targets"`
 	ShipCount  int              `json:"shipCount"`
+	Cheater    bool             `json:"cheater"`
 	Connection *websocket.Conn
 }
 
@@ -63,15 +64,16 @@ type PlayerView struct {
 	Board     []Cell `json:"board"`
 	Order     int    `json:"order"`
 	ShipCount int    `json:"shipCount"`
+	Cheater   bool   `json:"cheater"`
 }
 type Request struct {
-	Name     string           `json:"name"`
-	Command  string           `json:"command"`
-	Board    []Cell           `json:"board"`
-	Targets  map[string][]int `json:"targets"`
-	Ships    map[string][]int `json:"ships"`
-	Rules    Rules            `json:"rules"`
-	ToDelete string           `json:toDelete"`
+	Name    string           `json:"name"`
+	Command string           `json:"command"`
+	Board   []Cell           `json:"board"`
+	Targets map[string][]int `json:"targets"`
+	Ships   map[string][]int `json:"ships"`
+	Rules   Rules            `json:"rules"`
+	Delete  string           `json:"delete"`
 }
 
 type View struct {

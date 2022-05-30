@@ -26,13 +26,13 @@ const validate = (coordinates: number[]): number[] => {
 const getTransformation = (rotation: Rotation, ) => {
   switch(rotation) {
   case 'right':
-    return (selected: number) => (x, y) => selected + x + y * 10
+    return (selected: number) => (x: number, y: number) => selected + x + y * 10
   case 'down':
-    return (selected: number) => (x, y) => selected + x * 10 - y
+    return (selected: number) => (x: number, y: number) => selected + x * 10 - y
   case 'left':
-    return (selected: number) => (x, y) => selected - x - y * 10
+    return (selected: number) => (x: number, y: number) => selected - x - y * 10
   case 'up':
-    return (selected: number) => (x, y) => selected - x * 10 + y
+    return (selected: number) => (x: number, y: number) => selected - x * 10 + y
   }
 }
 

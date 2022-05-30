@@ -9,6 +9,24 @@ import (
 
 // COMMAND LEVEL
 
+func Validate(game Game, request Request, conn *websocket.Conn) Game {
+	if request.Command == "JOIN_ROOM" {
+		return game
+	} else if game.Players[request.Name].Connection != conn || (request.Command == "FIRE" && request.Name != game.Order[0]) {
+		for name, player := range game.Players {
+			if player.Connection == conn {
+				player.Cheater = true
+				game.Players[name] = player
+				game = addMessage(game, fmt.Sprintf("%s tried to cheat", name))
+				return game
+			}
+		}
+		return game
+	} else {
+		return game
+	}
+}
+
 func RemovePlayerConnection(game Game, conn *websocket.Conn) Game {
 	for name, player := range game.Players {
 		if player.Connection == conn {
@@ -99,7 +117,12 @@ func Fire(game Game, request Request) Game {
 
 func SendUpdates(game Game) {
 	for _, name := range game.Order {
-		game.Players[name].Connection.WriteJSON(GameToView(game, name))
+		err := game.Players[name].Connection.WriteJSON(GameToView(game, name))
+		if err != nil {
+			fmt.Println(err)
+			game = RemovePlayerName(game, name)
+			SendUpdates(game)
+		}
 	}
 }
 
@@ -112,6 +135,7 @@ func GameToView(game Game, self string) View {
 			Board:     AssembleBoard(game.Players[name], self == name),
 			Order:     index,
 			ShipCount: game.Players[name].ShipCount,
+			Cheater:   game.Players[name].Cheater,
 		}
 		if self != name {
 			otherViews = append(otherViews, view)

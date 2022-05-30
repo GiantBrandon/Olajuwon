@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { Anchor, Close, DirectionsBoat, ModeStandby, QuestionMark, Water } from '@mui/icons-material'
+import { Tooltip } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import React from 'react'
 import { Size } from './BattleGrid'
@@ -32,6 +33,7 @@ const getIcon = (status: BattleshipCellStatus, size: Size) => {
 }
 
 type BattleCellProps = {
+  position: number
   status: BattleshipCellStatus
   hover: boolean
   size: Size
@@ -39,10 +41,12 @@ type BattleCellProps = {
   onClick?: () => void
 }
 
-export const BattleCell: React.FC<BattleCellProps> = ({ status, hover, size, setHover, onClick }) => {	
+export const BattleCell: React.FC<BattleCellProps> = ({ position, status, hover, size, setHover, onClick }) => {	
   return (
-    <GridItem hover={hover} onMouseEnter={setHover} onClick={onClick}>
-      {getIcon(status, size)}
-    </GridItem>
+    <Tooltip title={`${position}: ${status}`} disableInteractive>
+      <GridItem hover={hover} onMouseEnter={setHover} onClick={onClick}>
+        {getIcon(status, size)}
+      </GridItem>
+    </Tooltip>
   )
 }

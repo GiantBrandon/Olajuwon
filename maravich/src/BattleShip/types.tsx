@@ -56,4 +56,5 @@ export type BattleshipPlayer = {
   board: BattleshipCellStatus[]
   order: number
   shipCount: number
+  cheater: boolean
 }

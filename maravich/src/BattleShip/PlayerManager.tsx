@@ -22,7 +22,7 @@ export const PlayerManager: React.FC<PlayerManagerProps> = ({game, open, handleC
         {player.shipCount}
       </TableCell>
       <TableCell>
-        <Delete onClick={() => sendMessage(game.self.name, 'REMOVE_PLAYER', {toDelete: player.name})}/>
+        <Delete onClick={() => sendMessage(game.self.name, 'REMOVE_PLAYER', {delete: player.name})}/>
       </TableCell>
     </TableRow>
   }

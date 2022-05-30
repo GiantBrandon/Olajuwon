@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { HashRouter, Route, Link } from 'react-router-dom'
 import { Expansion } from './Expansion'
 import { Login } from './Login/Login'
@@ -34,9 +34,11 @@ const ShellyLink = styled(Button)({
 })
 
 export const App: React.FC = () => {
+  const [dark, setDark] = useState(window.matchMedia('(prefers-color-scheme: dark)').matches)
+
   const theme = createTheme({
     palette: {
-      mode: 'dark',
+      mode: dark ? 'dark' : 'light',
     },
   })
 
@@ -46,7 +48,7 @@ export const App: React.FC = () => {
         <CssBaseline />
         <Route exact path='/'>
           {window.innerHeight / window.innerWidth < .65 ? <Background src={background} width={'100%'} height={'auto'} /> : <Background src={background} width={'auto'} height={'100%'} />}
-          <Expansion />
+          <Expansion toggleDarkMode={() => setDark(dark => !dark)} />
           <ShellyLink
             style={{ fontSize: '24px' }}
             color={'primary'}

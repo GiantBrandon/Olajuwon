@@ -9,7 +9,7 @@ export type Size = 'small' | 'medium' | 'large'
 
 const GridWrapper = styled(Paper)((props: {size: number}) => ({
   width: `${props.size}px`,
-  height: `${props.size}px`
+  height: `${props.size}px`,
 }))
 
 const NameChip = styled(Chip)((props: {width: number}) => ({
@@ -49,10 +49,10 @@ export const BattleGrid: React.FC<BattleGridProps> = ({ player, size = 'large' }
 
   return (
     <div>
-      <GridWrapper size={getSize(size)} onMouseLeave={() => setHover(undefined)}>
+      <GridWrapper variant='outlined' size={getSize(size)} onMouseLeave={() => setHover(undefined)}>
         <ShipGrid board={board} hovered={hover != null ? [hover] : []} setHover={setHover} onClick={onClick} />
       </GridWrapper>
-      <NameChip width={getSize(size)} avatar={<Avatar>{player.shipCount}</Avatar>} label={player.name} color={player.order == 0 ? 'primary' : 'default'} />
+      <NameChip width={getSize(size)} avatar={<Avatar>{player.shipCount}</Avatar>} label={player.name} color={player.order == 0 ? 'primary' : 'default'} onDelete={player.cheater ? () => undefined : undefined} />
     </div>
   )
 }

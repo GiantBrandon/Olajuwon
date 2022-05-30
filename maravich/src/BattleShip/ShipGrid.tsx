@@ -41,7 +41,7 @@ export const ShipGrid: React.FC<ShipGridProps> = ({ board, size = 'large', hover
         {board?.map((item, index) => {
           const isTarget = false
           return (
-            <BattleCell key={index} size={size} status={isTarget ? 'Target' : item} hover={hovered.includes(index)} setHover={() => setHover(index)} onClick={() => onClick(index)} />
+            <BattleCell key={index} size={size} position={index / 10} status={isTarget ? 'Target' : item} hover={hovered.includes(index)} setHover={() => setHover(index)} onClick={() => onClick(index)} />
           )
         })}
       </GridView>
