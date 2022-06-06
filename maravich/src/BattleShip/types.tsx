@@ -54,6 +54,7 @@ export type BattleshipRules = {
 export type BattleshipPlayer = {
   name: string
   board: BattleshipCellStatus[]
+  colors: any,
   order: number
   shipCount: number
   cheater: boolean

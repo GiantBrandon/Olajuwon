@@ -118,6 +118,7 @@ export const ShipSelection: React.FC<ShipSelectionProps> = ({ game }) => {
     <Stack height='100vh' justifyContent='center' alignItems='center'>
       <ShipGrid
         board={[...Array(100)].map((_, index) => placedShips.includes(index) ? 'Ship' : 'Untouched')}
+        colors={game.self.colors}
         hovered={hovered}
         setHover={setHover}
         onClick={addShip}

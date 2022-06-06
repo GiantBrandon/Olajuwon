@@ -1,16 +1,11 @@
 import styled from '@emotion/styled'
-import { Avatar, Chip, Paper } from '@mui/material'
+import { Avatar, Chip } from '@mui/material'
 import React, { useContext, useState } from 'react'
 import { TargetSelectionContext } from './GameView'
 import { ShipGrid } from './ShipGrid'
 import { BattleshipPlayer } from './types'
 
 export type Size = 'small' | 'medium' | 'large'
-
-const GridWrapper = styled(Paper)((props: {size: number}) => ({
-  width: `${props.size}px`,
-  height: `${props.size}px`,
-}))
 
 const NameChip = styled(Chip)((props: {width: number}) => ({
   maxWidth: `${props.width}px`
@@ -49,9 +44,7 @@ export const BattleGrid: React.FC<BattleGridProps> = ({ player, size = 'large' }
 
   return (
     <div>
-      <GridWrapper variant='outlined' size={getSize(size)} onMouseLeave={() => setHover(undefined)}>
-        <ShipGrid board={board} hovered={hover != null ? [hover] : []} setHover={setHover} onClick={onClick} />
-      </GridWrapper>
+      <ShipGrid board={board} colors={player.colors} size={size} hovered={hover != null ? [hover] : []} setHover={setHover} onClick={onClick} />
       <NameChip width={getSize(size)} avatar={<Avatar>{player.shipCount}</Avatar>} label={player.name} color={player.order == 0 ? 'primary' : 'default'} onDelete={player.cheater ? () => undefined : undefined} />
     </div>
   )

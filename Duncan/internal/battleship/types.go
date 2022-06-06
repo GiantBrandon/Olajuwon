@@ -38,6 +38,14 @@ const (
 	End         = "End"
 )
 
+type Colors struct {
+	Untouched string `json:"untouched"`
+	Hit       string `json:"hit"`
+	Miss      string `json:"miss"`
+	Ship      string `json:"ship"`
+	Target    string `json:"target"`
+}
+
 type Game struct {
 	Players  map[string]Player `json:"players"`
 	Order    []string          `json:"order"`
@@ -56,6 +64,7 @@ type Player struct {
 	Targets    []int            `json:"targets"`
 	ShipCount  int              `json:"shipCount"`
 	Cheater    bool             `json:"cheater"`
+	Colors     Colors           `json:"colors"`
 	Connection *websocket.Conn
 }
 
@@ -65,11 +74,13 @@ type PlayerView struct {
 	Order     int    `json:"order"`
 	ShipCount int    `json:"shipCount"`
 	Cheater   bool   `json:"cheater"`
+	Colors    Colors `json:"colors"`
 }
 type Request struct {
 	Name    string           `json:"name"`
 	Command string           `json:"command"`
 	Board   []Cell           `json:"board"`
+	Colors  Colors           `json:"colors"`
 	Targets map[string][]int `json:"targets"`
 	Ships   map[string][]int `json:"ships"`
 	Rules   Rules            `json:"rules"`

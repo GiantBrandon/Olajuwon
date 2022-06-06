@@ -231,12 +231,11 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 		case "START_GAME":
 			game = battleship.StartGame(game)
 			break
-		case "RESET":
-			fmt.Println("here")
-			game = battleship.Reset(game)
-			break
 		case "REMOVE_PLAYER":
 			game = battleship.RemovePlayerName(game, request.Delete)
+			break
+		case "CHANGE_STATE":
+			game = battleship.ChangeState(game)
 			break
 		case "ADD_BOARD":
 			game = battleship.AddBoard(game, request)

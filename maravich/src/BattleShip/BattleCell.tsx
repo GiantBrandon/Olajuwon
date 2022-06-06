@@ -15,18 +15,18 @@ const GridItem = styled.div((props: {hover: boolean}) => ({
   backgroundColor: props.hover ? grey[400] : undefined,
 }))
 
-const getIcon = (status: BattleshipCellStatus, size: Size) => {
+const getIcon = (status: BattleshipCellStatus, size: Size, colors: any) => {
   switch (status) {
   case 'Untouched':
-    return <Water fontSize={size} color='primary' />
+    return <Water fontSize={size} color={colors.untouched} />
   case 'Hit':
-    return <Anchor fontSize={size} color='disabled' />
+    return <Anchor fontSize={size} color={colors.hit} />
   case 'Miss':
-    return <Close fontSize={size} />
+    return <Close fontSize={size} color={colors.miss}/>
   case 'Ship':
-    return <DirectionsBoat fontSize={size} color='success' />
+    return <DirectionsBoat fontSize={size} color={colors.ship} />
   case 'Target':
-    return <ModeStandby fontSize={size} />
+    return <ModeStandby fontSize={size} color={colors.target} />
   default:
     return <QuestionMark fontSize={size} />
   }
@@ -35,17 +35,18 @@ const getIcon = (status: BattleshipCellStatus, size: Size) => {
 type BattleCellProps = {
   position: number
   status: BattleshipCellStatus
+  colors: any
   hover: boolean
   size: Size
   setHover: () => void
   onClick?: () => void
 }
 
-export const BattleCell: React.FC<BattleCellProps> = ({ position, status, hover, size, setHover, onClick }) => {	
+export const BattleCell: React.FC<BattleCellProps> = ({ position, status, colors, hover, size, setHover, onClick }) => {
   return (
     <Tooltip title={`${position}: ${status}`} disableInteractive>
       <GridItem hover={hover} onMouseEnter={setHover} onClick={onClick}>
-        {getIcon(status, size)}
+        {getIcon(status, size, colors)}
       </GridItem>
     </Tooltip>
   )

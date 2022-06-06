@@ -55,7 +55,7 @@ func RemovePlayerName(game Game, name string) Game {
 }
 
 func JoinRoom(game Game, request Request, conn *websocket.Conn) Game {
-	game.Players[request.Name] = Player{Connection: conn}
+	game.Players[request.Name] = Player{Colors: request.Colors, Connection: conn}
 	game.Order = append(game.Order, request.Name)
 	game = addMessage(game, fmt.Sprintf("%s joined", request.Name))
 	SendUpdates(game)
@@ -64,16 +64,6 @@ func JoinRoom(game Game, request Request, conn *websocket.Conn) Game {
 
 func StartGame(game Game) Game {
 	game.Status = "Active"
-	SendUpdates(game)
-	return game
-}
-
-func Reset(game Game) Game {
-	for name, player := range game.Players {
-		game.Players[name] = Player{Connection: player.Connection}
-	}
-	game.Messages = []string{}
-	game.Status = "Setup"
 	SendUpdates(game)
 	return game
 }
@@ -126,6 +116,12 @@ func SendUpdates(game Game) {
 	}
 }
 
+func ChangeState(game Game) Game {
+	game.Status = "Setup"
+	SendUpdates(game)
+	return game
+}
+
 func GameToView(game Game, self string) View {
 	var selfView PlayerView
 	otherViews := []PlayerView{}
@@ -136,6 +132,7 @@ func GameToView(game Game, self string) View {
 			Order:     index,
 			ShipCount: game.Players[name].ShipCount,
 			Cheater:   game.Players[name].Cheater,
+			Colors:    game.Players[name].Colors,
 		}
 		if self != name {
 			otherViews = append(otherViews, view)

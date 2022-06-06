@@ -18,7 +18,6 @@ export const SocketContext = React.createContext<SocketContextType>({sendMessage
 export const BattleShip: React.FC = () => {
   const [game, setGame] = useState<BattleshipGame>()
   const [socket, setSocket] = useState<WebSocket>()
-  console.log(game)
 
   useEffect(() => {
     const mySocket = location.hostname === 'localhost'

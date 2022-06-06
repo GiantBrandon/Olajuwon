@@ -17,6 +17,7 @@ const GridView = styled(Grid)({
 
 type ShipGridProps = {
   board: BattleshipCellStatus[]
+  colors: any
   size?: Size
   hovered: number[]
   setHover: (index: number) => void
@@ -34,14 +35,14 @@ const getSize = (size: Size) => {
   }
 }
 
-export const ShipGrid: React.FC<ShipGridProps> = ({ board, size = 'large', hovered, setHover, onClick }) => {
+export const ShipGrid: React.FC<ShipGridProps> = ({ board, colors, size = 'large', hovered, setHover, onClick }) => {
   return (
-    <GridWrapper size={getSize(size)} onMouseLeave={() => setHover(-100)}>
+    <GridWrapper size={getSize(size)} onMouseLeave={() => setHover(-100)} elevation={2}>
       <GridView container columns={10}>
         {board?.map((item, index) => {
           const isTarget = false
           return (
-            <BattleCell key={index} size={size} position={index / 10} status={isTarget ? 'Target' : item} hover={hovered.includes(index)} setHover={() => setHover(index)} onClick={() => onClick(index)} />
+            <BattleCell key={index} size={size} colors={colors} position={index / 10} status={isTarget ? 'Target' : item} hover={hovered.includes(index)} setHover={() => setHover(index)} onClick={() => onClick(index)} />
           )
         })}
       </GridView>
