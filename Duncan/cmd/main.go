@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/GiantBrandon/Olajuwon/Duncan/internal/battleship"
+	"github.com/GiantBrandon/Olajuwon/Duncan/internal/match"
 	"github.com/GiantBrandon/Olajuwon/Duncan/internal/types"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/contrib/static"
@@ -272,6 +273,7 @@ func main() {
 		v1.GET("/linkedin", Linkedin)
 		v1.GET("/recentgames/:player", GetRecentGames)
 		v1.GET("/players", GetPlayers)
+		v1.GET("/match", match.GetDailyMatch)
 	}
 	router.Run()
 }

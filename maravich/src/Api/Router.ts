@@ -28,10 +28,10 @@ export const getPlayers = (): Promise<{ players: Player[] }> =>
   axios
     .get<{ players: Player[] }>(`${getUrl()}/v1/players`)
     .then((Response) => Response.data)
-    
-export const getBoard = (): Promise<{ board: boolean[] }> =>
+
+export const getTodaysMatch = (): Promise<{ board: number[][], replacements: number[] }> =>
   axios
-    .get(`${getUrl()}/v1/boards`)
+    .get(`${getUrl()}/v1/match`)
     .then((Response) => {
       return Response.data
     })

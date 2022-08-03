@@ -94,7 +94,7 @@ export const Expansion: React.FC<ExpansionProps> = ({
       {expanded && (
         <>
           <GithubButton
-            href={'#/Github'}
+            href={'https://github.com/GiantBrandon'}
             hexWidth={hexWidth}
             hexHeight={hexHeight}
           >
@@ -103,7 +103,7 @@ export const Expansion: React.FC<ExpansionProps> = ({
             </Hexagon>
           </GithubButton>
           <LinkedInButton
-            href={'#/LinkedIn'}
+            href={'https://www.linkedin.com/in/brandon-kurtz-377251111/'}
             hexWidth={hexWidth}
             hexHeight={hexHeight}
           >
