@@ -13,7 +13,7 @@ const MatchWrapper = styled(Paper)({
 })
 
 const colors = ['primary','warning','success','error'] as any
-const symbols = ['♠','♦','♣','♥']
+const symbols = ['♤','♢','♧','♡']
 
 export const Match: React.FC = () => {
   const [board, setBoard] = useState<number[][]>([[]])
