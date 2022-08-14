@@ -12,8 +12,8 @@ const MatchWrapper = styled(Paper)({
   bottom: 0,
 })
 
-const colors = ['primary','warning','success','error'] as any
-const symbols = ['♤','♢','♧','♡']
+const colors = ['primary','warning','success','error', 'default'] as any
+const symbols = ['♤','♢','♧','♡','💣']
 
 export const Match: React.FC = () => {
   const [board, setBoard] = useState<number[][]>([[]])
@@ -23,6 +23,7 @@ export const Match: React.FC = () => {
   const [pops, setPops] = useState(0)
   const [turns, setTurns] = useState(0)
   const [waiting, setWaiting] = useState(false)
+  const [exploding, setExploding] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const size = ref.current ? Math.min(ref.current.offsetHeight, ref.current.offsetWidth) : 0
 
@@ -62,9 +63,15 @@ export const Match: React.FC = () => {
     setTimeout(() => setWaiting(false), 250)
   }, [board, waiting])
 
+  const isValid = (row: number, column: number, board: number[][]) => {
+    return board.length > 0 &&
+      row >= 0 && row < board.length &&
+      column >= 0 && column < board[row].length
+  }
+
   const connectHorizontal = (value: number, values: number[][], row: number, column: number): number[][] => {
     if (
-      column < 0 || column > 11 ||
+      !isValid(row, column, board) ||
       value !== board[row][column] ||
       values.some(coordinate => coordinate[0] === row && coordinate[1] === column)
     )
@@ -76,8 +83,7 @@ export const Match: React.FC = () => {
 
   const connectVertical = (value: number, values: number[][], row: number, column: number): number[][] => {
     if (
-      row < 0 || row > 8 ||
-      column < 0 || column > 11 ||
+      !isValid(row, column, board) ||
       value !== board[row][column] ||
       values.some(coordinate => coordinate[0] === row && coordinate[1] === column)
     )
@@ -101,8 +107,9 @@ export const Match: React.FC = () => {
     return south
   }
 
-  const containedInGroup = (coordinate: number[], group: number[][][]): boolean => {
-    return group.some(match => match.some(item => item[0] === coordinate[0] && item[1] === coordinate[1]))
+  const findGroupSize = (coordinate: number[], groups: number[][][]): number => {
+    const match = groups.find(group => group.some(item => item[0] === coordinate[0] && item[1] === coordinate[1]))
+    return match ? match.length : 0
   }
 
   const fall = (row: number, column: number, board: number[][]): number[][] => {
@@ -118,7 +125,7 @@ export const Match: React.FC = () => {
     let allMatches: number[][][] = []
     board.map((row, rIndex) => {
       row.map((cell, cIndex) => {
-        if (cell !== -1 && !containedInGroup([rIndex, cIndex], allMatches)) {
+        if (cell !== -1 && cell !== 4 && findGroupSize([rIndex, cIndex], allMatches) == 0) {
           const horizontal = addMatchHorizontal(cell, [], rIndex, cIndex)
           const vertical = addMatchVertical(cell, [], rIndex, cIndex)
           if(horizontal.length > vertical.length && horizontal.length > 2)
@@ -135,12 +142,14 @@ export const Match: React.FC = () => {
     const newBoard = [...board]
     newBoard.map((row, rIndex) => {
       newBoard[rIndex] = [...row]
-      row.map((cell, cIndex) => {
-        if (containedInGroup([rIndex, cIndex], matches)) {
-          newBoard[rIndex][cIndex] = -1
+      row.map((_, cIndex) => {
+        const groupSize = findGroupSize([rIndex, cIndex], matches)
+        if (groupSize > 0) {
+          newBoard[rIndex][cIndex] = groupSize > 4 && !exploding ? 4 : -1
         }
       })
     })
+    setExploding(false)
     return newBoard
   }
 
@@ -162,6 +171,27 @@ export const Match: React.FC = () => {
     setSelected([-1, -1])
     setTurns(turns + 1)
   }
+
+  const explode = () => {
+    const explosion = board.flatMap((row, rIndex) => {
+      return row.map((cell, cIndex) => {
+        if (
+          cell === 4 || 
+          isValid(rIndex - 1, cIndex, board) && board[rIndex - 1][cIndex] == 4 ||
+          isValid(rIndex + 1, cIndex, board) && board[rIndex + 1][cIndex] == 4 ||
+          isValid(rIndex, cIndex + 1, board) && board[rIndex][cIndex + 1] == 4 ||
+          isValid(rIndex, cIndex - 1, board) && board[rIndex][cIndex - 1] == 4
+        ) {
+          return [rIndex, cIndex]
+        } else {
+          return []
+        }
+      }).filter(index => index.length !== 0)
+    })
+    setExploding(true)
+    setMatches([explosion])
+    setPops(pops + explosion.length)
+  }
   
   return (
     <>
@@ -172,16 +202,18 @@ export const Match: React.FC = () => {
         Turns: {turns}
       </p>
       <SizeWrapper ref={ref}>
-        <MatchWrapper sx={{ height: size, width: size }}>
+        <MatchWrapper sx={{ width: size }}>
           <Grid container>
             {board.map((row, rIndex) => 
               row.map((cell, cIndex) => {
                 const isSelected = rIndex === selected[0] && cIndex === selected[1]
                 return (<Grid item xs={1} key={`${rIndex},${cIndex}`}>
                   <IconButton
-                    color={containedInGroup([rIndex, cIndex], matches) ? 'default' : colors[cell]}
+                    color={findGroupSize([rIndex, cIndex], matches) ? 'default' : colors[cell]}
                     onClick={() => {
-                      if (isSelected)
+                      if (cell === 4)
+                        explode()
+                      else if (isSelected)
                         setSelected([-1, -1])
                       else if (
                         (selected[0] === rIndex || selected[1] === cIndex) &&
