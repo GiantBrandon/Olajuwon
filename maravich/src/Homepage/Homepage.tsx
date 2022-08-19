@@ -19,7 +19,7 @@ const ShellyLink = styled(Button)({
 export const Homepage: React.FC = () => {
   return (
     <>
-      {window.innerHeight / window.innerWidth < .65 ? <Background src={background} width={'100%'} height={'auto'} /> : <Background src={background} width={'auto'} height={'100%'} />}
+      {window.innerHeight / window.innerWidth < .65 ? <Background src={background} alt='background' width='100%' height='auto' /> : <Background src={background} alt='background' width='auto' height='100%' />}
       <ShellyLink
         style={{ fontSize: '24px' }}
         color={'primary'}
