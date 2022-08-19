@@ -1,10 +1,11 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
 import { App } from './App'
+import { registerSW } from 'virtual:pwa-register'
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/serviceworker.ts')
+  // && !/localhost/.test(window.location)) {
+  registerSW()
 }
 

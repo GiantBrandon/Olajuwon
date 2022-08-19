@@ -9,7 +9,7 @@ deploy:
 	make deploy-ui
 
 build-server:
-	cd Duncan; cd cmd; GOOS=linux GOARCH=amd64 go build -o server .
+	cd Duncan; cd cmd; go build -o server .
 
 deploy-server:
 	scp -i "keyPair.pem" Duncan/cmd/server ec2-user@ec2-3-143-226-28.us-east-2.compute.amazonaws.com:~/server; rm -rf Duncan/cmd/server
