@@ -35,7 +35,7 @@ const SubmitButton = styled(Button)({
   marginTop: '8px',
 })
 
-export const Login: React.FC = () => {
+const Login: React.FC = () => {
   const [usePasscode, setUsePasscode] = useState(true)
   const [hidePassword, setHidePassword] = useState(true)
   return (
@@ -85,3 +85,5 @@ export const Login: React.FC = () => {
     </CenteredDiv>
   )
 }
+
+export default Login

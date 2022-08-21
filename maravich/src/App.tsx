@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
-import { Login } from './Login/Login'
-import { Fantasy } from './Fantasy/Fantasy'
+const Login = React.lazy(() => import('./Login/Login'))
+const Fantasy = React.lazy(() => import('./Fantasy/Fantasy'))
+const BattleShip = React.lazy(() => import('./BattleShip/BattleShip'))
+const Match = React.lazy(() => import('./Match/Match'))
 import {
   createTheme,
   CssBaseline,
   ThemeProvider,
 } from '@mui/material'
-import { BattleShip } from './BattleShip/BattleShip'
 import { Homepage } from './Homepage/Homepage'
 import { HomeButton } from './Homepage/HomeButton'
-import { Match } from './Match/Match'
 
 export const App: React.FC = () => {
   const [dark, setDark] = useState(window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -29,10 +29,26 @@ export const App: React.FC = () => {
         <Routes>
           <Route path='/'>
             <Route index element={<Homepage />} />
-            <Route path='Login' element={<Login />} />
-            <Route path='Fantasy' element={<Fantasy />} />
-            <Route path='BattleShip' element={<BattleShip />} />
-            <Route path='Match' element={<Match />} />
+            <Route path='Login' element={
+              <Suspense fallback='Loading...'>
+                <Login />
+              </Suspense>
+            } />
+            <Route path='Fantasy' element={
+              <Suspense fallback='Loading...'>
+                <Fantasy />
+              </Suspense>
+            } />
+            <Route path='BattleShip' element={
+              <Suspense fallback='Loading...'>
+                <BattleShip />
+              </Suspense>
+            } />
+            <Route path='Match' element={
+              <Suspense fallback='Loading...'>
+                <Match />
+              </Suspense>
+            } />
           </Route>
         </Routes>
         <HomeButton dark={dark} setDark={setDark} />

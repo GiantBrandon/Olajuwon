@@ -14,8 +14,7 @@ type SocketContextType = {
   
 export const SocketContext = React.createContext<SocketContextType>({sendMessage: () => undefined})
 
-
-export const BattleShip: React.FC = () => {
+const BattleShip: React.FC = () => {
   const [game, setGame] = useState<BattleshipGame>()
   const [socket, setSocket] = useState<WebSocket>()
 
@@ -45,3 +44,5 @@ export const BattleShip: React.FC = () => {
     return null
   }
 }
+
+export default BattleShip

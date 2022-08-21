@@ -40,7 +40,7 @@ const emptyStats: Stats = {
   turnovers: -1,
 }
 
-export const Fantasy: React.FC = () => {
+const Fantasy: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([])
   const [selectedPlayers, setSelectedPlayers] = useState<(Stats | undefined)[]>(
     [undefined, undefined, undefined]
@@ -144,3 +144,5 @@ export const Fantasy: React.FC = () => {
     </CenteredDiv>
   )
 }
+
+export default Fantasy
