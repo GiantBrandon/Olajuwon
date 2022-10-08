@@ -8,8 +8,8 @@
         "purpose": "maskable"
       },
       {
-        "src": "drawing.png",
-        "sizes": "600x600"
+        "src": "drawing.webp",
+        "sizes": "720x720"
       }
     ],
     "start_url": "/",

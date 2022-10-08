@@ -11,10 +11,10 @@ import {
 } from '@mui/material'
 import { Homepage } from './Homepage/Homepage'
 import { HomeButton } from './Homepage/HomeButton'
+import { JsonParser } from './Json/JsonParser'
 
 export const App: React.FC = () => {
   const [dark, setDark] = useState(window.matchMedia('(prefers-color-scheme: dark)').matches)
-  console.log(dark)
 
   const theme = createTheme({
     palette: {
@@ -47,6 +47,11 @@ export const App: React.FC = () => {
             <Route path='Match' element={
               <Suspense fallback='Loading...'>
                 <Match />
+              </Suspense>
+            } />
+            <Route path='Json' element={
+              <Suspense fallback='Loading...'>
+                <JsonParser />
               </Suspense>
             } />
           </Route>
