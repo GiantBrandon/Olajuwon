@@ -1,7 +1,6 @@
 import React, { Suspense, useState } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 const Login = React.lazy(() => import('./Login/Login'))
-const Fantasy = React.lazy(() => import('./Fantasy/Fantasy'))
 const BattleShip = React.lazy(() => import('./BattleShip/BattleShip'))
 const Match = React.lazy(() => import('./Match/Match'))
 import {
@@ -32,11 +31,6 @@ export const App: React.FC = () => {
             <Route path='Login' element={
               <Suspense fallback='Loading...'>
                 <Login />
-              </Suspense>
-            } />
-            <Route path='Fantasy' element={
-              <Suspense fallback='Loading...'>
-                <Fantasy />
               </Suspense>
             } />
             <Route path='BattleShip' element={
