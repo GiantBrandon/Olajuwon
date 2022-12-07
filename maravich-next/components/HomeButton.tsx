@@ -1,9 +1,11 @@
+'use client'
+
 import styled from '@emotion/styled'
 import { DarkMode, DataObject, Home, LightMode, Login, VideogameAsset } from '@mui/icons-material'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon, TextField } from '@mui/material'
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { create, login } from '../Api/Router'
+import Link from 'next/link'
+import React, { Dispatch, SetStateAction, useState } from 'react'
+import { create, login } from './Router'
 
 const PinnedSpeedDial = styled(SpeedDial)({
   position: 'absolute',
@@ -11,43 +13,44 @@ const PinnedSpeedDial = styled(SpeedDial)({
   top: '16px',
 })
 
+const NextLink = styled(Link)({
+  display: 'flex'
+})
+
 type HomeButtonProps = {
   dark: boolean,
-  setDark: (dark: boolean) => void
+  setDark: Dispatch<SetStateAction<boolean>>
 }
 
 export const HomeButton: React.FC<HomeButtonProps> = ({dark, setDark }) => {
   const [user, setUser] = useState('')
   const [pass, setPass] = useState('')
   const [isLoginOpen, setIsLoginOpen] = useState(false)
-  const navigate = useNavigate()
+  
   return (
     <>
-      <PinnedSpeedDial ariaLabel='nav-bar' direction='down' icon={<SpeedDialIcon />}>
+      <PinnedSpeedDial ariaLabel='nav-bar' direction='down' icon={<SpeedDialIcon color='primary' />}>
         <SpeedDialAction
-          icon={<Home />}
+          icon={<NextLink href='/' passHref aria-label='Home'><Home color='primary' /></NextLink>}
           tooltipTitle={'Home'}
-          onClick={() => navigate('/')}
         />
         <SpeedDialAction
-          icon={<Login />}
+          icon={<Login color='primary' />}
           tooltipTitle={'Login'}
           onClick={() => setIsLoginOpen(true)}
         />
         <SpeedDialAction
-          icon={<VideogameAsset />}
+          icon={<NextLink href='/GameHub' passHref aria-label='Game Hub'><VideogameAsset color='primary' /></NextLink>}
           tooltipTitle={'Game Hub'}
-          onClick={() => navigate('/GameHub')}
         />
         <SpeedDialAction
-          icon={<DataObject />}
+          icon={<NextLink href='/Json' passHref aria-label='Json'><DataObject color='primary' /></NextLink>}
           tooltipTitle={'Json'}
-          onClick={() => navigate('/Json')}
         />
         <SpeedDialAction
-          icon={dark ? <DarkMode /> : <LightMode />}
+          icon={dark ? <DarkMode color='primary' /> : <LightMode color='primary' />}
           tooltipTitle={'Toggle Dark Mode'}
-          onClick={() => setDark(!dark)}
+          onClick={() => setDark(dark => !dark)}
         />
       </PinnedSpeedDial>
       <Dialog open={isLoginOpen} onClose={() => setIsLoginOpen(false)}>

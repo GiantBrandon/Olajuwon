@@ -11,6 +11,8 @@ import {
 import { Homepage } from './Homepage/Homepage'
 import { HomeButton } from './Homepage/HomeButton'
 import { JsonParser } from './Json/JsonParser'
+import { TowerDefense } from './TowerDefense/TowerDefense'
+import { GameHub } from './GameHub/GameHub'
 
 export const App: React.FC = () => {
   const [dark, setDark] = useState(window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -33,6 +35,11 @@ export const App: React.FC = () => {
                 <Login />
               </Suspense>
             } />
+            <Route path='GameHub' element={
+              <Suspense fallback='Loading...'>
+                <GameHub />
+              </Suspense>
+            } />
             <Route path='BattleShip' element={
               <Suspense fallback='Loading...'>
                 <BattleShip />
@@ -46,6 +53,11 @@ export const App: React.FC = () => {
             <Route path='Json' element={
               <Suspense fallback='Loading...'>
                 <JsonParser />
+              </Suspense>
+            } />
+            <Route path='Defense' element={
+              <Suspense fallback='Loading...'>
+                <TowerDefense />
               </Suspense>
             } />
           </Route>

@@ -15,10 +15,10 @@ deploy-server:
 	scp -i "keyPair.pem" Duncan/cmd/server ec2-user@ec2-3-143-226-28.us-east-2.compute.amazonaws.com:~/server; rm -rf Duncan/cmd/server
 
 build-ui:
-	cd maravich; yarn build
+	cd maravich-next; yarn build
 
 deploy-ui:
-	scp -i "keyPair.pem" -r maravich/dist  ec2-user@ec2-3-143-226-28.us-east-2.compute.amazonaws.com:~/ui; rm -rf maravich/build
+	scp -i "keyPair.pem" -r maravich-next  ec2-user@ec2-3-143-226-28.us-east-2.compute.amazonaws.com:~/ui
 
 install: ## yarn and go install — Concurrently installs go and yarn dependencies
 	cd Duncan; go get ./...
