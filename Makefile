@@ -14,10 +14,10 @@ run-server:
 	docker start server
 
 build-ui:
-	docker build -t client ./maravich-next
+	cd maravich-next; yarn install; yarn build
 
 run-ui:
-	docker start client
+	cd maravich-next; yarn start
 
 deploy-ui:
 	scp -i "keyPair.pem" client.tar ec2-user@ec2-3-143-226-28.us-east-2.compute.amazonaws.com:~/client.tar; rm client.tar
