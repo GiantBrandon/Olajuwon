@@ -4,21 +4,23 @@ build: ## yarn and go build
 	make build-server
 	make build-ui
 
-deploy:
-	make deploy-server
-	make deploy-ui
+run:
+	make -j2 run-server run-ui
 
 build-server:
-	cd Duncan; cd cmd; go build -o server .
+	docker build -t server ./Duncan
 
-deploy-server:
-	scp -i "keyPair.pem" Duncan/cmd/server ec2-user@ec2-3-143-226-28.us-east-2.compute.amazonaws.com:~/server; rm -rf Duncan/cmd/server
+run-server:
+	docker start server
 
 build-ui:
-	cd maravich-next; yarn build
+	docker build -t client ./maravich-next
+
+run-ui:
+	docker start client
 
 deploy-ui:
-	scp -i "keyPair.pem" -r maravich-next  ec2-user@ec2-3-143-226-28.us-east-2.compute.amazonaws.com:~/ui
+	scp -i "keyPair.pem" client.tar ec2-user@ec2-3-143-226-28.us-east-2.compute.amazonaws.com:~/client.tar; rm client.tar
 
 install: ## yarn and go install — Concurrently installs go and yarn dependencies
 	cd Duncan; go get ./...
