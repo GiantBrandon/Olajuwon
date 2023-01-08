@@ -15,7 +15,7 @@ export const MUIWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const theme = createTheme({ palette: { mode: dark ? 'dark' : 'light' } })
 
   return <ThemeProvider theme={theme}>
-    <Paper sx={{ height: '100vh', width: '100vw' }} square>
+    <Paper sx={{ height: '100vh', width: '100vw', position: 'relative' }} square>
       {children}
       <HomeButton dark={dark} setDark={setDark} />
     </Paper>

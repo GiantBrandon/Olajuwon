@@ -1,57 +1,42 @@
 .DEFAULT_GOAL := help
 
-build: ## yarn and go build
-	make build-server
+build:
 	make build-ui
-
-run:
-	make -j2 run-server run-ui
+	make build-server
 
 build-server:
 	docker build -t server ./Duncan
 
-run-server:
-	docker start server
-
 build-ui:
-	cd maravich-next; yarn install; yarn build
+	docker build -t client ./maravich-next
+
+run:
+	make -j2 run-server run-ui
+
+run-server:
+	docker run --name SERVER_CONTAINER -p 0.0.0.0:8080:8080 server
 
 run-ui:
-	cd maravich-next; yarn start
-
-deploy-ui:
-	scp -i "keyPair.pem" client.tar ec2-user@ec2-3-143-226-28.us-east-2.compute.amazonaws.com:~/client.tar; rm client.tar
+	docker run --name CLIENT_CONTAINER -p 0.0.0.0:3000:3000 client
 
 install: ## yarn and go install — Concurrently installs go and yarn dependencies
 	cd Duncan; go get ./...
 	cd maravich; yarn install
 
-tidy: ## go mod tidy — Prune any no-longer-needed dependencies from go.mod and add any dependencies needed for other combinations of OS, architecture, and build tags
-	cd Duncan; go mod tidy
+local:
+	make -j2 server ui
 
 upgrade: ## go get -u ./... — Update all direct and indirect dependencies to latest minor or patch upgrades (pre-releases are ignored)
 	cd Duncan; go get -u ./...
 
 clean: ## clean - removes existing binaries, vendored code and code coverage results
-	rm -rf ./bin Duncan/vendor coverage.out maravich/node_modules ./tmp
+	rm -rf ./bin Duncan/vendor coverage.out maravich-next/node_modules ./tmp
 
 server: ## go run - runs the main server found at cmd/main.go
 	cd Duncan; go run cmd/main.go local
 
-ui: ## yarn start
-	cd maravich; yarn start
-
-test: ## go test ./... -race -cover - runs the full test suite with code coverage and data race detection
-	@go test ./... -race -cover
-
-coverage: ## go test ./... - runs the full test suite with code coverage and data race detection and outputs a coverprofile to ./coverage.out
-	@go test ./... -race -coverprofile=coverage.out -covermode=atomic
-
-report: ## go tool cover - reads the current coverprofile found at ./coverage.out as an html report
-	@go tool cover -html=coverage.out
-
-vet: ## go vet ./... - report likely mistakes in packages
-	@go vet ./...
+ui:
+	cd maravich-next; yarn dev
 
 lint: ## golangci-lint run ./... - run an aggregated linter on all go files, requires https://github.com/golangci/golangci-lint
 	cd Duncan; golangci-lint run ./...
