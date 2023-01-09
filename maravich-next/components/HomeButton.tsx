@@ -9,8 +9,8 @@ import { create, login } from './Router'
 
 const PinnedSpeedDial = styled(SpeedDial)({
   position: 'absolute',
-  right: '16px',
-  top: '16px',
+  left: '16px',
+  bottom: '16px',
 })
 
 const NextLink = styled(Link)({
@@ -29,7 +29,7 @@ export const HomeButton: React.FC<HomeButtonProps> = ({dark, setDark }) => {
   
   return (
     <>
-      <PinnedSpeedDial ariaLabel='nav-bar' direction='down' icon={<SpeedDialIcon color='primary' />}>
+      <PinnedSpeedDial ariaLabel='nav-bar' direction='up' icon={<SpeedDialIcon color='primary' />}>
         <SpeedDialAction
           icon={<NextLink href='/' passHref aria-label='Home'><Home color='primary' /></NextLink>}
           tooltipTitle={'Home'}
