@@ -20,15 +20,15 @@ run-ui:
 	docker run --name CLIENT_CONTAINER -p 0.0.0.0:3000:3000 client
 
 install: ## yarn and go install — Concurrently installs go and yarn dependencies
-	cd Duncan; go get ./...
+	cd Duncan; go install ./...
 	cd maravich-next; yarn install
 
 local:
 	make -j2 server ui
 
-upgrade: ## go get -u ./... — Update all direct and indirect dependencies to latest minor or patch upgrades (pre-releases are ignored)
-	cd Duncan; go get -u ./...
-	cd Mutombo; go get -u ./...
+upgrade: ## go install -u ./... — Update all direct and indirect dependencies to latest minor or patch upgrades (pre-releases are ignored)
+	cd Duncan; go install -u ./...
+	cd Mutombo; go install -u ./...
 
 clean: ## clean - removes existing binaries, vendored code and code coverage results
 	rm -rf ./bin Duncan/vendor coverage.out maravich-next/node_modules ./tmp

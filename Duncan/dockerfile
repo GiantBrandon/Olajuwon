@@ -6,7 +6,7 @@ WORKDIR /usr/src
 # copy source files
 COPY . /usr/src
 
-RUN go get ./...
+RUN go install ./...
 
 # start app
 EXPOSE 8080
