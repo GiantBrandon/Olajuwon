@@ -5,6 +5,17 @@ const nextConfig = {
   experimental: {
     appDir: true
   },
+  webpack(config, { isServer, dev }) {
+    config.experiments = {
+      layers: true,
+      asyncWebAssembly: true
+    };
+    config.output.webassemblyModuleFilename =
+      isServer && !dev ? "../static/wasm/[id].wasm" : "static/wasm/[id].wasm";
+    config.optimization.moduleIds = "named";
+
+    return config;
+  }
 }
 
 const withPWA = require('next-pwa')({

@@ -21,16 +21,20 @@ run-ui:
 
 install: ## yarn and go install — Concurrently installs go and yarn dependencies
 	cd Duncan; go get ./...
-	cd maravich; yarn install
+	cd maravich-next; yarn install
 
 local:
 	make -j2 server ui
 
 upgrade: ## go get -u ./... — Update all direct and indirect dependencies to latest minor or patch upgrades (pre-releases are ignored)
 	cd Duncan; go get -u ./...
+	cd Mutombo; go get -u ./...
 
 clean: ## clean - removes existing binaries, vendored code and code coverage results
 	rm -rf ./bin Duncan/vendor coverage.out maravich-next/node_modules ./tmp
+
+wasm:
+	cd mutombo; wasm-pack build --target web
 
 server: ## go run - runs the main server found at cmd/main.go
 	cd Duncan; go run cmd/main.go local

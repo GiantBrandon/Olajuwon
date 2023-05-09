@@ -1,7 +1,7 @@
 'use client'
 
 import styled from '@emotion/styled'
-import { DarkMode, DataObject, Home, LightMode, Login, VideogameAsset } from '@mui/icons-material'
+import { DarkMode, DataObject, Diamond, Home, LightMode, Login, VideogameAsset } from '@mui/icons-material'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, SpeedDial, SpeedDialAction, SpeedDialIcon, TextField } from '@mui/material'
 import Link from 'next/link'
 import React, { Dispatch, SetStateAction, useState } from 'react'
@@ -49,6 +49,11 @@ export const HomeButton: React.FC<HomeButtonProps> = ({dark, setDark }) => {
         />
         <SpeedDialAction
           icon={dark ? <DarkMode color='primary' /> : <LightMode color='primary' />}
+          tooltipTitle={'Toggle Dark Mode'}
+          onClick={() => setDark(dark => !dark)}
+        />
+        <SpeedDialAction
+          icon={<NextLink href='/Wedding' passHref aria-label='Wedding'><Diamond color='primary' /></NextLink>}
           tooltipTitle={'Toggle Dark Mode'}
           onClick={() => setDark(dark => !dark)}
         />

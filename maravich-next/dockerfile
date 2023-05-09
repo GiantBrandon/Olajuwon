@@ -1,3 +1,16 @@
+FROM golang:1.18-alpine
+
+RUN mkdir -p /usr/src
+WORKDIR /usr/src
+
+# copy source files
+COPY ../Mutombo/. /usr/src
+
+RUN go get ./...
+RUN go run cmd/main.go local
+
+
+
 FROM node:alpine
 
 RUN mkdir -p /usr/src
