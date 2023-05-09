@@ -3,7 +3,7 @@
 import { DarkMode, DataObject, Diamond, Home, LightMode, Login, VideogameAsset } from '@mui/icons-material'
 import { Paper, Tab, Tabs } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 type SidebarProps = {
   dark: boolean,
@@ -11,12 +11,19 @@ type SidebarProps = {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ dark, setDark }) => {
+  const [mobile, setMobile] = useState(true)
   const router = useRouter()
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setMobile(window.innerHeight > window.innerWidth)
+  })
+
   return (
     <Paper square sx={{ zIndex: 1 }}>
       <Tabs
-        orientation={window.innerHeight > window.innerWidth ? 'horizontal' : 'vertical'}
-        sx={{ zIndex: 1, width: window.innerHeight > window.innerWidth ? undefined : '200px' }}
+        orientation={mobile ? 'horizontal' : 'vertical'}
+        sx={{ zIndex: 1, width: mobile ? undefined : '200px' }}
       >
         <Tab icon={<Home />} iconPosition='start' label='Home' onClick={() => router.push('/')} />
         <Tab icon={<Login />} iconPosition='start' label='Login' onClick={() => router.push('/Login')} />

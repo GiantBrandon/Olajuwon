@@ -29,15 +29,11 @@ const ShellyLink = styled(Button)({
 export default function Homepage() {
   const [ratio, setRatio] = useState(1)
 
-  const onResize = () => {
-    setRatio(window.innerWidth / window.innerHeight)
-  }
-
   useEffect(() => {
-    window.addEventListener('resize', onResize)
+    window.addEventListener('resize', () => setRatio(window.innerWidth / window.innerHeight))
     setRatio(window.innerWidth / window.innerHeight)
     return () => {
-      window.removeEventListener('resize', onResize)
+      window.removeEventListener('resize', () => setRatio(window.innerWidth / window.innerHeight))
     }
   }, [])
   

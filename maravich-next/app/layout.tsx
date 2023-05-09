@@ -18,8 +18,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const [dark, setDark] = useState(window.matchMedia('(prefers-color-scheme: dark)').matches)
+  const [dark, setDark] = useState(true)
+  const [mobile, setMobile] = useState(true)
   const pathname = usePathname()
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setDark(window.matchMedia('(prefers-color-scheme: dark)').matches)
+    setMobile(window.innerHeight > window.innerWidth)
+  })
+
   useEffect(() => {
     if('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').then(
@@ -45,7 +53,7 @@ export default function RootLayout({
           children
         ) : (
           <ThemeProvider theme={theme}>
-            <Layout square mobile={window.innerHeight > window.innerWidth}>
+            <Layout square mobile={mobile}>
               <div style={{ gridArea: 'content' }}>
                 {children}
               </div>

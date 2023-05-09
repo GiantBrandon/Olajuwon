@@ -90,6 +90,7 @@ export const useYahtzee = () => {
       determineSelection()
       setState('ready')
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turn, state])
 
   const setScore = (score: Score) => {

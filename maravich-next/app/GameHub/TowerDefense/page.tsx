@@ -2,7 +2,7 @@
 
 import styled from '@emotion/styled'
 import { Button, Stack, Typography } from '@mui/material'
-import { CounterState } from 'mutombo'
+//import { CounterState } from 'mutombo'
 import React, { useEffect, useState } from 'react'
 
 const Layout = styled.div({
@@ -18,17 +18,17 @@ const Main = styled.div({
 })
 
 const TowerDefense: React.FC = () => {
-  const [counter, setCounter] = useState<CounterState>()
+  //onst [counter, setCounter] = useState<CounterState>()
   const [tick, setTick] = useState(0)
   
-  useEffect(() => {
+  /*useEffect(() => {
     (async() => {
       const wasm = await import('mutombo')
       await wasm.default()
       console.log(wasm)
       wasm.start()
     })()
-  }, [])
+  }, [])*/
   
   return (
     <div style={{ height: '100%', width: '100%'}} id='canvas' />

@@ -47,6 +47,7 @@ export const useMatch = () => {
       setWaiting(true)
     }
     setTimeout(() => setWaiting(false), 250)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [board, waiting])
     
   const isValid = (row: number, column: number, board: number[][]) => {

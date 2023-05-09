@@ -3,7 +3,7 @@
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import { ThemeOptions } from '@mui/material/styles'
 
-export const themeOptions: ThemeOptions = {
+const themeOptions: ThemeOptions = {
   palette: {
     mode: 'light',
     primary: {
