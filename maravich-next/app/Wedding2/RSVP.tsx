@@ -11,8 +11,8 @@ export const RSVP: React.FC = () => {
       <Typography variant='h3'>
       Sign-up through google sheets
       </Typography>
-      <Button size='large' variant='contained' endIcon={<Rsvp />}>
-        Open
+      <Button size='large' variant='contained' endIcon={<Rsvp />} disabled>
+        Coming Soon
       </Button>
     </Stack>
   )

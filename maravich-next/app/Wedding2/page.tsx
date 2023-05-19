@@ -1,7 +1,6 @@
 'use client'
 
-import { Search } from '@mui/icons-material'
-import { Card, CardContent, Divider, FilledInput, FormControl, Input, InputAdornment, InputLabel, List, Stack, Tab, Tabs, TextField, Typography } from '@mui/material'
+import { Stack, Tab, Tabs, ThemeProvider, Typography, createTheme } from '@mui/material'
 import React, { useState } from 'react'
 import { SeatingChart } from './SeatingChart'
 import { RSVP } from './RSVP'
@@ -10,23 +9,27 @@ import { Home } from './Home'
 import { VenueInfo } from './VenueInfo'
 import { Schedule } from './Schedule'
 
-const tables = [
-  ['Alison Reikher', 'Brandon Kurtz', 'Jason Kurtz', 'Jen Kurtz'],
-  ['Marianna Reikher', 'Alex Reikher', 'Daniel Reikher', 'Kristine Kurtz', 'Kelly Kurtz'],
-  ['Stephanie', 'Alexis', 'Sara'],
-  ['Stephanie', 'Alexis', 'Sara']
-]
-
 const Wedding: React.FC = () => {
   const [tab, setTab] = useState(0)
+  const theme = createTheme({
+    typography: {
+      fontFamily: ['Great Vibes', 'cursive'].join(','),
+    },
+  })
   
   return (
     <>
+      <Stack direction='column' alignItems='center'>
+        <ThemeProvider theme={theme}>
+          <Typography variant='h2'>Brandon</Typography>
+          <Typography variant='h5'>and</Typography>
+          <Typography variant='h2'>Alison</Typography>
+        </ThemeProvider>
+      </Stack>
       <Tabs
         value={tab}
         onChange={(e: React.SyntheticEvent, newTab: number) => setTab(newTab)}
         variant="scrollable"
-        centered
       >
         <Tab label='Home' />
         <Tab label='RSVP' />

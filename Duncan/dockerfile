@@ -6,7 +6,7 @@ WORKDIR /usr/src
 # copy source files
 COPY . /usr/src
 
-RUN go install ./...
+RUN go mod tidy
 
 # start app
 EXPOSE 8080

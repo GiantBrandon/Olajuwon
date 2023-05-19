@@ -5,10 +5,10 @@ import { Card, CardContent, Divider, FormControl, Input, InputAdornment, InputLa
 import React, { useState } from 'react'
 
 const tables = [
-  ['Alison Reikher', 'Brandon Kurtz', 'Jason Kurtz', 'Jen Kurtz'],
-  ['Marianna Reikher', 'Alex Reikher', 'Daniel Reikher', 'Kristine Kurtz', 'Kelly Kurtz'],
-  ['Stephanie', 'Alexis', 'Sara'],
-  ['Stephanie', 'Alexis', 'Sara']
+  ['Brandon Kurtz', 'Alison Reikher'],
+  ['Marianna Reikher', 'Alex Reikher', 'Kristine Kurtz', 'Kelly Kurtz'],
+  ['Lorem Ipsum', 'Dolor Sit', 'Amet Consectetur', 'Adipiscing Elit'],
+  ['Sed Do', 'Eiusmod Tempor', 'Incididunt Ut', 'Labore Et']
 ]
 
 export const SeatingChart: React.FC = () => {
@@ -25,7 +25,7 @@ export const SeatingChart: React.FC = () => {
           startAdornment={<InputAdornment position='start'><Search /></InputAdornment>}
         />
       </FormControl>
-      <Divider>TABLES</Divider>
+      <Divider>Example Data</Divider>
       <Stack direction='row' flexWrap='wrap' gap={2} justifyContent='space-around'>
         {filteredTables.map((table, index) => 
           <Card key={index} sx={{ marginBottom: '4px', width: '240px', textAlign: 'center' }}>

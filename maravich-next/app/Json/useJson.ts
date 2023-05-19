@@ -18,7 +18,6 @@ const formatValue = (value: unknown, depth: number): string[] => {
   } else if (typeof value == 'string') {
     return [`"${value}",`]
   } else if (Array.isArray(value)) {
-    console.log(value)
     return [
       '[',
       ...Object.entries(value as object)
@@ -117,7 +116,6 @@ export const useJson = () => {
     const firstJson = JSON.parse(first)
     const secondJson = JSON.parse(second)
     const results = compareJson(firstJson, secondJson)
-    console.log(results)
     setResults(results)
   }
 
