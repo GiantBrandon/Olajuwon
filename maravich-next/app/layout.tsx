@@ -58,7 +58,7 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
       </head>
-      <body style={{ height: '100%' }}>
+      <body style={{ height: '100%', margin: 0 }}>
         {pathname === '/Wedding' ? (
           children
         ) : (

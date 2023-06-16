@@ -44,7 +44,7 @@ ui:
 
 lint: ## golangci-lint run ./... - run an aggregated linter on all go files, requires https://github.com/golangci/golangci-lint
 	cd Duncan; golangci-lint run ./...
-	cd maravich; yarn lint --fix
+	cd maravich-next; yarn lint --fix
 
 refresh: ## refresh - runs the main hack server found at cmd/hack/main.go and auto refreshes on code changes, requires https://github.com/markbates/refresh
 	@refresh run Duncan/cmd/main.go
