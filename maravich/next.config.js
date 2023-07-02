@@ -5,6 +5,9 @@ const nextConfig = {
   experimental: {
     appDir: true
   },
+  images: {
+    domains: ['drive.google.com'],
+  },
   webpack(config, { isServer, dev }) {
     config.experiments = {
       layers: true,
