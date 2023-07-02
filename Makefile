@@ -8,7 +8,7 @@ build-server:
 	docker build -t server ./Duncan
 
 build-ui:
-	docker build -t client ./maravich-next
+	docker build -t client ./maravich
 
 run:
 	make -j2 run-server run-ui
@@ -21,7 +21,7 @@ run-ui:
 
 install: ## yarn and go install — Concurrently installs go and yarn dependencies
 	cd Duncan; go install ./...
-	cd maravich-next; yarn install
+	cd maravich; yarn install
 
 local:
 	make -j2 server ui
@@ -31,7 +31,7 @@ upgrade: ## go install -u ./... — Update all direct and indirect dependencies 
 	cd Mutombo; go install -u ./...
 
 clean: ## clean - removes existing binaries, vendored code and code coverage results
-	rm -rf ./bin Duncan/vendor coverage.out maravich-next/node_modules ./tmp
+	rm -rf ./bin Duncan/vendor coverage.out maravich/node_modules ./tmp
 
 wasm:
 	cd mutombo; wasm-pack build --target web
@@ -40,11 +40,11 @@ server: ## go run - runs the main server found at cmd/main.go
 	cd Duncan; go run cmd/main.go local
 
 ui:
-	cd maravich-next; yarn dev
+	cd maravich; yarn dev
 
 lint: ## golangci-lint run ./... - run an aggregated linter on all go files, requires https://github.com/golangci/golangci-lint
 	cd Duncan; golangci-lint run ./...
-	cd maravich-next; yarn lint --fix
+	cd maravich; yarn lint --fix
 
 refresh: ## refresh - runs the main hack server found at cmd/hack/main.go and auto refreshes on code changes, requires https://github.com/markbates/refresh
 	@refresh run Duncan/cmd/main.go

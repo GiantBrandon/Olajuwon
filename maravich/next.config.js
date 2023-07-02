@@ -18,9 +18,8 @@ const nextConfig = {
   }
 }
 
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  buildExcludes: [/app-build-manifest.json$/]
-})
+const withPWA = require("@imbios/next-pwa")({
+  dest: "public",
+});
 
 module.exports = withPWA(nextConfig)
