@@ -34,7 +34,16 @@ clean: ## clean - removes existing binaries, vendored code and code coverage res
 	rm -rf ./bin Duncan/vendor coverage.out maravich/node_modules ./tmp
 
 wasm:
-	cd mutombo; wasm-pack build --target web
+	cd mutombo;\
+	em++ src/game.cpp src/tower.cpp src/enemy.cpp \
+	-s WASM=1 \
+	-s EXPORTED_FUNCTIONS=_start \
+	-s EXPORTED_RUNTIME_METHODS=ccall \
+	-s USE_SDL=2 \
+	-s USE_SDL_TTF=2 \
+	-s MIN_SAFARI_VERSION=-1 \
+	-o ../maravich/public/wasm/game.js;\
+	emrun --port 8080 ../maravich/public/wasm/;
 
 server: ## go run - runs the main server found at cmd/main.go
 	cd Duncan; go run cmd/main.go local

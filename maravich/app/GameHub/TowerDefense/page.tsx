@@ -1,9 +1,9 @@
 'use client'
 
 import styled from '@emotion/styled'
-import { Button, Stack, Typography } from '@mui/material'
-//import { CounterState } from 'mutombo'
 import React, { useEffect, useState } from 'react'
+import background from '../public/background.webp'
+import Script from 'next/script'
 
 const Layout = styled.div({
   display: 'grid',
@@ -18,20 +18,10 @@ const Main = styled.div({
 })
 
 const TowerDefense: React.FC = () => {
-  //onst [counter, setCounter] = useState<CounterState>()
-  const [tick, setTick] = useState(0)
-  
-  /*useEffect(() => {
-    (async() => {
-      const wasm = await import('mutombo')
-      await wasm.default()
-      console.log(wasm)
-      wasm.start()
-    })()
-  }, [])*/
-  
   return (
-    <div style={{ height: '100%', width: '100%'}} id='canvas' />
+    <>
+      <canvas width={640} height={480} id="canvas" onContextMenu={(e) => e.preventDefault} tabIndex={-1} />
+    </>
   )
 }
 
