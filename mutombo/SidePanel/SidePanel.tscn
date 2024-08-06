@@ -1,0 +1,329 @@
+[gd_scene load_steps=12 format=3 uid="uid://chhm7job0lvvd"]
+
+[ext_resource type="Script" path="res://SidePanel/SidePanel.gd" id="1_du2px"]
+[ext_resource type="Texture2D" uid="uid://doxml5853b8bl" path="res://Assets/heart.png" id="2_6por7"]
+[ext_resource type="StyleBox" uid="uid://c0t00vul4mm3r" path="res://panel.tres" id="4_xdc5d"]
+[ext_resource type="Texture2D" uid="uid://m0m8agqu7ptk" path="res://Assets/Towers/BasicTower.png" id="12_jv8td"]
+[ext_resource type="Texture2D" uid="uid://d2ybdtjuddi22" path="res://Assets/Towers/FastTower.png" id="13_qtydc"]
+[ext_resource type="Texture2D" uid="uid://wukeh88roml5" path="res://Assets/Towers/StrongTower.png" id="14_oj8mh"]
+[ext_resource type="Texture2D" uid="uid://c0u11rviann5j" path="res://Assets/Towers/SolarPanel.png" id="16_4plnb"]
+[ext_resource type="Texture2D" uid="uid://ck6ho4o1h4oor" path="res://Assets/Towers/LongTower.png" id="18_bbb1f"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hemp6"]
+bg_color = Color(1, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hbsbl"]
+bg_color = Color(0, 1, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u61qv"]
+bg_color = Color(0, 0, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="SidePanel" type="Panel"]
+offset_right = 352.0
+offset_bottom = 704.0
+script = ExtResource("1_du2px")
+
+[node name="Column" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="Info" type="HBoxContainer" parent="Column"]
+layout_mode = 2
+
+[node name="Health" type="HBoxContainer" parent="Column/Info"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Icon" type="Control" parent="Column/Info/Health"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="Heart" type="Sprite2D" parent="Column/Info/Health/Icon"]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_6por7")
+centered = false
+
+[node name="Value" type="Label" parent="Column/Info/Health"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "100
+"
+
+[node name="Money" type="HBoxContainer" parent="Column/Info"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="Column/Info/Money"]
+layout_direction = 2
+layout_mode = 2
+text = "Money
+"
+
+[node name="Value" type="Label" parent="Column/Info/Money"]
+layout_mode = 2
+text = "100
+"
+
+[node name="Upgrades" type="VBoxContainer" parent="Column"]
+layout_mode = 2
+alignment = 2
+
+[node name="Name" type="Label" parent="Column/Upgrades"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Tower"
+horizontal_alignment = 1
+
+[node name="RedUpgrade" type="Panel" parent="Column/Upgrades"]
+custom_minimum_size = Vector2(256, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_hemp6")
+
+[node name="Label" type="Label" parent="Column/Upgrades/RedUpgrade"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "1 / 10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GreenUpgrade" type="Panel" parent="Column/Upgrades"]
+custom_minimum_size = Vector2(256, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_hbsbl")
+
+[node name="Label" type="Label" parent="Column/Upgrades/GreenUpgrade"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "1 / 10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BlueUpgrade" type="Panel" parent="Column/Upgrades"]
+custom_minimum_size = Vector2(256, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_u61qv")
+
+[node name="Label" type="Label" parent="Column/Upgrades/BlueUpgrade"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "1 / 10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CostLabel" type="Label" parent="Column/Upgrades"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Cost 30"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Close" type="Button" parent="Column/Upgrades"]
+custom_minimum_size = Vector2(256, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 4
+action_mode = 0
+text = "X"
+
+[node name="Store" type="VBoxContainer" parent="Column"]
+z_as_relative = false
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="BuyBasicTower" type="HBoxContainer" parent="Column/Store"]
+layout_mode = 2
+
+[node name="TowerOutline" type="Panel" parent="Column/Store/BuyBasicTower"]
+z_as_relative = false
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_default_cursor_shape = 6
+theme_override_styles/panel = ExtResource("4_xdc5d")
+
+[node name="BasicTower" type="Sprite2D" parent="Column/Store/BuyBasicTower/TowerOutline"]
+position = Vector2(40, 40)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("12_jv8td")
+
+[node name="Label" type="Label" parent="Column/Store/BuyBasicTower"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 16
+text = "Basic Tower
+All-arounder
+100e"
+
+[node name="BuyFastTower" type="HBoxContainer" parent="Column/Store"]
+layout_mode = 2
+
+[node name="TowerOutline" type="Panel" parent="Column/Store/BuyFastTower"]
+z_as_relative = false
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("4_xdc5d")
+
+[node name="FastTower" type="Sprite2D" parent="Column/Store/BuyFastTower/TowerOutline"]
+position = Vector2(40, 40)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("13_qtydc")
+
+[node name="Label" type="Label" parent="Column/Store/BuyFastTower"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 16
+text = "Fast Tower
+Shoots faster
+100e"
+
+[node name="BuyStrongTower" type="HBoxContainer" parent="Column/Store"]
+layout_mode = 2
+
+[node name="TowerOutline" type="Panel" parent="Column/Store/BuyStrongTower"]
+z_as_relative = false
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("4_xdc5d")
+
+[node name="StrongTower" type="Sprite2D" parent="Column/Store/BuyStrongTower/TowerOutline"]
+position = Vector2(40, 40)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("14_oj8mh")
+
+[node name="Label" type="Label" parent="Column/Store/BuyStrongTower"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Strong Tower
+Shoots harder
+100e"
+
+[node name="BuyLongTower" type="HBoxContainer" parent="Column/Store"]
+layout_mode = 2
+
+[node name="TowerOutline" type="Panel" parent="Column/Store/BuyLongTower"]
+z_as_relative = false
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("4_xdc5d")
+
+[node name="LongTower" type="Sprite2D" parent="Column/Store/BuyLongTower/TowerOutline"]
+position = Vector2(40, 40)
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("18_bbb1f")
+
+[node name="Label" type="Label" parent="Column/Store/BuyLongTower"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Long Tower
+Shoots further
+100e
+"
+
+[node name="BuySolarPanel" type="HBoxContainer" parent="Column/Store"]
+layout_mode = 2
+
+[node name="TowerOutline" type="Panel" parent="Column/Store/BuySolarPanel"]
+z_as_relative = false
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("4_xdc5d")
+
+[node name="LongTower" type="Sprite2D" parent="Column/Store/BuySolarPanel/TowerOutline"]
+position = Vector2(40, 40)
+scale = Vector2(0.17, 0.17)
+texture = ExtResource("16_4plnb")
+
+[node name="Label" type="Label" parent="Column/Store/BuySolarPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Solar Panel
+Generates Energy
+150e"
+
+[node name="Space" type="Control" parent="Column"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Timer" type="Label" parent="Column"]
+custom_minimum_size = Vector2(300, 2.08165e-12)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="Column"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Next Wave"
+
+[connection signal="gui_input" from="Column/Upgrades/RedUpgrade" to="." method="_on_red_upgrade_gui_input"]
+[connection signal="gui_input" from="Column/Upgrades/RedUpgrade" to="Column/Upgrades" method="_on_red_upgrade_gui_input"]
+[connection signal="gui_input" from="Column/Upgrades/GreenUpgrade" to="." method="_on_green_upgrade_gui_input"]
+[connection signal="gui_input" from="Column/Upgrades/GreenUpgrade" to="Column/Upgrades" method="_on_green_upgrade_gui_input"]
+[connection signal="gui_input" from="Column/Upgrades/BlueUpgrade" to="." method="_on_blue_upgrade_gui_input"]
+[connection signal="gui_input" from="Column/Upgrades/BlueUpgrade" to="Column/Upgrades" method="_on_blue_upgrade_gui_input"]
+[connection signal="pressed" from="Column/Upgrades/Close" to="." method="_on_close_pressed"]
+[connection signal="gui_input" from="Column/Store/BuyBasicTower/TowerOutline" to="." method="_on_basic_tower_gui_input"]
+[connection signal="gui_input" from="Column/Store/BuyFastTower/TowerOutline" to="." method="_on_fast_tower_gui_input"]
+[connection signal="gui_input" from="Column/Store/BuyStrongTower/TowerOutline" to="." method="_on_strong_tower_gui_input"]
+[connection signal="gui_input" from="Column/Store/BuyLongTower/TowerOutline" to="." method="_on_long_tower_gui_input"]
+[connection signal="pressed" from="Column/Button" to="." method="_on_button_pressed"]

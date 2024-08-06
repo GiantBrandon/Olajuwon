@@ -5,19 +5,19 @@ build:
 	make build-server
 
 build-server:
-	docker build -t server ./Duncan
+	docker build --platform linux/amd64 -t git.kyojin.dev/brandon.kurtz/server ./Duncan
 
 build-ui:
-	docker build -t client ./maravich
+	docker build --platform linux/amd64 -t git.kyojin.dev/brandon.kurtz/client ./maravich
 
 run:
 	make -j2 run-server run-ui
 
 run-server:
-	docker run --name SERVER_CONTAINER -p 0.0.0.0:8080:8080 server
+	docker run -p 0.0.0.0:8080:8080 git.kyojin.dev/brandon.kurtz/server
 
 run-ui:
-	docker run --name CLIENT_CONTAINER -p 0.0.0.0:3000:3000 client
+	docker run -p 0.0.0.0:3001:3001 git.kyojin.dev/brandon.kurtz/client
 
 install: ## yarn and go install — Concurrently installs go and yarn dependencies
 	cd Duncan; go install ./...

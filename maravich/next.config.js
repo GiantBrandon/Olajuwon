@@ -3,7 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   experimental: {
-    appDir: true
+    appDir: true,
+    optimizePackageImports: ["@mui/material", "@mui/icons-material"]
   },
   images: {
     domains: ['drive.google.com'],
