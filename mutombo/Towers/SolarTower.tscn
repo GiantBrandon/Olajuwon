@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://crujyhbvkc2j8"]
+
+[ext_resource type="Script" path="res://Towers/SolarTower.gd" id="1_iqa52"]
+[ext_resource type="Texture2D" uid="uid://cc8uuwypcifg" path="res://Assets/base.png" id="2_wmf2y"]
+[ext_resource type="Texture2D" uid="uid://b35shwwaay3nf" path="res://Assets/Range.png" id="3_k20dk"]
+[ext_resource type="Texture2D" uid="uid://c0u11rviann5j" path="res://Assets/Towers/SolarPanel.png" id="3_s2jc7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_phctu"]
+radius = 20.0
+
+[node name="Tower" type="Area2D"]
+script = ExtResource("1_iqa52")
+
+[node name="Base" type="Sprite2D" parent="."]
+modulate = Color(0.588235, 0.588235, 0.588235, 1)
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_wmf2y")
+
+[node name="Range" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_phctu")
+
+[node name="VisualRange" type="Sprite2D" parent="Range"]
+modulate = Color(1, 1, 1, 0.392157)
+texture_filter = 1
+scale = Vector2(0.06, 0.06)
+texture = ExtResource("3_k20dk")
+
+[node name="Laser" type="Line2D" parent="."]
+points = PackedVector2Array(2.08165e-12, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+width = 2.0
+
+[node name="Turret" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_s2jc7")
+
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = 30.0
+
+[connection signal="gui_input" from="ReferenceRect" to="." method="_on_reference_rect_gui_input"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://0ixncyjrpxdb"]
 
-[ext_resource type="PackedScene" uid="uid://wsqq1aa0mjhq" path="res://Mob.tscn" id="1_7ktxb"]
+[ext_resource type="PackedScene" uid="uid://wsqq1aa0mjhq" path="res://Enemy/Mob.tscn" id="1_7ktxb"]
 
 [node name="Progress" type="PathFollow2D"]
 position = Vector2(144, 0)
